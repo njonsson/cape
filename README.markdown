@@ -159,6 +159,42 @@ Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements mu
       mirror_rake_tasks :foo
     end
 
+### Mirror Rake tasks that require Capistrano recipe options and environment variables
+
+Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when running Rake tasks. Note that Cape statements must be executed within a `Cape` block.
+
+    # config/deploy.rb
+
+    require 'cape'
+
+    Cape do
+      # Display defined Rails routes on application server remote machines only.
+      mirror_rake_tasks :routes, :roles => :app
+
+      # Execute database migration on application server remote machines only,
+      # and set the 'RAILS_ENV' environment variable to the value of the
+      # Capistrano variable 'rails_env'.
+      mirror_rake_tasks 'db:migrate', :roles => :app do |env|
+        env['RAILS_ENV'] = rails_env
+      end
+    end
+
+The above is equivalent to the following manually-defined Capistrano recipes.
+
+    # config/deploy.rb
+
+    # These translations to Capistrano are just for illustration.
+
+    task :routes, :roles => :app do
+      run "cd #{current_path} && /usr/bin/env rake routes"
+    end
+
+    namespace :db do
+      task :migrate, :roles => :app do
+        run "cd #{current_path} && /usr/bin/env rake db:migrate RAILS_ENV=#{rails_env}"
+      end
+    end
+
 ### Mirror Rake tasks into a Capistrano namespace
 
 Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be executed within a `Cape` block.

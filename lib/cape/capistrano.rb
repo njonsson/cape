@@ -20,7 +20,8 @@ module Cape
     # Defines a wrapper in Capistrano around the specified Rake _task_.
     #
     # @param [Hash] task            metadata for a Rake task
-    # @param [Hash] named_arguments named arguments
+    # @param [Hash] named_arguments named arguments, including options to pass to
+    #                               the Capistrano +task+ method
     #
     # @option task [String]               :name        the name of the Rake task
     # @option task [Array of String, nil] :parameters  the names of the Rake
@@ -28,34 +29,38 @@ module Cape
     # @option task [String]               :description documentation for the Rake
     #                                                  task
     #
-    # @option named_arguments [Binding]           :binding the Binding of your
-    #                                                      Capistrano recipes
-    #                                                      file
-    # @option named_arguments [[Array of] Symbol] :roles   the Capistrano role(s)
-    #                                                      of remote computers
-    #                                                      that will execute
-    #                                                      _task_
+    # @option named_arguments [Binding] :binding            the Binding of your
+    #                                                       Capistrano recipes
+    #                                                       file
+    #
+    # @yield [env] a block that defines environment variables for the Rake task;
+    #              optional
+    # @yieldparam [Hash] env the environment variables to set before executing
+    #                        the Rake task
     #
     # @return [Capistrano] the object
     #
     # @raise [ArgumentError] +named_arguments[:binding]+ is missing
     #
     # @note Any parameters that the Rake task has are integrated via environment variables, since Capistrano does not support recipe parameters per se.
-    def define_rake_wrapper(task, named_arguments)
+    #
+    # @see http://github.com/capistrano/capistrano/blob/master/lib/capistrano/task_definition.rb#L15-L17 Valid Capistrano ‘task’ method options
+    def define_rake_wrapper(task, named_arguments, &block)
       unless (binding = named_arguments[:binding])
         raise ::ArgumentError, ':binding named argument is required'
       end
-      roles = named_arguments[:roles] || :app
 
       capistrano_context = binding.eval('self', __FILE__, __LINE__)
-      describe  task,        capistrano_context
-      implement task, roles, capistrano_context
-      self
+      options = named_arguments.reject do |key, value|
+        key == :binding
+      end
+      describe( task, capistrano_context, options, &block)
+      implement(task, capistrano_context, options, &block)
     end
 
   private
 
-    def build_capistrano_description(task)
+    def build_capistrano_description(task, options, &block)
       return nil unless task[:description]
 
       description = [task[:description]]
@@ -78,19 +83,19 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
       description.join
     end
 
-    def describe(task, capistrano_context)
-      if (description = build_capistrano_description(task))
+    def describe(task, capistrano_context, options, &block)
+      if (description = build_capistrano_description(task, options, &block))
         capistrano_context.desc description
       end
       self
     end
 
-    def implement(task, roles, capistrano_context)
+    def implement(task, capistrano_context, options, &env_block)
       name = task[:name].split(':')
       rake = self.rake
       # Define the recipe.
       block = lambda { |context|
-        context.task name.last, :roles => roles do
+        context.task name.last, options do
           arguments = Array(task[:parameters]).collect do |a|
             if (value = ENV[a.upcase])
               value = value.inspect
@@ -102,8 +107,15 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
           else
             arguments = "[#{arguments.join ','}]"
           end
-          context.run "cd #{context.current_path} && " +
-                      "#{rake.remote_executable} #{name.join ':'}#{arguments}"
+          env_hash = {}
+          env_block.call(env_hash) if env_block
+          env_strings = env_hash.collect do |var_name, var_value|
+            "#{var_name}=#{var_value.inspect}"
+          end
+          env = env_strings.empty? ? nil : (' ' + env_strings.join(' '))
+          command = "cd #{context.current_path} && " +
+                    "#{rake.remote_executable} #{name.join ':'}#{arguments}#{env}"
+          context.run command
         end
       }
       # Nest the recipe inside its containing namespaces.
@@ -114,6 +126,7 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
         }
       end
       block.call capistrano_context
+      self
     end
 
   end

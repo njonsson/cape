@@ -47,48 +47,131 @@ describe Cape::DSL do
       subject.stub! :raise_unless_capistrano
     end
 
-    def do_mirror_rake_tasks
-      subject.mirror_rake_tasks task_expression
+    def do_mirror_rake_tasks(*arguments, &block)
+      subject.mirror_rake_tasks(*arguments, &block)
     end
 
-    it 'should collect Rake#each_task' do
-      mock_rake.should_receive(:each_task).with task_expression
-      do_mirror_rake_tasks
-    end
-
-    it 'should verify that Capistrano is in use' do
-      subject.should_receive :raise_unless_capistrano
-      do_mirror_rake_tasks
-    end
-
-    describe 'should Capistrano#define_rake_wrapper for Rake#each_task' do
-      it 'with the expected task' do
-        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                      options|
-          task == {:name => task_expression}
-        end
-        do_mirror_rake_tasks
-      end
-
-      it 'with the expected named options' do
-        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                      options|
-          options.keys == [:binding]
-        end
-        do_mirror_rake_tasks
-      end
-
-      it 'with a :binding option' do
-        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                      options|
-          options[:binding].is_a? Binding
-        end
-        do_mirror_rake_tasks
+    describe 'with two scalar arguments' do
+      specify do
+        lambda {
+          do_mirror_rake_tasks task_expression, task_expression
+        }.should raise_error(ArgumentError,
+                             'wrong number of arguments (2 for 0 or 1, plus ' +
+                             'an options hash)')
       end
     end
 
-    it 'should return itself' do
-      do_mirror_rake_tasks.should == subject
+    shared_examples_for 'a successful call' do |task_expression_in_use,
+                                                options_in_use|
+      it 'should collect Rake#each_task' do
+        mock_rake.should_receive(:each_task).with task_expression_in_use
+        do_mirror_rake_tasks
+      end
+
+      it 'should verify that Capistrano is in use' do
+        subject.should_receive :raise_unless_capistrano
+        do_mirror_rake_tasks
+      end
+
+      describe 'should Capistrano#define_rake_wrapper for Rake#each_task' do
+        specify 'with the expected task' do
+          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                        named_arguments|
+            task == {:name => task_expression}
+          end
+          do_mirror_rake_tasks
+        end
+
+        specify 'with the expected named options' do
+          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                        named_arguments|
+            named_arguments.keys.sort == ([:binding] + options_in_use.keys).sort
+          end
+          do_mirror_rake_tasks
+        end
+
+        specify 'with a :binding option' do
+          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                        named_arguments|
+            named_arguments[:binding].is_a? Binding
+          end
+          do_mirror_rake_tasks
+        end
+
+        specify 'with any provided extra options' do
+          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                        named_arguments|
+            named_arguments.slice(*options_in_use.keys) == options_in_use
+          end
+          do_mirror_rake_tasks
+        end
+      end
+
+      it 'should return itself' do
+        do_mirror_rake_tasks.should == subject
+      end
+    end
+
+    describe 'with one scalar argument, an options hash, and a block' do
+      def do_mirror_rake_tasks
+        super 'task:expression', :bar => :baz do |env|
+          env['AN_ENV_VAR'] = 'an environment variable'
+        end
+      end
+
+      it_should_behave_like 'a successful call', 'task:expression', :bar => :baz
+    end
+
+    describe 'with one scalar argument and an options hash' do
+      def do_mirror_rake_tasks
+        super 'task:expression', :bar => :baz
+      end
+
+      it_should_behave_like 'a successful call', 'task:expression', :bar => :baz
+    end
+
+    describe 'with an options hash and a block' do
+      def do_mirror_rake_tasks
+        super :bar => :baz do |env|
+          env['AN_ENV_VAR'] = 'an environment variable'
+        end
+      end
+
+      it_should_behave_like 'a successful call', nil, :bar => :baz
+    end
+
+    describe 'with an options hash' do
+      def do_mirror_rake_tasks
+        super :bar => :baz
+      end
+
+      it_should_behave_like 'a successful call', nil, :bar => :baz
+    end
+
+    describe 'with one scalar argument and a block' do
+      def do_mirror_rake_tasks
+        super 'task:expression' do |env|
+          env['AN_ENV_VAR'] = 'an environment variable'
+        end
+      end
+
+      it_should_behave_like('a successful call', 'task:expression', {})
+    end
+
+    describe 'with one scalar argument' do
+      def do_mirror_rake_tasks
+        super 'task:expression'
+      end
+
+      it_should_behave_like('a successful call', 'task:expression', {})
+    end
+
+    describe 'without arguments' do
+      def do_mirror_rake_tasks
+        super
+      end
+
+      it_should_behave_like('a successful call', nil, {})
     end
   end
 
