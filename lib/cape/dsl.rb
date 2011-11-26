@@ -74,8 +74,8 @@ module Cape
       rake.local_executable = value
     end
 
-    # Makes the use of a block parameter optional by forwarding non-Cape method
-    # calls to the containing binding.
+    # Makes the use of a Cape block parameter optional by forwarding non-Cape
+    # method calls to the containing binding.
     #
     # @param [Symbol, String] method the method called
     # @param [Array]          args   the arguments passed to _method_
@@ -85,13 +85,13 @@ module Cape
       @outer_self.send(method, *args, &block)
     end
 
-    # Defines Rake tasks as Capistrano tasks.
+    # Defines Rake tasks as Capistrano recipes.
     #
     # @param [String, Symbol] task_expression the full name of a Rake task or
     #                                         namespace to filter; optional
     # @return [DSL] the object
     #
-    # @note Any parameters that the Rake tasks have are integrated via environment variables, since Capistrano does not support task parameters per se.
+    # @note Any parameters that the Rake tasks have are integrated via environment variables, since Capistrano does not support recipe parameters per se.
     #
     # @example Mirroring all Rake tasks
     #   # config/deploy.rb
@@ -102,13 +102,13 @@ module Cape
     #     mirror_rake_tasks
     #   end
     #
-    # @example Mirroring some Rake tasks
+    # @example Mirroring specific Rake tasks
     #   # config/deploy.rb
     #
     #   require 'cape'
     #
     #   Cape do
-    #     mirror_rake_tasks :foo
+    #     mirror_rake_tasks 'log:clear'
     #   end
     #
     # @example Mirroring Rake tasks into a Capistrano namespace
