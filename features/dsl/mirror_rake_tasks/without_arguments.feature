@@ -139,7 +139,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       ------------------------------------------------------------
       My task with one argument.
 
-      Set environment variable THE_ARG to pass a Rake task argument.
+      Set environment variable THE_ARG if you want to pass a Rake task argument.
 
 
       """
@@ -215,7 +215,8 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       ------------------------------------------------------------
       My task with two arguments.
 
-      Set environment variables MY_ARG1 and MY_ARG2 to pass Rake task arguments.
+      Set environment variables MY_ARG1 and MY_ARG2 if you want to pass Rake task
+      arguments.
 
 
       """
@@ -236,8 +237,8 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       ------------------------------------------------------------
       My task with three arguments.
 
-      Set environment variables AN_ARG1, AN_ARG2, and AN_ARG3 to pass Rake task
-      arguments.
+      Set environment variables AN_ARG1, AN_ARG2, and AN_ARG3 if you want to pass Rake
+      task arguments.
 
 
       """

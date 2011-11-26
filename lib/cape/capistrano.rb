@@ -60,6 +60,7 @@ module Cape
 
       description = [task[:description]]
       description << '.' unless task[:description].end_with?('.')
+
       unless (parameters = Array(task[:parameters])).empty?
         noun            = Util.pluralize('variable', parameters.length)
         parameters_list = Util.to_list_phrase(parameters.collect(&:upcase))
@@ -67,12 +68,13 @@ module Cape
         noun_phrase     = (parameters.length == 1) ?
                           "a #{singular}"          :
                           Util.pluralize(singular)
-        description << <<-end_description
+        description << <<-end_fragment
 
 
-Set environment #{noun} #{parameters_list} to pass #{noun_phrase}.
-        end_description
+Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
+        end_fragment
       end
+
       description.join
     end
 
