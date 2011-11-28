@@ -4,7 +4,7 @@ gemspec
 
 gem 'jruby-openssl',          :platforms => :jruby
 
-group :development do
+group :debug do
   gem 'ruby-debug',           :platforms => :mri_18
 
   # This is a dependency of ruby-debug. We're specifying it here because its
@@ -12,7 +12,9 @@ group :development do
   gem 'linecache', '<= 0.43', :platforms => :mri_18
 
   gem 'ruby-debug19',         :platforms => :mri_19
+end
 
+group :doc do
   gem 'yard',                 :platforms => [:ruby, :mswin, :mingw]
   gem 'rdiscount',            :platforms => [:ruby, :mswin, :mingw]
 end
