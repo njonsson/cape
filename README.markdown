@@ -42,6 +42,15 @@ Then
 * **You can invoke [Cape](http://github.com/njonsson/cape)** to dynamically add Capistrano recipes for each of your application’s Rake tasks, and
 * **You can run your Rake tasks on your deployed servers,** friction-free, and look like a superhero. _[cue fanfare]_
 
+Installation
+------------
+
+Install [the RubyGem](http://rubygems.org/gems/cape "Cape at RubyGems.org"):
+
+    $ gem install cape
+
+Or you may want to make Cape a dependency of your project by using [Bundler](http://gembundler.com).
+
 Features
 --------
 
