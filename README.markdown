@@ -29,8 +29,8 @@
             <hNNBNBh=(.                                /   \   `
                ..
 
-Cape
-====
+[<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status" />](http://travis-ci.org/njonsson/cape) Cape
+==================================================================================================================================================================
 
 If
 
