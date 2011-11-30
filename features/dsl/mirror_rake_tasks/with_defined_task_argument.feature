@@ -6,10 +6,8 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined task
 
   Scenario: mirror only the matching Rake task
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks 'with_period'
       end
@@ -23,10 +21,8 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined task
 
   Scenario: mirror Rake task 'with_period' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks :with_period
       end
@@ -44,10 +40,8 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined task
 
   Scenario: do not mirror Rake task 'without_period'
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks :with_period
       end

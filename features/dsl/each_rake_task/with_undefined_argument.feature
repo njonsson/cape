@@ -6,10 +6,8 @@ Feature: The #each_rake_task DSL method with an undefined argument
 
   Scenario: do not enumerate any Rake tasks
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         each_rake_task :this_does_not_exist do |t|
           $stdout.puts '', "Name: #{t[:name].inspect}"

@@ -6,10 +6,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror all non-hidden Rake tasks
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -53,10 +51,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'with_period' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -76,11 +72,10 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'with_period' with its implementation
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       set :current_path, '/path/to/current/deployed/application'
+
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -95,10 +90,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'without_period' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -118,10 +111,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'long' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -143,10 +134,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'with_one_arg' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -168,10 +157,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -191,10 +178,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'my_namespace:my_nested_namespace:in_a_nested_namespace' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -214,10 +199,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'with_two_args' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -239,10 +222,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: mirror Rake task 'with_three_args' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks
@@ -264,10 +245,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
   Scenario: do not mirror Rake task 'hidden_task'
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks

@@ -6,10 +6,8 @@ Feature: The #mirror_rake_tasks DSL method with an undefined argument
 
   Scenario: do not mirror any Rake tasks
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks 'this_does_not_exist'
       end
@@ -19,10 +17,8 @@ Feature: The #mirror_rake_tasks DSL method with an undefined argument
 
   Scenario: do not mirror Rake task 'with_period'
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks :this_does_not_exist
       end

@@ -1,4 +1,7 @@
-require 'bundler/gem_tasks'
+begin
+  require 'bundler/gem_tasks'
+rescue LoadError
+end
 require 'cucumber'
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
@@ -12,7 +15,9 @@ else
   end
 end
 
-Cucumber::Rake::Task.new :features, 'Test features'
+Cucumber::Rake::Task.new :features, 'Test features' do |t|
+  t.bundler = false
+end
 
 def define_spec_task(name, options={})
   RSpec::Core::RakeTask.new name do |t|
@@ -37,5 +42,13 @@ task ''       => [:spec, :features]
 task :default => [:spec, :features]
 
 # Support the 'gem test' command.
-desc ''
-define_spec_task :test, :debug => false
+namespace :test do
+  desc ''
+  define_spec_task :specs, :debug => false
+
+  Cucumber::Rake::Task.new :features, '' do |t|
+    t.bundler = false
+    t.cucumber_opts = '--backtrace'
+  end
+end
+task :test => %w(test:specs test:features)

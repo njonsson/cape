@@ -6,10 +6,8 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
 
   Scenario: mirror only the Rake tasks in the matching namespace
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks 'my_namespace'
       end
@@ -27,10 +25,8 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
 
   Scenario: do not mirror Rake task 'with_period'
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks :my_namespace
       end
@@ -44,10 +40,8 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
 
   Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks :my_namespace
       end
@@ -65,10 +59,8 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
 
   Scenario: mirror Rake task 'my_namespace:my_nested_namespace:in_a_nested_namespace' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         mirror_rake_tasks :my_namespace
       end

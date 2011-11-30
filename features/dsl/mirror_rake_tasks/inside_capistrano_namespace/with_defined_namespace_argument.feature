@@ -6,10 +6,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, with 
 
   Scenario: mirror only the Rake tasks in the matching namespace
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks 'my_namespace'
@@ -29,10 +27,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, with 
 
   Scenario: do not mirror Rake task 'with_period'
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks :my_namespace
@@ -48,10 +44,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, with 
 
   Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks :my_namespace
@@ -71,10 +65,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, with 
 
   Scenario: mirror Rake task 'my_namespace:my_nested_namespace:in_a_nested_namespace' with its description
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       namespace :ns do
         Cape do |cape|
           cape.mirror_rake_tasks :my_namespace

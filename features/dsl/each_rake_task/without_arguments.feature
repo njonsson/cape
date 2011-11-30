@@ -6,10 +6,8 @@ Feature: The #each_rake_task DSL method without arguments
 
   Scenario: enumerate all non-hidden Rake tasks
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         each_rake_task do |t|
           $stdout.puts '', "Name: #{t[:name].inspect}"

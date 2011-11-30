@@ -6,10 +6,8 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
 
   Scenario: use a different Rake executable to enumerate Rake tasks
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         self.local_rake_executable = 'echo "rake this-comes-from-overridden-rake  # This comes from overridden Rake" #'
         $stdout.puts "We changed the local Rake executable to #{self.local_rake_executable.inspect}."
@@ -43,10 +41,8 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
 
   Scenario: use a different Rake executable to execute Rake tasks
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       set :current_path, '/path/to/current/deployed/application'
       Cape do
         self.remote_rake_executable = 'echo "This comes from overridden Rake" #'

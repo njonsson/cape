@@ -6,10 +6,8 @@ Feature: The #each_rake_task DSL method with an argument of a defined namespace
 
   Scenario: enumerate only the Rake tasks in the matching namespace
     Given a full-featured Rakefile
-    And a file named "Capfile" with:
+    And a Capfile with:
       """
-      require 'cape'
-
       Cape do
         each_rake_task :my_namespace do |t|
           $stdout.puts '', "Name: #{t[:name].inspect}"

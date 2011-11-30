@@ -1,3 +1,12 @@
+Given 'a Capfile with:' do |content|
+  preamble = <<-end_preamble
+$:.unshift #{File.expand_path('../../lib', __FILE__).inspect}
+require 'cape'
+
+  end_preamble
+  step('a file named "Capfile" with:', (preamble + content))
+end
+
 Given 'a full-featured Rakefile' do
   step 'a file named "Rakefile" with:', <<-end_step
     desc 'Ends with period.'
