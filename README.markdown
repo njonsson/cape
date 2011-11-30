@@ -38,37 +38,43 @@ If
 
 Then
 
-* **You can invoke [Cape](http://github.com/njonsson/cape)** to dynamically add Capistrano recipes for each of your application’s Rake tasks, and
+* **You can use the [Cape](http://github.com/njonsson/cape) DSL** within Capistrano recipes to dynamically add recipes for your application’s Rake tasks, and
 * **You can run your Rake tasks on your deployed servers,** friction-free, and look like a superhero. _[cue fanfare]_
 
 ## Features
 
 * **Mirror Rake tasks** as Capistrano recipes, optionally filtered by namespace or name
-* **Embed Rake tasks** in a Capistrano namespace
+* **Embed Rake tasks** in Capistrano namespaces
 * **Pass arguments** to Rake tasks by setting environment variables with the same names
 * **Override the default executables** for local and remote Rake installations (`/usr/bin/env rake` is the default)
 * **Enumerate Rake tasks** for your own purposes
 
-## Installation
+## Installation — get your Cape on
 
-Install [the RubyGem](http://rubygems.org/gems/cape "Cape at RubyGems.org"):
+Install [the RubyGem](http://rubygems.org/gems/cape "Cape at RubyGems.org").
 
     $ gem install cape
 
 Or you may want to make Cape a dependency of your project by using [Bundler](http://gembundler.com).
 
+    # Gemfile
+
+    source 'http://rubygems.org'
+
+    gem 'cape'
+
 ## Examples
 
-Assume we have the following _Rakefile_.
+Assume the following Rake tasks are defined.
 
     desc 'Rakes the leaves'
     task :leaves do
-      # (Raking action goes here.)
+      $stdout.puts "Raking the leaves"
     end
 
     desc 'Rakes and bags the leaves'
-    task :bag_leaves, [:paper_or_plastic] => :leaves do
-      # (Bagging action goes here.)
+    task :bag_leaves, [:paper_or_plastic] => :leaves do |task, arguments|
+      $stdout.puts "Putting the leaves in a #{arguments[:paper_or_plastic]} bag"
     end
 
 Rake lists these tasks in the expected fashion.
@@ -77,7 +83,15 @@ Rake lists these tasks in the expected fashion.
     rake bag_leaves[paper_or_plastic]  # Rakes and bags the leaves
     rake leaves                        # Rakes the leaves
 
-Put the following in your _config/deploy.rb_. **Note that Cape statements must be executed within a `Cape` block.**
+    $ rake --describe bag_leaves
+    rake bag_leaves[paper_or_plastic]
+        Rakes and bags the leaves
+
+### Simply mirror all Rake tasks as Capistrano recipes
+
+Add the following to your Capistrano recipes. Note that Cape statements must be executed within a `Cape` block.
+
+    # config/deploy.rb
 
     require 'cape'
 
@@ -86,7 +100,7 @@ Put the following in your _config/deploy.rb_. **Note that Cape statements must b
       mirror_rake_tasks
     end
 
-Now all your Rake tasks can be invoked as Capistrano recipes. Capistrano lists the recipes in the following fashion.
+Now all your Rake tasks appear alongside your Capistrano recipes.
 
     $ cap --tasks
     cap deploy               # Deploys your project.
@@ -112,7 +126,32 @@ Let’s use Capistrano to view the unabbreviated description of a Rake task reci
 
     You must set environment variable PAPER_OR_PLASTIC.
 
-Cape lets you filter the Rake tasks to be mirrored:
+Here’s how to invoke a task/recipe with arguments. On the local computer, via Rake:
+
+    $ rake bag_leaves[plastic]
+    (in /current/working/directory)
+    Raking the leaves
+    Putting the leaves in a plastic bag
+
+On remote computers, via Capistrano:
+
+    $ cap bag_leaves PAPER_OR_PLASTIC=plastic
+      * executing `bag_leaves'
+      * executing "cd /path/to/currently/deployed/version/of/your/app && rake bag_leaves[plastic]"
+        servers: ["your.server.name"]
+        [your.server.name] executing command
+     ** [out :: your.server.name] (in /path/to/currently/deployed/version/of/your/app)
+     ** [out :: your.server.name] Raking the leaves
+     ** [out :: your.server.name] Putting the leaves in a plastic bag
+        command finished in 1000ms
+
+### Mirror some Rake tasks, but not others
+
+Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements must be executed within a `Cape` block.
+
+    # config/deploy.rb
+
+    require 'cape'
 
     Cape do
       # Create Capistrano recipes for the Rake task 'foo' or for the tasks in a
@@ -124,7 +163,13 @@ Cape lets you filter the Rake tasks to be mirrored:
       mirror_rake_tasks 'bar:baz'
     end
 
-Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces.
+### Mirror Rake tasks into a Capistrano namespace
+
+Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be executed within a `Cape` block.
+
+    # config/deploy.rb
+
+    require 'cape'
 
     # Use an argument with the Cape block, if you want to or need to.
     namespace :rake_tasks do
@@ -133,7 +178,13 @@ Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistr
       end
     end
 
-Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace.
+### Iterate over available Rake tasks
+
+Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace. Note that Cape statements must be executed within a `Cape` block.
+
+    # config/deploy.rb
+
+    require 'cape'
 
     Cape do
       each_rake_task do |t|
