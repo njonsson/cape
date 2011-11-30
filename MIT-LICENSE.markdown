@@ -1,5 +1,4 @@
-The MIT License
-===============
+# The MIT License
 
 Source code for _Cape_ is Copyright © 2011 [Nils Jonsson](mailto:cape@nilsjonsson.com) and [contributors](http://github.com/njonsson/cape/contributors "Cape contributors at GitHub").
 

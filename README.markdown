@@ -29,8 +29,7 @@
             <hNNBNBh=(.                                /   \   `
                ..
 
-[<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status" />](http://travis-ci.org/njonsson/cape) Cape
-==================================================================================================================================================================
+# [<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status" />](http://travis-ci.org/njonsson/cape) Cape
 
 If
 
@@ -42,8 +41,7 @@ Then
 * **You can invoke [Cape](http://github.com/njonsson/cape)** to dynamically add Capistrano recipes for each of your application’s Rake tasks, and
 * **You can run your Rake tasks on your deployed servers,** friction-free, and look like a superhero. _[cue fanfare]_
 
-Features
---------
+## Features
 
 * **Mirror Rake tasks** as Capistrano recipes, optionally filtered by namespace or name
 * **Embed Rake tasks** in a Capistrano namespace
@@ -51,8 +49,7 @@ Features
 * **Override the default executables** for local and remote Rake installations (`/usr/bin/env rake` is the default)
 * **Enumerate Rake tasks** for your own purposes
 
-Installation
-------------
+## Installation
 
 Install [the RubyGem](http://rubygems.org/gems/cape "Cape at RubyGems.org"):
 
@@ -60,8 +57,7 @@ Install [the RubyGem](http://rubygems.org/gems/cape "Cape at RubyGems.org"):
 
 Or you may want to make Cape a dependency of your project by using [Bundler](http://gembundler.com).
 
-Examples
---------
+## Examples
 
 Assume we have the following _Rakefile_.
 
@@ -148,19 +144,16 @@ Cape lets you enumerate Rake tasks, optionally filtering them by task name or na
       end
     end
 
-Limitations
------------
+## Limitations
 
 For now, only Rake tasks that have descriptions can be mirrored or enumerated.
 
-Contributing
-------------
+## Contributing
 
 Report defects and feature requests on [GitHub Issues](http://github.com/njonsson/cape/issues).
 
 Your patches are welcome, and you will receive attribution here for good stuff.
 
-License
--------
+## License
 
 Released under the [MIT License](http://github.com/njonsson/cape/blob/master/MIT-LICENSE.markdown).
