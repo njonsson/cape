@@ -37,13 +37,5 @@ task ''       => [:spec, :features]
 task :default => [:spec, :features]
 
 # Support the 'gem test' command.
-namespace :test do
-  desc ''
-  define_spec_task :specs, :debug => false
-
-  Cucumber::Rake::Task.new :features, '' do |t|
-    t.bundler = false
-    t.cucumber_opts = '--backtrace'
-  end
-end
-task :test => %w(test:specs test:features)
+desc ''
+define_spec_task :test, :debug => false
