@@ -70,6 +70,23 @@ Feature: The #mirror_rake_tasks DSL method without arguments
 
       """
 
+  Scenario: mirror Rake task 'with_period' with its implementation
+    Given a full-featured Rakefile
+    And a file named "Capfile" with:
+      """
+      require 'cape'
+
+      set :current_path, '/path/to/current/deployed/application'
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+    When I run `cap with_period`
+    Then the output should contain:
+      """
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
+      """
+
   Scenario: mirror Rake task 'without_period' with its description
     Given a full-featured Rakefile
     And a file named "Capfile" with:
@@ -179,6 +196,23 @@ Feature: The #mirror_rake_tasks DSL method without arguments
 
       """
 
+  Scenario: mirror Rake task 'my_namespace:my_nested_namespace:in_a_nested_namespace' with its implementation
+    Given a full-featured Rakefile
+    And a file named "Capfile" with:
+      """
+      require 'cape'
+
+      set :current_path, '/path/to/current/deployed/application'
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+      When I run `cap my_namespace:my_nested_namespace:in_a_nested_namespace`
+    Then the output should contain:
+      """
+      * executing "cd /path/to/current/deployed/application && /usr/bin/env rake my_namespace:my_nested_namespace:in_a_nested_namespace"
+      """
+
   Scenario: mirror Rake task 'with_two_args' with its description
     Given a full-featured Rakefile
     And a file named "Capfile" with:
@@ -222,6 +256,39 @@ Feature: The #mirror_rake_tasks DSL method without arguments
 
       You must set environment variables AN_ARG1, AN_ARG2, and AN_ARG3.
 
+
+      """
+
+  Scenario: mirror Rake task 'with_three_args' with its implementation enforcing arguments
+    Given a full-featured Rakefile
+    And a file named "Capfile" with:
+      """
+      require 'cape'
+
+      set :current_path, '/path/to/current/deployed/application'
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+    When I run `cap with_three_args AN_ARG1="a value for an_arg1"`
+    Then the output should contain "Environment variable AN_ARG2 must be set (RuntimeError)"
+
+  Scenario: mirror Rake task 'with_three_args' with its implementation
+    Given a full-featured Rakefile
+    And a file named "Capfile" with:
+      """
+      require 'cape'
+
+      set :current_path, '/path/to/current/deployed/application'
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+      When I run `cap with_three_args AN_ARG1="a value for an_arg1" AN_ARG2="a value for an_arg2" AN_ARG3="a value for an_arg3"`
+    Then the output should contain:
+      """
+        * executing `with_three_args'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_three_args[\"a value for an_arg1\",\"a value for an_arg2\",\"a value for an_arg3\"]"
 
       """
 

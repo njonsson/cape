@@ -74,6 +74,25 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
 
       """
 
+  Scenario: mirror Rake task 'with_period' with its implementation
+    Given a full-featured Rakefile
+    And a file named "Capfile" with:
+      """
+      require 'cape'
+
+      set :current_path, '/path/to/current/deployed/application'
+      namespace :ns do
+        Cape do |cape|
+          cape.mirror_rake_tasks
+        end
+      end
+      """
+    When I run `cap ns:with_period`
+    Then the output should contain:
+      """
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
+      """
+
   Scenario: mirror Rake task 'without_period' with its description
     Given a full-featured Rakefile
     And a file named "Capfile" with:
