@@ -154,7 +154,7 @@ Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements mu
     require 'cape'
 
     Cape do
-      # Create Capistrano recipes for the Rake task 'foo' or for the tasks in a
+      # Create Capistrano recipes for the Rake task 'foo' or for the tasks in the
       # 'foo' namespace.
       mirror_rake_tasks :foo
 
@@ -187,11 +187,17 @@ Cape lets you enumerate Rake tasks, optionally filtering them by task name or na
     require 'cape'
 
     Cape do
+      # Enumerate all Rake tasks.
       each_rake_task do |t|
         # Do something interesting with this hash:
         # * t[:name] -- the full name of the task
         # * t[:parameters] -- the names of task arguments
         # * t[:description] -- documentation on the task, including parameters
+      end
+
+      # Enumerate the Rake task 'foo' or the tasks in the 'foo' namespace.
+      each_rake_task 'foo' do |t|
+        # ...
       end
     end
 
