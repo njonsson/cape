@@ -60,7 +60,7 @@ You must set environment #{noun} #{parameters_list}.
             unless (value = ENV[a.upcase])
               fail "Environment variable #{a.upcase} must be set"
             end
-            value
+            value.inspect
           end
           if arguments.empty?
             arguments = nil
