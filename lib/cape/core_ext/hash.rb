@@ -17,8 +17,8 @@ module Cape
 
 end
 
-unless Hash.instance_methods.collect(&:to_s).include?('slice')
-  Hash.class_eval do
+unless ::Hash.instance_methods.collect(&:to_s).include?('slice')
+  ::Hash.class_eval do
     include Cape::CoreExt::Hash
   end
 end

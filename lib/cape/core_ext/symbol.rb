@@ -18,8 +18,8 @@ module Cape
 
 end
 
-unless Symbol.instance_methods.collect(&:to_s).include?('<=>')
-  Symbol.class_eval do
+unless ::Symbol.instance_methods.collect(&:to_s).include?('<=>')
+  ::Symbol.class_eval do
     include Cape::CoreExt::Symbol
   end
 end

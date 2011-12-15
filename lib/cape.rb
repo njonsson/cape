@@ -1,5 +1,5 @@
-Dir.glob( File.expand_path( 'cape/*.rb', File.dirname( __FILE__ ))) do |f|
-  require "cape/#{File.basename f, '.rb'}"
+::Dir.glob( ::File.expand_path( '../cape/*.rb', __FILE__ )) do |f|
+  require "cape/#{::File.basename f, '.rb'}"
 end
 
 # Contains the implementation of Cape.
