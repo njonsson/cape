@@ -7,9 +7,15 @@ module Cape
     DEFAULT_EXECUTABLE = '/usr/bin/env rake'.freeze
 
     # Sets the command used to run Rake on the local computer.
+    #
+    # @param [String] value the command used to run Rake on the local computer
+    # @return [String] _value_
     attr_writer :local_executable
 
     # Sets the command used to run Rake on remote computers.
+    #
+    # @param [String] value the command used to run Rake on remote computers
+    # @return [String] _value_
     attr_writer :remote_executable
 
     # Constructs a new Rake object with the specified _attributes_.
@@ -19,15 +25,16 @@ module Cape
       end
     end
 
-    # Yields each available Rake task to a block. The optional _task_expression_
-    # argument limits the list to a single task or a namespace containing
-    # multiple tasks.
+    # Enumerates Rake tasks.
     #
-    # Tasks are yielded as Hash objects of the form:
+    # @param [String, Symbol] task_expression the full name of a task or
+    #                                         namespace to filter; optional
+    # @param [Proc]           block           a block that processes tasks
     #
-    #   {:name        => <String>,
-    #    :parameters  => <String Array or nil>,
-    #    :description => <String>}
+    # @yield [task] a block that processes tasks
+    # @yieldparam [Hash] task metadata on a task
+    #
+    # @return [Rake] the object
     def each_task(task_expression=nil)
       task_expression = " #{task_expression}" if task_expression
       command = "#{local_executable} --tasks #{task_expression}"
@@ -43,14 +50,20 @@ module Cape
       self
     end
 
-    # Returns the command used to run Rake on the local computer. Defaults to
-    # DEFAULT_EXECUTABLE.
+    # The command used to run Rake on the local computer.
+    #
+    # @return [String] the command used to run Rake on the local computer
+    #
+    # @see DEFAULT_EXECUTABLE
     def local_executable
       @local_executable ||= DEFAULT_EXECUTABLE
     end
 
-    # Returns the command used to run Rake on remote computers. Defaults to
-    # DEFAULT_EXECUTABLE.
+    # The command used to run Rake on remote computers.
+    #
+    # @return [String] the command used to run Rake on remote computers
+    #
+    # @see DEFAULT_EXECUTABLE
     def remote_executable
       @remote_executable ||= DEFAULT_EXECUTABLE
     end

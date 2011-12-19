@@ -171,8 +171,8 @@ Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistr
 
     require 'cape'
 
-    # Use an argument with the Cape block, if you want to or need to.
     namespace :rake_tasks do
+      # Use an argument with the Cape block, if you want to or need to.
       Cape do |cape|
         cape.mirror_rake_tasks
       end

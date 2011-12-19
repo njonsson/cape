@@ -1,21 +1,37 @@
-require 'cape/strings'
+require 'cape/util'
 
 module Cape
 
   # An abstraction of the Capistrano installation.
   class Capistrano
 
-    # Defines the specified _task_ as a Capistrano task, provided a Binding
-    # named argument +:binding+ and a Cape::Rake named argument +:rake+. Any
-    # parameters the task has are converted to environment variables, since
-    # Capistrano does not have the concept of task parameters.
+    # Defines the specified _task_ as a Capistrano task.
     #
-    # The _task_ argument must be a Hash of the form:
+    # @param [Hash] task            metadata for a task
+    # @param [Hash] named_arguments named arguments
     #
-    #   {:name        => <String>,
-    #    :parameters  => <String Array or nil>,
-    #    :description => <String>}
-    def define(task, named_arguments={})
+    # @option task [String]               :name        the name of the task
+    # @option task [Array of String, nil] :parameters  the names of the task's
+    #                                                  parameters, if any
+    # @option task [String]               :description documentation for the task
+    #
+    # @option named_arguments [Binding]           :binding the Binding of your
+    #                                                      Capistrano recipes
+    #                                                      file
+    # @option named_arguments [Rake]              :rake    a Cape abstraction of
+    #                                                      the Rake installation
+    # @option named_arguments [[Array of] Symbol] :roles   the Capistrano role(s)
+    #                                                      of remote computers
+    #                                                      that will execute
+    #                                                      _task_
+    #
+    # @return [Capistrano] the object
+    #
+    # @raise [ArgumentError] +named_arguments[:binding]+ is missing
+    # @raise [ArgumentError] +named_arguments[:rake]+ is missing
+    #
+    # @note Any parameters that the task has are integrated via environment variables, since Capistrano does not support task parameters per se.
+    def define(task, named_arguments)
       unless (binding = named_arguments[:binding])
         raise ::ArgumentError, ':binding named argument is required'
       end
@@ -40,8 +56,8 @@ module Cape
       description = [task[:description]]
       description << '.' unless task[:description].end_with?('.')
       unless (parameters = Array(task[:parameters])).empty?
-        noun            = Strings.pluralize('variable', parameters.length)
-        parameters_list = Strings.to_list_phrase(parameters.collect(&:upcase))
+        noun            = Util.pluralize('variable', parameters.length)
+        parameters_list = Util.to_list_phrase(parameters.collect(&:upcase))
         description << <<-end_description
 
 

@@ -2,12 +2,15 @@ module Cape
 
   module CoreExt
 
-    # Contains extensions to the Symbol core class.
+    # Adds methods missing from Ruby's Symbol core class.
     module Symbol
 
-      # Returns +0+ if the Symbol is equal to _other_, +-1+ if it is
-      # alphabetically lesser than _other_, and +1+ if it is alphabetically
-      # greater than _other_.
+      # Compares the String representation of the Symbol to that of another.
+      #
+      # @param [Symbol] other
+      # @return  [0] the Symbol is equal to _other_
+      # @return [-1] the Symbol is lesser than _other_
+      # @return  [1] the Symbol is greater than _other_
       def <=>(other)
         to_s <=> other.to_s
       end

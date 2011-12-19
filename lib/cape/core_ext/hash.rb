@@ -2,11 +2,14 @@ module Cape
 
   module CoreExt
 
-    # Contains extensions to the Hash core class.
+    # Adds methods missing from Ruby's Hash core class.
     module Hash
 
       # Returns a copy of the Hash containing values only for the specified
       # _keys_.
+      #
+      # @param [Array] keys zero or more hash keys
+      # @return [Hash] a subset of the Hash
       def slice(*keys)
         ::Hash[select { |key, value| keys.include? key }]
       end
