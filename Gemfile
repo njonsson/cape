@@ -2,8 +2,6 @@ source 'http://rubygems.org'
 
 gemspec
 
-gem 'jruby-openssl',          :platforms => :jruby
-
 group :debug do
   gem 'ruby-debug',           :platforms => :mri_18
 
