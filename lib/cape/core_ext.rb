@@ -1,4 +1,4 @@
-::Dir.glob( ::File.expand_path( '../core_ext/*.rb', __FILE__ )) do |f|
+::Dir.glob(::File.expand_path('../core_ext/*.rb', __FILE__)) do |f|
   require "cape/core_ext/#{::File.basename f, '.rb'}"
 end
 
