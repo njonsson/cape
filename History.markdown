@@ -1,6 +1,6 @@
 # Version history for the _Cape_ project
 
-## <a name="v1.0.3"></a>v1.0.3, Tue 11/29/2011
+## <a name="v1.0.3"></a>v1.0.3, Thu 12/29/2011
 
 * Run Cucumber features from `gem test cape`
 
