@@ -138,7 +138,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       ------------------------------------------------------------
       My task with one argument.
 
-      You must set environment variable THE_ARG.
+      Set environment variable THE_ARG to pass a Rake task argument.
 
 
       """
@@ -213,7 +213,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       ------------------------------------------------------------
       My task with two arguments.
 
-      You must set environment variables MY_ARG1 and MY_ARG2.
+      Set environment variables MY_ARG1 and MY_ARG2 to pass Rake task arguments.
 
 
       """
@@ -234,22 +234,11 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       ------------------------------------------------------------
       My task with three arguments.
 
-      You must set environment variables AN_ARG1, AN_ARG2, and AN_ARG3.
+      Set environment variables AN_ARG1, AN_ARG2, and AN_ARG3 to pass Rake task
+      arguments.
 
 
       """
-
-  Scenario: mirror Rake task 'with_three_args' with its implementation enforcing arguments
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      set :current_path, '/path/to/current/deployed/application'
-      Cape do
-        mirror_rake_tasks
-      end
-      """
-    When I run `cap with_three_args AN_ARG1="a value for an_arg1"`
-    Then the output should contain "Environment variable AN_ARG2 must be set (RuntimeError)"
 
   Scenario: mirror Rake task 'with_three_args' with its implementation
     Given a full-featured Rakefile
@@ -261,11 +250,29 @@ Feature: The #mirror_rake_tasks DSL method without arguments
         mirror_rake_tasks
       end
       """
-      When I run `cap with_three_args AN_ARG1="a value for an_arg1" AN_ARG2="a value for an_arg2" AN_ARG3="a value for an_arg3"`
+    When I run `cap with_three_args AN_ARG1="a value for an_arg1" AN_ARG2="a value for an_arg2" AN_ARG3="a value for an_arg3"`
     Then the output should contain:
       """
         * executing `with_three_args'
         * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_three_args[\"a value for an_arg1\",\"a value for an_arg2\",\"a value for an_arg3\"]"
+
+      """
+
+  Scenario: mirror Rake task 'with_three_args' with its implementation not enforcing arguments
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      set :current_path, '/path/to/current/deployed/application'
+
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+    When I run `cap with_three_args AN_ARG2="a value for an_arg2"`
+    Then the output should contain:
+      """
+        * executing `with_three_args'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_three_args[,\"a value for an_arg2\",]"
 
       """
 

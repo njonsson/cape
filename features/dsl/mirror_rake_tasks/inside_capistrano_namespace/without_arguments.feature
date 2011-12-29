@@ -150,7 +150,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
       ------------------------------------------------------------
       My task with one argument.
 
-      You must set environment variable THE_ARG.
+      Set environment variable THE_ARG to pass a Rake task argument.
 
 
       """
@@ -215,7 +215,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
       ------------------------------------------------------------
       My task with two arguments.
 
-      You must set environment variables MY_ARG1 and MY_ARG2.
+      Set environment variables MY_ARG1 and MY_ARG2 to pass Rake task arguments.
 
 
       """
@@ -238,7 +238,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
       ------------------------------------------------------------
       My task with three arguments.
 
-      You must set environment variables AN_ARG1, AN_ARG2, and AN_ARG3.
+      Set environment variables AN_ARG1, AN_ARG2, and AN_ARG3 to pass Rake task
+      arguments.
 
 
       """

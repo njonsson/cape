@@ -124,7 +124,7 @@ Let’s use Capistrano to view the unabbreviated description of a Rake task reci
     ------------------------------------------------------------
     Bags the leaves.
 
-    You must set environment variable PAPER_OR_PLASTIC.
+    Set environment variable PAPER_OR_PLASTIC to pass a Rake task argument.
 
 Here’s how to invoke a task/recipe with arguments. On the local computer, via Rake:
 

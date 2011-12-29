@@ -58,10 +58,14 @@ module Cape
       unless (parameters = Array(task[:parameters])).empty?
         noun            = Util.pluralize('variable', parameters.length)
         parameters_list = Util.to_list_phrase(parameters.collect(&:upcase))
+        singular        = 'Rake task argument'
+        noun_phrase     = (parameters.length == 1) ?
+                          "a #{singular}"          :
+                          Util.pluralize(singular)
         description << <<-end_description
 
 
-You must set environment #{noun} #{parameters_list}.
+Set environment #{noun} #{parameters_list} to pass #{noun_phrase}.
         end_description
       end
       description.join
@@ -73,10 +77,10 @@ You must set environment #{noun} #{parameters_list}.
       block = lambda { |context|
         context.task name.last, :roles => roles do
           arguments = Array(task[:parameters]).collect do |a|
-            unless (value = ENV[a.upcase])
-              fail "Environment variable #{a.upcase} must be set"
+            if (value = ENV[a.upcase])
+              value = value.inspect
             end
-            value.inspect
+            value
           end
           if arguments.empty?
             arguments = nil
