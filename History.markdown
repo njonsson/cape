@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.0.3"></a>v1.0.3, Tue 11/29/2011
+
+* Run Cucumber features from `gem test cape`
+
 ## <a name="v1.0.2"></a>v1.0.2, Thu 12/29/2011
 
 * Support Rake task arguments that contain whitespace
