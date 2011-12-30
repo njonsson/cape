@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.1.0"></a>v1.1.0, Thu 12/29/2011
+
+* Allow environment variables for Rake task arguments to be optional
+
 ## <a name="v1.0.3"></a>v1.0.3, Thu 12/29/2011
 
 * Run Cucumber features from `gem test cape`
