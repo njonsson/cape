@@ -16,8 +16,7 @@ Gem::Specification.new do |s|
                   'pass Rake task arguments via environment variables.'
   s.license     = 'MIT'
 
-  # TODO: Apply for RubyForge project
-  # s.rubyforge_project = 'cape'
+  s.rubyforge_project = 'cape'
 
   s.required_ruby_version = '>= 1.8.7'
 
