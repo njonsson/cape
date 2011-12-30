@@ -10,10 +10,10 @@ Gem::Specification.new do |s|
   s.email       = %w(cape@nilsjonsson.com)
   s.homepage    = ''
   s.summary     = 'Dynamically generates Capistrano recipes for Rake tasks'
-  s.description = 'Cape provides a simple DSL for selecting Rake tasks to be ' +
-                  'made available as documented Capistrano recipes. You can '  +
-                  'pass required arguments to Rake tasks via environment '     +
-                  'variables.'
+  s.description = 'Cape dynamically generates Capistrano recipes for Rake '    +
+                  'tasks. It provides a DSL for reflecting on Rake tasks and ' +
+                  'mirroring them as documented Capistrano recipes. You can '  +
+                  'pass Rake task arguments via environment variables.'
   s.license     = 'MIT'
 
   # TODO: Apply for RubyForge project
