@@ -201,6 +201,23 @@ Cape lets you enumerate Rake tasks, optionally filtering them by task name or na
       end
     end
 
+### Configure Rake execution
+
+Cape lets you specify how Rake should be executed on the local computer and on remote computers. Note that Cape statements must be executed within a `Cape` block.
+
+    # config/deploy.rb
+
+    require 'cape'
+
+    Cape do
+      # Configure Cape to execute Rake via Bundler, both locally and remotely.
+      self.local_rake_executable  = '/usr/bin/env bundle exec rake'
+      self.remote_rake_executable = '/usr/bin/env bundle exec rake'
+
+      # Create Capistrano recipes for all Rake tasks.
+      mirror_rake_tasks
+    end
+
 ## Limitations
 
 For now, only Rake tasks that have descriptions can be mirrored or enumerated.
