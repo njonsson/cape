@@ -157,10 +157,6 @@ Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements mu
       # Create Capistrano recipes for the Rake task 'foo' or for the tasks in the
       # 'foo' namespace.
       mirror_rake_tasks :foo
-
-      # Create Capistrano recipes only for the Rake task 'bar:baz' or for the
-      # tasks in the 'bar:baz' namespace.
-      mirror_rake_tasks 'bar:baz'
     end
 
 ### Mirror Rake tasks into a Capistrano namespace
