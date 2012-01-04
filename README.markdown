@@ -214,7 +214,7 @@ Cape lets you specify how Rake should be executed on the local computer and on r
       mirror_rake_tasks
     end
 
-## Limitations
+## Known issues
 
 For now, only Rake tasks that have descriptions can be mirrored or enumerated.
 
