@@ -5,15 +5,16 @@ module Cape
   # An abstraction of the Capistrano installation.
   class Capistrano
 
-    # Defines the specified _task_ as a Capistrano task.
+    # Defines a wrapper in Capistrano around the specified Rake _task_.
     #
-    # @param [Hash] task            metadata for a task
+    # @param [Hash] task            metadata for a Rake task
     # @param [Hash] named_arguments named arguments
     #
-    # @option task [String]               :name        the name of the task
-    # @option task [Array of String, nil] :parameters  the names of the task's
-    #                                                  parameters, if any
-    # @option task [String]               :description documentation for the task
+    # @option task [String]               :name        the name of the Rake task
+    # @option task [Array of String, nil] :parameters  the names of the Rake
+    #                                                  task's parameters, if any
+    # @option task [String]               :description documentation for the Rake
+    #                                                  task
     #
     # @option named_arguments [Binding]           :binding the Binding of your
     #                                                      Capistrano recipes
@@ -30,8 +31,8 @@ module Cape
     # @raise [ArgumentError] +named_arguments[:binding]+ is missing
     # @raise [ArgumentError] +named_arguments[:rake]+ is missing
     #
-    # @note Any parameters that the task has are integrated via environment variables, since Capistrano does not support task parameters per se.
-    def define(task, named_arguments)
+    # @note Any parameters that the Rake task has are integrated via environment variables, since Capistrano does not support recipe parameters per se.
+    def define_rake_wrapper(task, named_arguments)
       unless (binding = named_arguments[:binding])
         raise ::ArgumentError, ':binding named argument is required'
       end
@@ -73,7 +74,7 @@ Set environment #{noun} #{parameters_list} to pass #{noun_phrase}.
 
     def implement(task, roles, capistrano_context, rake)
       name = task[:name].split(':')
-      # Define the task.
+      # Define the recipe.
       block = lambda { |context|
         context.task name.last, :roles => roles do
           arguments = Array(task[:parameters]).collect do |a|
@@ -91,7 +92,7 @@ Set environment #{noun} #{parameters_list} to pass #{noun_phrase}.
                       "#{rake.remote_executable} #{name.join ':'}#{arguments}"
         end
       }
-      # Nest the task inside its containing namespaces.
+      # Nest the recipe inside its containing namespaces.
       name[0...-1].reverse.each do |namespace_token|
         inner_block = block
         block = lambda { |context|

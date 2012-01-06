@@ -124,7 +124,8 @@ module Cape
     def mirror_rake_tasks(task_expression=nil)
       d = nil
       rake.each_task task_expression do |t|
-        (d ||= deployment_library).define t, :binding => binding, :rake => rake
+        (d ||= deployment_library).define_rake_wrapper t, :binding => binding,
+                                                          :rake => rake
       end
       self
     end

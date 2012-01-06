@@ -61,30 +61,34 @@ describe Cape::DSL do
       do_mirror_rake_tasks
     end
 
-    describe 'should Capistrano#define Rake#each_task' do
+    describe 'should Capistrano#define_rake_wrapper for Rake#each_task' do
       it 'with the expected task' do
-        mock_capistrano.should_receive(:define).with do |task, options|
+        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                      options|
           task == {:name => task_expression}
         end
         do_mirror_rake_tasks
       end
 
       it 'with the expected named options' do
-        mock_capistrano.should_receive(:define).with do |task, opts|
-          opts.keys.sort == [:binding, :rake]
+        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                      options|
+          options.keys.sort == [:binding, :rake]
         end
         do_mirror_rake_tasks
       end
 
       it 'with a :binding option' do
-        mock_capistrano.should_receive(:define).with do |task, options|
+        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                      options|
           options[:binding].is_a? Binding
         end
         do_mirror_rake_tasks
       end
 
       it 'with the expected :rake option' do
-        mock_capistrano.should_receive(:define).with do |task, options|
+        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
+                                                                      options|
           options[:rake] == mock_rake
         end
         do_mirror_rake_tasks
