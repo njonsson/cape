@@ -137,7 +137,7 @@ On remote computers, via Capistrano:
 
     $ cap bag_leaves PAPER_OR_PLASTIC=plastic
       * executing `bag_leaves'
-      * executing "cd /path/to/currently/deployed/version/of/your/app && rake bag_leaves[plastic]"
+      * executing "cd /path/to/currently/deployed/version/of/your/app && /usr/bin/env rake bag_leaves[plastic]"
         servers: ["your.server.name"]
         [your.server.name] executing command
      ** [out :: your.server.name] (in /path/to/currently/deployed/version/of/your/app)
