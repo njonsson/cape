@@ -205,11 +205,11 @@ Cape lets you specify how Rake should be executed on the local computer and on r
 
     require 'cape'
 
-    Cape do
-      # Configure Cape to execute Rake via Bundler, both locally and remotely.
-      self.local_rake_executable  = '/usr/bin/env bundle exec rake'
-      self.remote_rake_executable = '/usr/bin/env bundle exec rake'
+    # Configure Cape to execute Rake via Bundler, both locally and remotely.
+    Cape.local_rake_executable  = '/usr/bin/env bundle exec rake'
+    Cape.remote_rake_executable = '/usr/bin/env bundle exec rake'
 
+    Cape do
       # Create Capistrano recipes for all Rake tasks.
       mirror_rake_tasks
     end

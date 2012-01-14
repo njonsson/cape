@@ -8,10 +8,11 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
     Given a full-featured Rakefile
     And a Capfile with:
       """
+      Cape.local_rake_executable = 'echo "rake this-comes-from-overridden-rake  # This comes from overridden Rake" #'
+
       Cape do
-        self.local_rake_executable = 'echo "rake this-comes-from-overridden-rake  # This comes from overridden Rake" #'
-        $stdout.puts "We changed the local Rake executable to #{self.local_rake_executable.inspect}."
-        $stdout.puts "We left the remote Rake executable as #{self.remote_rake_executable.inspect}."
+        $stdout.puts "We changed the local Rake executable to #{local_rake_executable.inspect}."
+        $stdout.puts "We left the remote Rake executable as #{remote_rake_executable.inspect}."
         each_rake_task do |t|
           $stdout.puts '', "Name: #{t[:name].inspect}"
           if t[:parameters]
@@ -44,10 +45,12 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
     And a Capfile with:
       """
       set :current_path, '/path/to/current/deployed/application'
+
+      Cape.remote_rake_executable = 'echo "This comes from overridden Rake" #'
+
       Cape do
-        self.remote_rake_executable = 'echo "This comes from overridden Rake" #'
-        $stdout.puts "We changed the remote Rake executable to #{self.remote_rake_executable.inspect}."
-        $stdout.puts "We left the local Rake executable as #{self.local_rake_executable.inspect}."
+        $stdout.puts "We changed the remote Rake executable to #{remote_rake_executable.inspect}."
+        $stdout.puts "We left the local Rake executable as #{local_rake_executable.inspect}."
         mirror_rake_tasks
       end
       """
