@@ -12,6 +12,11 @@ group :debug do
   gem 'ruby-debug19',         :platforms => :mri_19
 end
 
+group :development do
+  gem 'guard-rspec'
+  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+end
+
 group :doc do
   gem 'yard',                 :platforms => [:ruby, :mswin, :mingw]
   gem 'rdiscount',            :platforms => [:ruby, :mswin, :mingw]
