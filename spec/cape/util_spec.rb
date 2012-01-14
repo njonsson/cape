@@ -1,7 +1,7 @@
 require 'cape/util'
 
 describe Cape::Util do
-  describe '::pluralize' do
+  describe '.pluralize' do
     it "should pluralize 'foo' as expected" do
       Cape::Util.pluralize('foo').should == 'foos'
     end
@@ -23,7 +23,7 @@ describe Cape::Util do
     end
   end
 
-  describe '::to_list_phrase' do
+  describe '.to_list_phrase' do
     it 'should make the expected list phrase of an empty array' do
       Cape::Util.to_list_phrase([]).should == ''
     end
