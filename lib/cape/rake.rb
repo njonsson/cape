@@ -25,6 +25,17 @@ module Cape
       end
     end
 
+    # Compares the Rake object to another.
+    #
+    # @param [Object] other another object
+    # @return [true]  the Rake object is equal to _other_
+    # @return [false] the Rake object is unequal to _other_
+    def ==(other)
+      other.kind_of?(Rake)                          &&
+      (other.local_executable  == local_executable) &&
+      (other.remote_executable == remote_executable)
+    end
+
     # Enumerates Rake tasks.
     #
     # @param [String, Symbol] task_expression the full name of a task or

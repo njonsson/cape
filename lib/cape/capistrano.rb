@@ -1,9 +1,21 @@
+require 'cape/rake'
 require 'cape/util'
 
 module Cape
 
   # An abstraction of the Capistrano installation.
   class Capistrano
+
+    # A Cape abstraction of the Rake installation.
+    attr_accessor :rake
+
+    # Constructs a new Capistrano object with the specified _attributes_.
+    def initialize(attributes={})
+      attributes.each do |name, value|
+        send "#{name}=", value
+      end
+      self.rake ||= Rake.new
+    end
 
     # Defines a wrapper in Capistrano around the specified Rake _task_.
     #
@@ -19,8 +31,6 @@ module Cape
     # @option named_arguments [Binding]           :binding the Binding of your
     #                                                      Capistrano recipes
     #                                                      file
-    # @option named_arguments [Rake]              :rake    a Cape abstraction of
-    #                                                      the Rake installation
     # @option named_arguments [[Array of] Symbol] :roles   the Capistrano role(s)
     #                                                      of remote computers
     #                                                      that will execute
@@ -29,23 +39,17 @@ module Cape
     # @return [Capistrano] the object
     #
     # @raise [ArgumentError] +named_arguments[:binding]+ is missing
-    # @raise [ArgumentError] +named_arguments[:rake]+ is missing
     #
     # @note Any parameters that the Rake task has are integrated via environment variables, since Capistrano does not support recipe parameters per se.
     def define_rake_wrapper(task, named_arguments)
       unless (binding = named_arguments[:binding])
         raise ::ArgumentError, ':binding named argument is required'
       end
-      unless (rake = named_arguments[:rake])
-        raise ::ArgumentError, ':rake named argument is required'
-      end
       roles = named_arguments[:roles] || :app
 
-      capistrano = binding.eval('self', __FILE__, __LINE__)
-      if (description = build_capistrano_description(task))
-        capistrano.desc description
-      end
-      implement task, roles, capistrano, rake
+      capistrano_context = binding.eval('self', __FILE__, __LINE__)
+      describe  task,        capistrano_context
+      implement task, roles, capistrano_context
       self
     end
 
@@ -72,8 +76,16 @@ Set environment #{noun} #{parameters_list} to pass #{noun_phrase}.
       description.join
     end
 
-    def implement(task, roles, capistrano_context, rake)
+    def describe(task, capistrano_context)
+      if (description = build_capistrano_description(task))
+        capistrano_context.desc description
+      end
+      self
+    end
+
+    def implement(task, roles, capistrano_context)
       name = task[:name].split(':')
+      rake = self.rake
       # Define the recipe.
       block = lambda { |context|
         context.task name.last, :roles => roles do

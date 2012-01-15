@@ -19,7 +19,7 @@ describe Cape::DSL do
 
   before :each do
     Cape::Capistrano.stub!(:new).and_return mock_capistrano
-    Cape::Rake.stub!(:new).and_return mock_rake
+    Cape::Rake.      stub!(:new).and_return mock_rake
   end
 
   describe 'when sent #each_rake_task' do
@@ -73,7 +73,7 @@ describe Cape::DSL do
       it 'with the expected named options' do
         mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
                                                                       options|
-          options.keys.sort == [:binding, :rake]
+          options.keys == [:binding]
         end
         do_mirror_rake_tasks
       end
@@ -82,14 +82,6 @@ describe Cape::DSL do
         mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
                                                                       options|
           options[:binding].is_a? Binding
-        end
-        do_mirror_rake_tasks
-      end
-
-      it 'with the expected :rake option' do
-        mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                      options|
-          options[:rake] == mock_rake
         end
         do_mirror_rake_tasks
       end

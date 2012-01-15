@@ -122,10 +122,8 @@ module Cape
     #     end
     #   end
     def mirror_rake_tasks(task_expression=nil)
-      d = nil
       rake.each_task task_expression do |t|
-        (d ||= deployment_library).define_rake_wrapper t, :binding => binding,
-                                                          :rake => rake
+        deployment_library.define_rake_wrapper t, :binding => binding
       end
       self
     end
@@ -158,8 +156,10 @@ module Cape
   private
 
     def deployment_library
+      return @deployment_library if @deployment_library
+
       raise_unless_capistrano
-      Capistrano.new
+      @deployment_library = Capistrano.new(:rake => rake)
     end
 
     def raise_unless_capistrano
