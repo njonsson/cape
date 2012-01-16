@@ -79,6 +79,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
     When I run `cap with_period`
     Then the output should contain:
       """
+        * executing `with_period'
         * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
       """
 
@@ -194,7 +195,8 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       When I run `cap my_namespace:my_nested_namespace:in_a_nested_namespace`
     Then the output should contain:
       """
-      * executing "cd /path/to/current/deployed/application && /usr/bin/env rake my_namespace:my_nested_namespace:in_a_nested_namespace"
+        * executing `my_namespace:my_nested_namespace:in_a_nested_namespace'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake my_namespace:my_nested_namespace:in_a_nested_namespace"
       """
 
   Scenario: mirror Rake task 'with_two_args' with its description

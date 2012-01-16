@@ -85,6 +85,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
     When I run `cap ns:with_period`
     Then the output should contain:
       """
+        * executing `ns:with_period'
         * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
       """
 
