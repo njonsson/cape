@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Nils Jonsson']
   s.email       = %w(cape@nilsjonsson.com)
-  s.homepage    = ''
+  s.homepage    = 'http://github.com/njonsson/cape'
   s.summary     = 'Dynamically generates Capistrano recipes for Rake tasks'
   s.description = 'Cape dynamically generates Capistrano recipes for Rake '    +
                   'tasks. It provides a DSL for reflecting on Rake tasks and ' +
