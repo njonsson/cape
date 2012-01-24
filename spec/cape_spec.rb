@@ -1,5 +1,23 @@
-require 'cape/version'
+require 'cape'
+require 'cape/dsl'
 
-describe Cape::VERSION do
-  it { should match(/^\d+\.\d+\.\d+$/) }
+describe Cape do
+  Cape::DSL.instance_methods.each do |m|
+    it { should respond_to(m) }
+  end
+end
+
+describe '#Cape' do
+  it 'should yield the Cape module if given a unary block' do
+    yielded = nil
+    Cape do |c|
+      yielded = c
+    end
+    yielded.should == Cape
+  end
+
+  it 'should accept a nullary block' do
+    Cape do
+    end
+  end
 end
