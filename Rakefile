@@ -30,7 +30,7 @@ def define_spec_task(name, options={})
         t.rspec_opts << '--debug'
       end
     end
-    t.pattern = "spec/**/*_spec.rb"
+    t.pattern = %w(spec/*_spec.rb spec/**/*_spec.rb)
   end
 end
 
