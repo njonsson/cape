@@ -6,10 +6,12 @@ Gem::Specification.new do |s|
   s.name        = 'cape'
   s.version     = Cape::VERSION
   s.summary     = 'Dynamically generates Capistrano recipes for Rake tasks'
-  s.description = 'Cape dynamically generates Capistrano recipes for Rake '    +
-                  'tasks. It provides a DSL for reflecting on Rake tasks and ' +
-                  'mirroring them as documented Capistrano recipes. You can '  +
-                  'pass Rake task arguments via environment variables.'
+  s.description = <<-end_description.gsub(/^\s+/, '').chomp
+                  Cape dynamically generates Capistrano recipes for Rake tasks.
+                  It provides a DSL for reflecting on Rake tasks and mirroring
+                  them as documented Capistrano recipes. You can pass Rake task
+                  arguments via environment variables.
+                  end_description
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Nils Jonsson']
   s.email       = %w(cape@nilsjonsson.com)
