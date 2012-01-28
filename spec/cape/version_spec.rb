@@ -1,4 +1,3 @@
-require 'rspec'
 require 'cape/version'
 
 describe Cape::VERSION do
