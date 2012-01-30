@@ -50,7 +50,10 @@ module Cape
       task_expression = " #{task_expression}" if task_expression
       command = "#{local_executable} --tasks #{task_expression}"
       `#{command}`.each_line do |l|
-        matches = l.chomp.match(/^rake (.+?)(?:\[(.+?)\])?\s+# (.+)/)
+        unless (matches = l.chomp.match(/^rake (.+?)(?:\[(.+?)\])?\s+# (.+)/))
+          next
+        end
+
         task = {}.tap do |t|
           t[:name]        = matches[1].strip
           t[:parameters]  = matches[2].split(',') if matches[2]
