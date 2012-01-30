@@ -47,11 +47,13 @@ module Cape
     #
     # @return [Rake] the object
     def each_task(task_expression=nil)
-      task_expression = " #{task_expression}" if task_expression
-      command = "#{local_executable} --tasks #{task_expression}"
       previous_task, this_task = nil, nil
-      `#{command}`.each_line do |l|
-        unless (matches = l.chomp.match(/^rake (.+?)(?:\[(.+?)\])?\s+# (.+)/))
+      task_expression = task_expression                       ?
+                        ::Regexp.escape(task_expression.to_s) :
+                        '.+?'
+      regexp = /^rake (#{task_expression}(?::.+?)?)(?:\[(.+?)\])?\s+# (.+)/
+      `#{local_executable} --tasks`.each_line do |l|
+        unless (matches = l.chomp.match(regexp))
           next
         end
 
