@@ -21,6 +21,9 @@ Given 'a full-featured Rakefile' do
     desc 'My task with one argument'
     task :with_one_arg, [:the_arg]
 
+    desc 'A task that shadows a namespace'
+    task :my_namespace
+
     namespace :my_namespace do
       desc 'My task in a namespace'
       task :in_a_namespace

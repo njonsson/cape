@@ -31,6 +31,10 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       """
     And the output should contain:
       """
+      cap my_namespace                                           # A task that shadows a names...
+      """
+    And the output should contain:
+      """
       cap my_namespace:in_a_namespace                            # My task in a namespace.
       """
     And the output should contain:
@@ -142,6 +146,42 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       Set environment variable THE_ARG if you want to pass a Rake task argument.
 
 
+      """
+
+  Scenario: mirror Rake task 'my_namespace' with its description
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+    When I run `cap -e my_namespace`
+    Then the output should contain exactly:
+      """
+      ------------------------------------------------------------
+      cap my_namespace
+      ------------------------------------------------------------
+      A task that shadows a namespace.
+
+
+      """
+
+  Scenario: mirror Rake task 'my_namespace' with its implementation
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      set :current_path, '/path/to/current/deployed/application'
+
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+    When I run `cap my_namespace`
+    Then the output should contain:
+      """
+        * executing `my_namespace'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake my_namespace"
       """
 
   Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description

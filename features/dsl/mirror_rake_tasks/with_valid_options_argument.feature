@@ -31,6 +31,10 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
       """
     And the output should contain:
       """
+      cap my_namespace                                           # A task that shadows a names...
+      """
+    And the output should contain:
+      """
       cap my_namespace:in_a_namespace                            # My task in a namespace.
       """
     And the output should contain:

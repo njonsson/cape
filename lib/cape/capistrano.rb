@@ -91,11 +91,12 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
     end
 
     def implement(task, capistrano_context, options, &env_block)
-      name = task[:name].split(':')
+      name_tokens = task[:name].split(':')
+      rake_task_name = task[:name].gsub(/:default$/, '')
       rake = self.rake
       # Define the recipe.
       block = lambda { |context|
-        context.task name.last, options do
+        context.task name_tokens.last, options do
           arguments = Array(task[:parameters]).collect do |a|
             if (value = ENV[a.upcase])
               value = value.inspect
@@ -114,12 +115,13 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
           end
           env = env_strings.empty? ? nil : (' ' + env_strings.join(' '))
           command = "cd #{context.current_path} && " +
-                    "#{rake.remote_executable} #{name.join ':'}#{arguments}#{env}"
+                    "#{rake.remote_executable} "     +
+                    "#{rake_task_name}#{arguments}#{env}"
           context.run command
         end
       }
       # Nest the recipe inside its containing namespaces.
-      name[0...-1].reverse.each do |namespace_token|
+      name_tokens[0...-1].reverse.each do |namespace_token|
         inner_block = block
         block = lambda { |context|
           context.namespace(namespace_token, &inner_block)

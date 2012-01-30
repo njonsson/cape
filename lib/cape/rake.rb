@@ -49,18 +49,27 @@ module Cape
     def each_task(task_expression=nil)
       task_expression = " #{task_expression}" if task_expression
       command = "#{local_executable} --tasks #{task_expression}"
+      previous_task, this_task = nil, nil
       `#{command}`.each_line do |l|
         unless (matches = l.chomp.match(/^rake (.+?)(?:\[(.+?)\])?\s+# (.+)/))
           next
         end
 
-        task = {}.tap do |t|
+        previous_task = this_task
+        this_task = {}.tap do |t|
           t[:name]        = matches[1].strip
           t[:parameters]  = matches[2].split(',') if matches[2]
           t[:description] = matches[3]
         end
-        yield task
+        if previous_task
+          all_but_last_segment = this_task[:name].split(':')[0...-1].join(':')
+          if all_but_last_segment == previous_task[:name]
+            previous_task[:name] << ':default'
+          end
+          yield previous_task
+        end
       end
+      yield this_task if this_task
       self
     end
 

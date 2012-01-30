@@ -49,6 +49,12 @@ Feature: The #each_rake_task DSL method without arguments
     And the output should contain:
       """
 
+      Name: "my_namespace:default"
+      Description: "A task that shadows a namespace"
+      """
+    And the output should contain:
+      """
+
       Name: "my_namespace:in_a_namespace"
       Description: "My task in a namespace"
       """

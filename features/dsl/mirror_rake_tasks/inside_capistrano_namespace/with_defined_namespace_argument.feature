@@ -18,6 +18,10 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, with 
     Then the output should not contain "cap ns:with_period"
     And the output should contain:
       """
+      cap ns:my_namespace                                           # A task that shadows a names...
+      """
+    And the output should contain:
+      """
       cap ns:my_namespace:in_a_namespace                            # My task in a namespace.
       """
     And the output should contain:
@@ -39,6 +43,27 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, with 
     Then the output should contain exactly:
       """
       The task `ns:with_period' does not exist.
+
+      """
+
+  Scenario: mirror Rake task 'my_namespace' with its description
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      namespace :ns do
+        Cape do |cape|
+          cape.mirror_rake_tasks :my_namespace
+        end
+      end
+      """
+    When I run `cap -e ns:my_namespace`
+    Then the output should contain exactly:
+      """
+      ------------------------------------------------------------
+      cap ns:my_namespace
+      ------------------------------------------------------------
+      A task that shadows a namespace.
+
 
       """
 

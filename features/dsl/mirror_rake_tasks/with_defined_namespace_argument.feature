@@ -38,6 +38,25 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
 
       """
 
+  Scenario: mirror Rake task 'my_namespace' with its description
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      Cape do
+        mirror_rake_tasks :my_namespace
+      end
+      """
+    When I run `cap -e my_namespace`
+    Then the output should contain exactly:
+      """
+      ------------------------------------------------------------
+      cap my_namespace
+      ------------------------------------------------------------
+      A task that shadows a namespace.
+
+
+      """
+
   Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description
     Given a full-featured Rakefile
     And a Capfile with:
