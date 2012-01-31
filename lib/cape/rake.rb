@@ -52,7 +52,7 @@ module Cape
                         ::Regexp.escape(task_expression.to_s) :
                         '.+?'
       regexp = /^rake (#{task_expression}(?::.+?)?)(?:\[(.+?)\])?\s+# (.+)/
-      `#{local_executable} --tasks`.each_line do |l|
+      `#{local_executable} --tasks 2> /dev/null`.each_line do |l|
         unless (matches = l.chomp.match(regexp))
           next
         end
