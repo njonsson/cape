@@ -1,6 +1,6 @@
 # Version history for the _Cape_ project
 
-## <a name="v1.2.0"></a>v1.2.0, Mon 1/30/2012
+## <a name="v1.2.0"></a>v1.2.0, Wed 2/01/2012
 
 * Add support in the DSL for specifying remote environment variables and Capistrano recipe options
 * Add support for Rake tasks that overlap with (have the same full name as) namespaces
