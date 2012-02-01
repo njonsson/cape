@@ -17,6 +17,7 @@ Feature: The #each_rake_task DSL method with an argument of a defined namespace
           if t[:description]
             $stdout.puts "Description: #{t[:description].inspect}"
           end
+          $stdout.puts 'Default' if t[:default]
         end
       end
       """
@@ -30,8 +31,9 @@ Feature: The #each_rake_task DSL method with an argument of a defined namespace
     And the output should contain:
       """
 
-      Name: "my_namespace:default"
+      Name: "my_namespace"
       Description: "A task that shadows a namespace"
+      Default
       """
     And the output should contain:
       """

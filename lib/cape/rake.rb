@@ -65,9 +65,8 @@ module Cape
         end
         if previous_task
           all_but_last_segment = this_task[:name].split(':')[0...-1].join(':')
-          if all_but_last_segment == previous_task[:name]
-            previous_task[:name] << ':default'
-          end
+          previous_task[:default] = (all_but_last_segment ==
+                                     previous_task[:name])
           yield previous_task
         end
       end

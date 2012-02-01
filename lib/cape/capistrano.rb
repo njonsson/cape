@@ -92,7 +92,7 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
 
     def implement(task, capistrano_context, options, &env_block)
       name_tokens = task[:name].split(':')
-      rake_task_name = task[:name].gsub(/:default$/, '')
+      name_tokens << 'default' if task[:default]
       rake = self.rake
       # Define the recipe.
       block = lambda { |context|
@@ -116,7 +116,7 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
           env = env_strings.empty? ? nil : (' ' + env_strings.join(' '))
           command = "cd #{context.current_path} && " +
                     "#{rake.remote_executable} "     +
-                    "#{rake_task_name}#{arguments}#{env}"
+                    "#{task[:name]}#{arguments}#{env}"
           context.run command
         end
       }
