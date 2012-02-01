@@ -152,7 +152,7 @@ module Cape
     #     mirror_rake_tasks 'log:clear'
     #   end
     #
-    # @example Mirroring specific Rake tasks with Capistrano recipe options and environment variables
+    # @example Mirroring specific Rake tasks with Capistrano recipe options and/or environment variables
     #   # config/deploy.rb
     #
     #   require 'cape'

@@ -154,12 +154,12 @@ Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements mu
     require 'cape'
 
     Cape do
-      # Create Capistrano recipes for the Rake task 'foo' or for the tasks in the
+      # Create Capistrano recipes for the Rake task 'foo' and/or for the tasks in the
       # 'foo' namespace.
       mirror_rake_tasks :foo
     end
 
-### Mirror Rake tasks that require Capistrano recipe options and environment variables
+### Mirror Rake tasks that require Capistrano recipe options and/or environment variables
 
 Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when running Rake tasks. Note that Cape statements must be executed within a `Cape` block.
 
@@ -227,7 +227,7 @@ Cape lets you enumerate Rake tasks, optionally filtering them by task name or na
         # * t[:description] -- documentation on the task, including parameters
       end
 
-      # Enumerate the Rake task 'foo' or the tasks in the 'foo' namespace.
+      # Enumerate the Rake task 'foo' and/or the tasks in the 'foo' namespace.
       each_rake_task 'foo' do |t|
         # ...
       end
