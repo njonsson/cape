@@ -37,4 +37,79 @@ describe Cape::Rake do
 
     its(:remote_executable) { should == 'completely different' }
   end
+
+  describe 'caching: ' do
+    before :each do
+      subject.stub!(:fetch_output).and_return output
+    end
+
+    let(:output) {
+      <<-end_output
+rake foo # foo
+rake bar # bar
+rake baz # baz
+      end_output
+    }
+
+    describe '#each_task' do
+      it 'should build and use a cache' do
+        subject.should_receive(:fetch_output).once.and_return output
+        subject.each_task do |t|
+        end
+        subject.each_task do |t|
+        end
+      end
+
+      it 'should not expire the cache' do
+        subject.should_not_receive :expire_cache!
+        subject.each_task do |t|
+        end
+      end
+
+      it 'should expire the cache in the event of an error' do
+        subject.should_receive(:expire_cache!).once
+        begin
+          subject.each_task do |t|
+            raise 'pow!'
+          end
+        rescue
+        end
+      end
+
+      it 'should not swallow errors' do
+        lambda {
+          subject.each_task do |t|
+            raise ZeroDivisionError, 'pow!'
+          end
+        }.should raise_error(ZeroDivisionError, 'pow!')
+      end
+    end
+
+    describe '#expire_cache!' do
+      it 'should expire the cache' do
+        subject.should_receive(:fetch_output).twice.and_return output
+        subject.each_task do |t|
+        end
+        subject.expire_cache!
+        subject.each_task do |t|
+        end
+      end
+    end
+
+    describe '#local_executable=' do
+      describe 'with the same value' do
+        it 'should not expire the cache' do
+          subject.should_not_receive :expire_cache!
+          subject.local_executable = subject.local_executable
+        end
+      end
+
+      describe 'with a different value' do
+        it 'should expire the cache' do
+          subject.should_receive(:expire_cache!).once
+          subject.local_executable = subject.local_executable + ' foo'
+        end
+      end
+    end
+  end
 end

@@ -215,6 +215,12 @@ module Cape
       rake.remote_executable = value
     end
 
+  protected
+
+    def rake
+      @rake ||= Rake.new
+    end
+
   private
 
     def deployment_library
@@ -228,10 +234,6 @@ module Cape
       if @outer_self.method(:task).owner.name !~ /^Capistrano::/
         raise 'Use this in the context of Capistrano recipes'
       end
-    end
-
-    def rake
-      @rake ||= Rake.new
     end
 
   end

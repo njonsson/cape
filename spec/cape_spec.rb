@@ -20,4 +20,10 @@ describe '#Cape' do
     Cape do
     end
   end
+
+  it 'should expire the Rake tasks cache when leaving the block' do
+    Cape do
+      rake.should_receive(:expire_cache!).once
+    end
+  end
 end

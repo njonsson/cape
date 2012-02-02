@@ -6,12 +6,6 @@ module Cape
     # The default command used to run Rake.
     DEFAULT_EXECUTABLE = '/usr/bin/env rake'.freeze
 
-    # Sets the command used to run Rake on the local computer.
-    #
-    # @param [String] value the command used to run Rake on the local computer
-    # @return [String] _value_
-    attr_writer :local_executable
-
     # Sets the command used to run Rake on remote computers.
     #
     # @param [String] value the command used to run Rake on remote computers
@@ -52,7 +46,7 @@ module Cape
                         ::Regexp.escape(task_expression.to_s) :
                         '.+?'
       regexp = /^rake (#{task_expression}(?::.+?)?)(?:\[(.+?)\])?\s+# (.+)/
-      `#{local_executable} --tasks 2> /dev/null`.each_line do |l|
+      each_output_line do |l|
         unless (matches = l.chomp.match(regexp))
           next
         end
@@ -74,6 +68,12 @@ module Cape
       self
     end
 
+    # Forces cached Rake task metadata (if any) to be discarded.
+    def expire_cache!
+      @output_lines = nil
+      self
+    end
+
     # The command used to run Rake on the local computer.
     #
     # @return [String] the command used to run Rake on the local computer
@@ -81,6 +81,21 @@ module Cape
     # @see DEFAULT_EXECUTABLE
     def local_executable
       @local_executable ||= DEFAULT_EXECUTABLE
+    end
+
+    # Sets the command used to run Rake on the local computer and discards any
+    # cached Rake task metadata.
+    #
+    # @param [String] value the command used to run Rake on the local computer
+    # @return [String] _value_
+    #
+    # @see #expire_cache!
+    def local_executable=(value)
+      unless @local_executable == value
+        @local_executable = value
+        expire_cache!
+      end
+      value
     end
 
     # The command used to run Rake on remote computers.
@@ -92,6 +107,30 @@ module Cape
       @remote_executable ||= DEFAULT_EXECUTABLE
     end
 
+  private
+
+    def each_output_line(&block)
+      if @output_lines
+        @output_lines.each(&block)
+        return self
+      end
+
+      @output_lines = []
+      begin
+        fetch_output.each_line do |l|
+          @output_lines << l
+          block.call(l)
+        end
+      rescue
+        expire_cache!
+        raise
+      end
+      self
+    end
+
+    def fetch_output
+      `#{local_executable} --tasks 2> /dev/null`
+    end
   end
 
 end

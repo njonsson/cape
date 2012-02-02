@@ -40,10 +40,14 @@ end
 def Cape(&block)
   Cape.module_eval do
     @outer_self = block.binding.eval('self', __FILE__, __LINE__)
-    if 0 < block.arity
-      block.call self
-    else
-      module_eval(&block)
+    begin
+      if 0 < block.arity
+        block.call self
+      else
+        module_eval(&block)
+      end
+    ensure
+      rake.expire_cache!
     end
   end
   Cape
