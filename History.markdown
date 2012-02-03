@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.3.0"></a>v1.3.0, Fri 2/03/2012
+
+* Don’t allow `nil` environment variables to pass through to the remote command line
+
 ## <a name="v1.2.0"></a>v1.2.0, Wed 2/01/2012
 
 * Add support in the DSL for specifying remote environment variables and Capistrano recipe options
