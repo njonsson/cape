@@ -95,6 +95,48 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
       `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
       """
 
+  Scenario: mirror Rake task 'with_period' with its implementation, ignoring nil environment variable names
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      set :current_path, '/path/to/current/deployed/application'
+      set :rails_env,    'production'
+
+      Cape do
+        mirror_rake_tasks :roles => :app do |env|
+          env[nil] = 'foo'
+        end
+      end
+      """
+    When I run `cap with_period`
+    Then the output should contain:
+      """
+        * executing `with_period'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
+      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      """
+
+  Scenario: mirror Rake task 'with_period' with its implementation, ignoring nil environment variable values
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      set :current_path, '/path/to/current/deployed/application'
+      set :rails_env,    'production'
+
+      Cape do
+        mirror_rake_tasks :roles => :app do |env|
+          env['FOO'] = nil
+        end
+      end
+      """
+    When I run `cap with_period`
+    Then the output should contain:
+      """
+        * executing `with_period'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
+      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      """
+
   Scenario: mirror Rake task 'with_one_arg' with its description
     Given a full-featured Rakefile
     And a Capfile with:
