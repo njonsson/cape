@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.4.0"></a>v1.4.0, Mon 2/06/2012
+
+* Cache the Rake task list to improve Capistrano responsiveness
+
 ## <a name="v1.3.0"></a>v1.3.0, Fri 2/03/2012
 
 * Don’t allow `nil` environment variables to pass through to the remote command line
