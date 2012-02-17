@@ -3,6 +3,7 @@ require 'cape/capistrano'
 require 'cape/core_ext/hash'
 require 'cape/core_ext/symbol'
 require 'cape/rake'
+require ::File.expand_path('../../spec_helper', __FILE__)
 
 describe Cape::DSL do
   subject do
@@ -22,7 +23,7 @@ describe Cape::DSL do
     Cape::Rake.      stub!(:new).and_return mock_rake
   end
 
-  describe 'when sent #each_rake_task' do
+  describe '-- when sent #each_rake_task --' do
     def do_each_rake_task(&block)
       subject.each_rake_task(task_expression, &block)
     end
@@ -41,7 +42,7 @@ describe Cape::DSL do
     end
   end
 
-  describe 'when sent #mirror_rake_tasks' do
+  describe '-- when sent #mirror_rake_tasks' do
     before :each do
       mock_rake.stub!(:each_task).and_yield({:name => task_expression})
       subject.stub! :raise_unless_capistrano
@@ -51,7 +52,7 @@ describe Cape::DSL do
       subject.mirror_rake_tasks(*arguments, &block)
     end
 
-    describe 'with two scalar arguments' do
+    describe 'with two scalar arguments --' do
       specify do
         lambda {
           do_mirror_rake_tasks task_expression, task_expression
@@ -63,17 +64,17 @@ describe Cape::DSL do
 
     shared_examples_for 'a successful call' do |task_expression_in_use,
                                                 options_in_use|
-      it 'should collect Rake#each_task' do
+      specify 'by collecting Rake#each_task' do
         mock_rake.should_receive(:each_task).with task_expression_in_use
         do_mirror_rake_tasks
       end
 
-      it 'should verify that Capistrano is in use' do
+      specify 'by verifying that Capistrano is in use' do
         subject.should_receive :raise_unless_capistrano
         do_mirror_rake_tasks
       end
 
-      describe 'should Capistrano#define_rake_wrapper for Rake#each_task' do
+      describe 'by sending Capistrano#define_rake_wrapper for Rake#each_task' do
         specify 'with the expected task' do
           mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
                                                                         named_arguments|
@@ -107,75 +108,75 @@ describe Cape::DSL do
         end
       end
 
-      it 'should return itself' do
+      specify 'by returning itself' do
         do_mirror_rake_tasks.should == subject
       end
     end
 
-    describe 'with one scalar argument, an options hash, and a block' do
+    describe 'with one scalar argument, an options hash, and a block --' do
       def do_mirror_rake_tasks
         super 'task:expression', :bar => :baz do |env|
           env['AN_ENV_VAR'] = 'an environment variable'
         end
       end
 
-      it_should_behave_like 'a successful call', 'task:expression', :bar => :baz
+      should_behave_like 'a successful call', 'task:expression', :bar => :baz
     end
 
-    describe 'with one scalar argument and an options hash' do
+    describe 'with one scalar argument and an options hash --' do
       def do_mirror_rake_tasks
         super 'task:expression', :bar => :baz
       end
 
-      it_should_behave_like 'a successful call', 'task:expression', :bar => :baz
+      should_behave_like 'a successful call', 'task:expression', :bar => :baz
     end
 
-    describe 'with an options hash and a block' do
+    describe 'with an options hash and a block --' do
       def do_mirror_rake_tasks
         super :bar => :baz do |env|
           env['AN_ENV_VAR'] = 'an environment variable'
         end
       end
 
-      it_should_behave_like 'a successful call', nil, :bar => :baz
+      should_behave_like 'a successful call', nil, :bar => :baz
     end
 
-    describe 'with an options hash' do
+    describe 'with an options hash --' do
       def do_mirror_rake_tasks
         super :bar => :baz
       end
 
-      it_should_behave_like 'a successful call', nil, :bar => :baz
+      should_behave_like 'a successful call', nil, :bar => :baz
     end
 
-    describe 'with one scalar argument and a block' do
+    describe 'with one scalar argument and a block --' do
       def do_mirror_rake_tasks
         super 'task:expression' do |env|
           env['AN_ENV_VAR'] = 'an environment variable'
         end
       end
 
-      it_should_behave_like('a successful call', 'task:expression', {})
+      should_behave_like('a successful call', 'task:expression', {})
     end
 
-    describe 'with one scalar argument' do
+    describe 'with one scalar argument --' do
       def do_mirror_rake_tasks
         super 'task:expression'
       end
 
-      it_should_behave_like('a successful call', 'task:expression', {})
+      should_behave_like('a successful call', 'task:expression', {})
     end
 
-    describe 'without arguments' do
+    describe 'without arguments --' do
       def do_mirror_rake_tasks
         super
       end
 
-      it_should_behave_like('a successful call', nil, {})
+      should_behave_like('a successful call', nil, {})
     end
   end
 
-  describe 'when sent #local_rake_executable' do
+  describe '-- when sent #local_rake_executable --' do
     before :each do
       mock_rake.stub!(:local_executable).and_return 'foo'
     end
@@ -190,7 +191,7 @@ describe Cape::DSL do
     end
   end
 
-  describe 'when sent #remote_rake_executable' do
+  describe '-- when sent #remote_rake_executable --' do
     before :each do
       mock_rake.stub!(:remote_executable).and_return 'foo'
     end

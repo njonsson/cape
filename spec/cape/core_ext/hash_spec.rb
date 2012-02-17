@@ -1,12 +1,12 @@
 require 'cape/core_ext/hash'
 
 describe Hash do
-  describe '#slice' do
-    it 'should return the expected Hash' do
-      hash = {:foo => 'bar', :baz => 'qux', :quux => 'corge'}
-      hash.slice(:baz, :quux).should == {:baz => 'qux', :quux => 'corge'}
+  subject { {:foo => 'bar', :baz => 'qux', :quux => 'corge'} }
 
-      {}.slice(:foo).should == {}
+  describe '-- when sent #slice with keys that are present and those that are not --' do
+    it 'should return the expected subset hash' do
+      subject.slice(:baz, :fizzle, :quux).should == {:baz => 'qux',
+                                                     :quux => 'corge'}
     end
   end
 end

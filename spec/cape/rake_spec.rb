@@ -9,7 +9,7 @@ describe Cape::Rake do
     it { should be_frozen }
   end
 
-  describe '#==' do
+  describe '-- when sent #== --' do
     it('should recognize equivalent instances to be equal') {
       described_class.new.should == described_class.new
     }
@@ -23,22 +23,28 @@ describe Cape::Rake do
     }
   end
 
-  describe 'without specified attributes' do
+  describe '-- without specified attributes --' do
     its(:local_executable)  { should == '/usr/bin/env rake' }
 
     its(:remote_executable) { should == '/usr/bin/env rake' }
   end
 
-  describe 'with specified attributes' do
-    subject { described_class.new :local_executable => 'And now for something',
-                                  :remote_executable => 'completely different' }
+  describe '-- with specified attributes --' do
+    subject {
+      described_class.new :local_executable => 'the specified value of #local_executable',
+                          :remote_executable => 'the specified value of #remote_executable'
+    }
 
-    its(:local_executable)  { should == 'And now for something' }
+    its(:local_executable) {
+      should == 'the specified value of #local_executable'
+    }
 
-    its(:remote_executable) { should == 'completely different' }
+    its(:remote_executable) {
+      should == 'the specified value of #remote_executable'
+    }
   end
 
-  describe 'caching: ' do
+  describe '-- with respect to caching --' do
     before :each do
       subject.stub!(:fetch_output).and_return output
     end
@@ -51,7 +57,7 @@ rake baz # baz
       end_output
     }
 
-    describe '#each_task' do
+    describe 'when sent #each_task,' do
       it 'should build and use a cache' do
         subject.should_receive(:fetch_output).once.and_return output
         subject.each_task do |t|
@@ -85,7 +91,7 @@ rake baz # baz
       end
     end
 
-    describe '#expire_cache!' do
+    describe 'when sent #expire_cache!,' do
       it 'should expire the cache' do
         subject.should_receive(:fetch_output).twice.and_return output
         subject.each_task do |t|
@@ -96,15 +102,15 @@ rake baz # baz
       end
     end
 
-    describe '#local_executable=' do
-      describe 'with the same value' do
+    describe 'when sent #local_executable=' do
+      describe 'with the same value,' do
         it 'should not expire the cache' do
           subject.should_not_receive :expire_cache!
           subject.local_executable = subject.local_executable
         end
       end
 
-      describe 'with a different value' do
+      describe 'with a different value,' do
         it 'should expire the cache' do
           subject.should_receive(:expire_cache!).once
           subject.local_executable = subject.local_executable + ' foo'

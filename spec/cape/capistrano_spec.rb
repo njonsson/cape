@@ -7,10 +7,8 @@ describe Cape::Capistrano do
   end
 
   describe 'with specified attributes' do
-    subject {
-      described_class.new :rake => 'I see you have the machine that goes "Bing!"'
-    }
+    subject { described_class.new :rake => 'the specified value of #rake' }
 
-    its(:rake) { should == 'I see you have the machine that goes "Bing!"' }
+    its(:rake) { should == 'the specified value of #rake' }
   end
 end

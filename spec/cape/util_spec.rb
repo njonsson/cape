@@ -10,7 +10,7 @@ describe Cape::Util do
       Cape::Util.pluralize('foo', 2).should == 'foos'
     end
 
-    it "should not pluralize for a count of 1" do
+    it "should not pluralize 'foo' for a count of 1" do
       Cape::Util.pluralize('foo', 1).should == 'foo'
     end
 
