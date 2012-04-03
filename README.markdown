@@ -61,7 +61,7 @@ Or you may want to make Cape a dependency of your project by using [Bundler](htt
 
     source 'http://rubygems.org'
 
-    gem 'cape'
+    gem 'cape', '~> 1'
 
 ## Examples
 
