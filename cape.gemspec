@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Nils Jonsson']
   s.email       = %w(cape@nilsjonsson.com)
-  s.homepage    = 'http://github.com/njonsson/cape'
+  s.homepage    = 'http://njonsson.github.com/cape'
   s.license     = 'MIT'
 
   s.rubyforge_project = 'cape'

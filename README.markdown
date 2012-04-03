@@ -38,7 +38,7 @@ If
 
 Then
 
-* **You can use the [Cape](http://github.com/njonsson/cape) DSL** within Capistrano recipes to dynamically add recipes for your application’s Rake tasks, and
+* **You can use the [Cape](http://njonsson.github.com/cape) DSL** within Capistrano recipes to dynamically add recipes for your application’s Rake tasks, and
 * **You can run your Rake tasks on your deployed servers,** friction-free, and look like a superhero. _[cue fanfare]_
 
 ## Features
