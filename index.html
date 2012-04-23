@@ -1,0 +1,344 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Cape by njonsson</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Cape</h1>
+        <p>Dynamically generate Capistrano recipes for Rake tasks</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/njonsson/cape" class="button fork"><strong>Fork On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/njonsson/cape/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/njonsson/cape/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <pre><code>                _____     __
+               / ___/___ / /_  __ _____ __ ______
+              / (_ // -_) __/ / // / _ | // / __/
+              \___/ \__/\__/  \_, /\___|_,_/_/
+      '-(+++++...            /___/ ............  s++++++++.
+   .(++++++++++++(      -+++~~~~~  'N++++++++++= B++++++++s
+  '+++++++++++++++(     DN=++++++&lt; -NB+++++++++s Bz++++++++
+  +++++++++++++++++.   'NNN=++++++(-BNB+++++++++'BN========-
+ =B=+++++++++sDBBBBs&lt;. +NNNN=+++++(&lt;NNNBDBDBNNNNDBNNBBBBBBBz
+'NN+s+++++=BBBh=+((+sB=DNNNNNBBBNNDhNNNN'   ..  -BNs      (z
+sN+N+z+++sBs-        .hNNNNBNh(-'   NNNN.  .NB-  &lt;Ns   +BBBz
+D+N+N+z=Bs.   .~.     'NNNNNB~      DNNN   .NN+  (Ns   =B+~
+BN+N+NNB+    ~NBD      BNNNBN   h'  hNNN   .Bs&lt;  &lt;Ns   =Dz~
+BNNNN+ND     +BhB      DNNNBz  'N~  sNNN   'ND'  hNs    -(z-
+NNNNNNB(     sDDN      hNNNB(  +N~  +NNN    ..-&lt;hBNs    ~=h-
+NNNNNNB-     sDBN     'DNNNN.  DN~  &lt;BNN   'NNhs(NNs   =NN-
+NNNNNNB'     zNNN(+sDNNBNNNz  .NB(  ~BNN   'D    NNs   =Bh~
+NNNNNNN.     zNNNBNBBNNNNNB(  &lt;NB~  'BNB   'D    &lt;Bs   =NNNN
+NNNNNNN.     zNNNNNNNNNNBNN.  .     .NDB   -D     hs       N
+NNNNNNN.     zNNNNNhBNBN=+z   +BN-   NDB  '(D     &lt;BhhhhhhhN
+BNNNNNN.     zNNNh=&lt;~. h-s&lt;   D~D'.-~B&lt;NBNBDs     ''``
+DNNNNNN.     zNNN      D-B-~(+B DNBDzs-`
+sNNNNNN.     zNNN      B(NDhs=(  ''`
+(BNNNNN'     zNDB     ~D.
+ sNNNNB-     +hsz     h&lt;                             O___
+  &lt;NNNB(     -=s'   'hz      ___  ___              &lt; s &gt; \____
+    ~BNh          .+B+      / _ \/ _ \               = \    /
+      ~Dz~.   .~+zB='       \___/_//_/              / \ \__/
+        &lt;hNNBNBh=(.                                /   \   `
+           ..
+</code></pre>
+
+<h1>
+<a href="http://gemnasium.com/njonsson/cape"><img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status"></a> <a href="http://travis-ci.org/njonsson/cape"><img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status"></a> Cape</h1>
+
+<p>If</p>
+
+<ul>
+<li>
+<strong>You use <a href="http://capify.org">Capistrano</a></strong> to deploy your application, and</li>
+<li>
+<strong>You have <a href="http://rake.rubyforge.org">Rake</a> tasks you want to run remotely</strong> — but you don’t want to hand-code Capistrano recipes for each Rake task —</li>
+</ul><p>Then</p>
+
+<ul>
+<li>
+<strong>You can use the <a href="http://njonsson.github.com/cape">Cape</a> DSL</strong> within Capistrano recipes to dynamically add recipes for your application’s Rake tasks, and</li>
+<li>
+<strong>You can run your Rake tasks on your deployed servers,</strong> friction-free, and look like a superhero. <em>[cue fanfare]</em>
+</li>
+</ul><h2>Features</h2>
+
+<ul>
+<li>
+<strong>Mirror Rake tasks</strong> as Capistrano recipes, optionally filtered by namespace or name</li>
+<li>
+<strong>Embed Rake tasks</strong> in Capistrano namespaces</li>
+<li>
+<strong>Pass arguments</strong> to Rake tasks by setting environment variables with the same names</li>
+<li>
+<strong>Override the default executables</strong> for local and remote Rake installations (<code>/usr/bin/env rake</code> is the default)</li>
+<li>
+<strong>Enumerate Rake tasks</strong> for your own purposes</li>
+</ul><h2>Installation — get your Cape on</h2>
+
+<p>Install <a href="http://rubygems.org/gems/cape" title="Cape at RubyGems.org">the RubyGem</a>.</p>
+
+<pre><code>$ gem install cape
+</code></pre>
+
+<p>Or you may want to make Cape a dependency of your project by using <a href="http://gembundler.com">Bundler</a>.</p>
+
+<pre><code># Gemfile
+
+source 'http://rubygems.org'
+
+gem 'cape', '~&gt; 1'
+</code></pre>
+
+<h2>Examples</h2>
+
+<p>Assume the following Rake tasks are defined.</p>
+
+<pre><code>desc 'Rakes the leaves'
+task :leaves do
+  $stdout.puts "Raking the leaves"
+end
+
+desc 'Rakes and bags the leaves'
+task :bag_leaves, [:paper_or_plastic] =&gt; :leaves do |task, arguments|
+  $stdout.puts "Putting the leaves in a #{arguments[:paper_or_plastic]} bag"
+end
+</code></pre>
+
+<p>Rake lists these tasks in the expected fashion.</p>
+
+<pre><code>$ rake --tasks
+rake bag_leaves[paper_or_plastic]  # Rakes and bags the leaves
+rake leaves                        # Rakes the leaves
+
+$ rake --describe bag_leaves
+rake bag_leaves[paper_or_plastic]
+    Rakes and bags the leaves
+</code></pre>
+
+<h3>Simply mirror all Rake tasks as Capistrano recipes</h3>
+
+<p>Add the following to your Capistrano recipes. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+
+<pre><code># config/deploy.rb
+
+require 'cape'
+
+Cape do
+  # Create Capistrano recipes for all Rake tasks.
+  mirror_rake_tasks
+end
+</code></pre>
+
+<p>Now all your Rake tasks appear alongside your Capistrano recipes.</p>
+
+<pre><code>$ cap --tasks
+cap deploy               # Deploys your project.
+...
+[other built-in Capistrano recipes]
+...
+cap bag_leaves           # Rakes and bags the leaves.
+cap leaves               # Rakes the leaves.
+Some tasks were not listed, either because they have no description,
+or because they are only used internally by other tasks. To see all
+tasks, type `cap -vT'.
+
+Extended help may be available for these tasks.
+Type `cap -e taskname' to view it.
+</code></pre>
+
+<p>Let’s use Capistrano to view the unabbreviated description of a Rake task recipe, including instructions for how to pass arguments to it. Note that Rake task parameters are automatically converted to environment variables.</p>
+
+<pre><code>$ cap --explain bag_leaves
+------------------------------------------------------------
+cap bag_leaves
+------------------------------------------------------------
+Bags the leaves.
+
+Set environment variable PAPER_OR_PLASTIC if you want to pass a Rake task argument.
+</code></pre>
+
+<p>Here’s how to invoke a task/recipe with arguments. On the local computer, via Rake:</p>
+
+<pre><code>$ rake bag_leaves[plastic]
+(in /current/working/directory)
+Raking the leaves
+Putting the leaves in a plastic bag
+</code></pre>
+
+<p>On remote computers, via Capistrano:</p>
+
+<pre><code>$ cap bag_leaves PAPER_OR_PLASTIC=plastic
+  * executing `bag_leaves'
+  * executing "cd /path/to/currently/deployed/version/of/your/app &amp;&amp; /usr/bin/env rake bag_leaves[plastic]"
+    servers: ["your.server.name"]
+    [your.server.name] executing command
+ ** [out :: your.server.name] (in /path/to/currently/deployed/version/of/your/app)
+ ** [out :: your.server.name] Raking the leaves
+ ** [out :: your.server.name] Putting the leaves in a plastic bag
+    command finished in 1000ms
+</code></pre>
+
+<h3>Mirror some Rake tasks, but not others</h3>
+
+<p>Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+
+<pre><code># config/deploy.rb
+
+require 'cape'
+
+Cape do
+  # Create Capistrano recipes for the Rake task 'foo' and/or for the tasks in the
+  # 'foo' namespace.
+  mirror_rake_tasks :foo
+end
+</code></pre>
+
+<h3>Mirror Rake tasks that require Capistrano recipe options and/or environment variables</h3>
+
+<p>Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when running Rake tasks. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+
+<pre><code># config/deploy.rb
+
+require 'cape'
+
+Cape do
+  # Display defined Rails routes on application server remote machines only.
+  mirror_rake_tasks :routes, :roles =&gt; :app
+
+  # Execute database migration on application server remote machines only,
+  # and set the 'RAILS_ENV' environment variable to the value of the
+  # Capistrano variable 'rails_env'.
+  mirror_rake_tasks 'db:migrate', :roles =&gt; :app do |env|
+    env['RAILS_ENV'] = rails_env
+  end
+end
+</code></pre>
+
+<p>The above is equivalent to the following manually-defined Capistrano recipes.</p>
+
+<pre><code># config/deploy.rb
+
+# These translations to Capistrano are just for illustration.
+
+task :routes, :roles =&gt; :app do
+  run "cd #{current_path} &amp;&amp; /usr/bin/env rake routes"
+end
+
+namespace :db do
+  task :migrate, :roles =&gt; :app do
+    run "cd #{current_path} &amp;&amp; /usr/bin/env rake db:migrate RAILS_ENV=#{rails_env}"
+  end
+end
+</code></pre>
+
+<h3>Mirror Rake tasks into a Capistrano namespace</h3>
+
+<p>Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+
+<pre><code># config/deploy.rb
+
+require 'cape'
+
+namespace :rake_tasks do
+  # Use an argument with the Cape block, if you want to or need to.
+  Cape do |cape|
+    cape.mirror_rake_tasks
+  end
+end
+</code></pre>
+
+<h3>Iterate over available Rake tasks</h3>
+
+<p>Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+
+<pre><code># config/deploy.rb
+
+require 'cape'
+
+Cape do
+  # Enumerate all Rake tasks.
+  each_rake_task do |t|
+    # Do something interesting with this hash:
+    # * t[:name] -- the full name of the task
+    # * t[:parameters] -- the names of task arguments
+    # * t[:description] -- documentation on the task, including parameters
+  end
+
+  # Enumerate the Rake task 'foo' and/or the tasks in the 'foo' namespace.
+  each_rake_task 'foo' do |t|
+    # ...
+  end
+end
+</code></pre>
+
+<h3>Configure Rake execution</h3>
+
+<p>Cape lets you specify how Rake should be executed on the local computer and on remote computers. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+
+<pre><code># config/deploy.rb
+
+require 'cape'
+
+# Configure Cape to execute Rake via Bundler, both locally and remotely.
+Cape.local_rake_executable  = '/usr/bin/env bundle exec rake'
+Cape.remote_rake_executable = '/usr/bin/env bundle exec rake'
+
+Cape do
+  # Create Capistrano recipes for all Rake tasks.
+  mirror_rake_tasks
+end
+</code></pre>
+
+<h2>Known issues</h2>
+
+<p>For now, only Rake tasks that have descriptions can be mirrored or enumerated.</p>
+
+<h2>Contributing</h2>
+
+<p>Report defects and feature requests on <a href="http://github.com/njonsson/cape/issues">GitHub Issues</a>.</p>
+
+<p>Your patches are welcome, and you will receive attribution here for good stuff.</p>
+
+<h2>License</h2>
+
+<p>Released under the <a href="http://github.com/njonsson/cape/blob/master/MIT-LICENSE.markdown">MIT License</a>.</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/njonsson">njonsson</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
