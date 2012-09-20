@@ -217,6 +217,7 @@ module Cape
 
   protected
 
+    # Returns an abstraction of the Rake installation and available tasks.
     def rake
       @rake ||= Rake.new
     end
