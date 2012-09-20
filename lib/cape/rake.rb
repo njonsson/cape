@@ -34,7 +34,6 @@ module Cape
     #
     # @param [String, Symbol] task_expression the full name of a task or
     #                                         namespace to filter; optional
-    # @param [Proc]           block           a block that processes tasks
     #
     # @yield [task] a block that processes tasks
     # @yieldparam [Hash] task metadata on a task
