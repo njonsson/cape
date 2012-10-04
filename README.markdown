@@ -264,4 +264,4 @@ Your patches are welcome, and you will receive attribution here for good stuff.
 
 ## License
 
-Released under the [MIT License](http://github.com/njonsson/cape/blob/master/MIT-LICENSE.markdown).
+Released under the [MIT License](http://github.com/njonsson/cape/blob/master/License.markdown).
