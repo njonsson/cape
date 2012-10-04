@@ -49,6 +49,8 @@ Then
 * **Override the default executables** for local and remote Rake installations (`/usr/bin/env rake` is the default)
 * **Enumerate Rake tasks** for your own purposes
 
+See what’s changed lately by reading the [project history](http://github.com/njonsson/cape/blob/master/History.markdown).
+
 ## Installation — get your Cape on
 
 Install [the RubyGem](http://rubygems.org/gems/cape "Cape at RubyGems.org").
