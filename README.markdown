@@ -34,12 +34,12 @@
 If
 
 * **You use [Capistrano](http://capify.org)** to deploy your application, and
-* **You have [Rake](http://rake.rubyforge.org) tasks you want to run remotely** — but you don’t want to hand-code Capistrano recipes for each Rake task —
+* **You have [Rake](http://rake.rubyforge.org) tasks that you want to execute remotely** — but you don’t want to hand-code Capistrano recipes for each Rake task —
 
 Then
 
 * **You can use the [Cape](http://njonsson.github.com/cape) DSL** within Capistrano recipes to dynamically add recipes for your application’s Rake tasks, and
-* **You can run your Rake tasks on your deployed servers,** friction-free, and look like a superhero. _[cue fanfare]_
+* **You can execute your Rake tasks on your deployed servers,** friction-free, and look like a superhero. _[cue fanfare]_
 
 ## Features
 
@@ -91,7 +91,7 @@ Rake lists these tasks in the expected fashion.
 
 ### Simply mirror all Rake tasks as Capistrano recipes
 
-Add the following to your Capistrano recipes. Note that Cape statements must be executed within a `Cape` block.
+Add the following to your Capistrano recipes. Note that Cape statements must be contained in a `Cape` block.
 
     # config/deploy.rb
 
@@ -149,7 +149,7 @@ On remote computers, via Capistrano:
 
 ### Mirror some Rake tasks, but not others
 
-Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements must be executed within a `Cape` block.
+Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements must be contained in a `Cape` block.
 
     # config/deploy.rb
 
@@ -163,7 +163,7 @@ Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements mu
 
 ### Mirror Rake tasks that require Capistrano recipe options and/or environment variables
 
-Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when running Rake tasks. Note that Cape statements must be executed within a `Cape` block.
+Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when executing Rake tasks. Note that Cape statements must be contained in a `Cape` block.
 
     # config/deploy.rb
 
@@ -199,7 +199,7 @@ The above is equivalent to the following manually-defined Capistrano recipes.
 
 ### Mirror Rake tasks into a Capistrano namespace
 
-Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be executed within a `Cape` block.
+Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be contained in a `Cape` block.
 
     # config/deploy.rb
 
@@ -214,7 +214,7 @@ Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistr
 
 ### Iterate over available Rake tasks
 
-Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace. Note that Cape statements must be executed within a `Cape` block.
+Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace. Note that Cape statements must be contained in a `Cape` block.
 
     # config/deploy.rb
 
@@ -237,20 +237,19 @@ Cape lets you enumerate Rake tasks, optionally filtering them by task name or na
 
 ### Configure Rake execution
 
-Cape lets you specify how Rake should be executed on the local computer and on remote computers. But the default behavior is most likely just right for your needs:
+Cape lets you specify how Rake should be run on the local computer and on remote computers. But the default behavior is most likely just right for your needs:
 
 * It detects whether Bundler is installed on the computer
 * It detects whether the project uses Bundler to manage its dependencies
 * It runs Rake via Bundler if the above conditions are true; otherwise, it runs Rake directly
 
-Note that Cape statements must be executed within a `Cape` block.
+Note that Cape statements must be contained in a `Cape` block.
 
     # config/deploy.rb
 
     require 'cape'
 
-    # Configure Cape never to execute Rake via Bundler, neither locally nor
-    # remotely.
+    # Configure Cape never to run Rake via Bundler, neither locally nor remotely.
     Cape.local_rake_executable  = '/usr/bin/env rake'
     Cape.remote_rake_executable = '/usr/bin/env rake'
 
