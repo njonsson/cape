@@ -261,7 +261,11 @@ Note that Cape statements must be executed within a `Cape` block.
 
 ## Known issues
 
-For now, only Rake tasks that have descriptions can be mirrored or enumerated.
+**A Rake task that lacks a description cannot be mirrored or enumerated.** This is pending [an enhancement to Rake](http://github.com/jimweirich/rake/pull/99 "Rake pull request #99 (“Add ‘--include-hidden-tasks’ option to enhance ‘-T’ and ‘-D’ ”)").
+
+**A Rake task whose name collides with a Ruby method cannot be mirrored.** For example, the name of [Rails](http://rubyonrails.org)’s _db:fixtures:load_ task collides with the Ruby Core Library’s [_Kernel::load_ method](http://ruby-doc.org/core/Kernel.html#method-i-load) because that method is mixed into all objects. If you try to mirror _db:fixtures:load_, Capistrano will raise an exception. There is [a questionable workaround](http://github.com/njonsson/cape/issues/7#issuecomment-5632718 "Comment on Cape issue #7 (“defining a task named ‘load’ would shadow an existing method with that name (ArgumentError)”)") for this.
+
+**A Rake task is always executed in the Capistrano deployment’s _current_path_.** You may need to execute a task under _release_path_ or another remote filesystem location, but this is not possible at present. [Discuss](http://github.com/njonsson/cape/issues/9 "Cape issue #9 (“Cape Always Runs the Mirrorred Rake Tasks Under $current_path”)") this.
 
 ## Contributing
 
