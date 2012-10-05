@@ -84,7 +84,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
     Then the output should contain:
       """
         * executing `with_period'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period"
       """
 
   Scenario: mirror Rake task 'without_period' with its description
@@ -181,7 +181,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
     Then the output should contain:
       """
         * executing `my_namespace'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake my_namespace"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace"
       """
 
   Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description
@@ -236,7 +236,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
     Then the output should contain:
       """
         * executing `my_namespace:my_nested_namespace:in_a_nested_namespace'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake my_namespace:my_nested_namespace:in_a_nested_namespace"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace:my_nested_namespace:in_a_nested_namespace"
       """
 
   Scenario: mirror Rake task 'with_two_args' with its description
@@ -297,7 +297,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
     Then the output should contain:
       """
         * executing `with_three_args'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_three_args[\"a value for an_arg1\",\"a value for an_arg2\",\"a value for an_arg3\"]"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_three_args[\"a value for an_arg1\",\"a value for an_arg2\",\"a value for an_arg3\"]"
 
       """
 
@@ -315,7 +315,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
     Then the output should contain:
       """
         * executing `with_three_args'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_three_args[,\"a value for an_arg2\",]"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_three_args[,\"a value for an_arg2\",]"
 
       """
 

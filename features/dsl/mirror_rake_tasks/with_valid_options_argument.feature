@@ -85,6 +85,6 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
     Then the output should contain:
       """
         * executing `with_period'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period"
       `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
       """

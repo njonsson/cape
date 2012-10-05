@@ -3,8 +3,23 @@ module Cape
   # An abstraction of the Rake installation and available tasks.
   class Rake
 
-    # The default command used to run Rake.
-    DEFAULT_EXECUTABLE = '/usr/bin/env rake'.freeze
+    # The default command used to run Rake. We use `bundle check` to detect the
+    # presence of Bundler and a Bundler configuration. If Bundler is installed
+    # on the computer and configured, we prepend `rake` with `bundle exec`.
+    DEFAULT_EXECUTABLE = (
+                          '/usr/bin/env '                                 +
+                          '`'                                             +
+                           '/usr/bin/env bundle check >/dev/null 2>&1; '  +
+                           'case $? in '                                  +
+                              # Exit code 0: bundle is defined and installed
+                              # Exit code 1: bundle is defined but not installed
+                             '0|1 ) '                                     +
+                               'echo bundle exec '                        +
+                               ';; '                                      +
+                           'esac' +
+                          '` '                                            +
+                          'rake'
+                         ).freeze
 
     # Sets the command used to run Rake on remote computers.
     #
@@ -128,7 +143,7 @@ module Cape
     end
 
     def fetch_output
-      `#{local_executable} --tasks 2> /dev/null`
+      `#{local_executable} --tasks 2>/dev/null`
     end
   end
 

@@ -46,7 +46,7 @@ Then
 * **Mirror Rake tasks** as Capistrano recipes, optionally filtered by namespace or name
 * **Embed Rake tasks** in Capistrano namespaces
 * **Pass arguments** to Rake tasks by setting environment variables with the same names
-* **Override the default executables** for local and remote Rake installations (`/usr/bin/env rake` is the default)
+* **Specify the Rake executable** for local and remote Rake installations
 * **Enumerate Rake tasks** for your own purposes
 
 See what’s changed lately by reading the [project history](http://github.com/njonsson/cape/blob/master/History.markdown).
@@ -237,15 +237,22 @@ Cape lets you enumerate Rake tasks, optionally filtering them by task name or na
 
 ### Configure Rake execution
 
-Cape lets you specify how Rake should be executed on the local computer and on remote computers. Note that Cape statements must be executed within a `Cape` block.
+Cape lets you specify how Rake should be executed on the local computer and on remote computers. But the default behavior is most likely just right for your needs:
+
+* It detects whether Bundler is installed on the computer
+* It detects whether the project uses Bundler to manage its dependencies
+* It runs Rake via Bundler if the above conditions are true; otherwise, it runs Rake directly
+
+Note that Cape statements must be executed within a `Cape` block.
 
     # config/deploy.rb
 
     require 'cape'
 
-    # Configure Cape to execute Rake via Bundler, both locally and remotely.
-    Cape.local_rake_executable  = '/usr/bin/env bundle exec rake'
-    Cape.remote_rake_executable = '/usr/bin/env bundle exec rake'
+    # Configure Cape never to execute Rake via Bundler, neither locally nor
+    # remotely.
+    Cape.local_rake_executable  = '/usr/bin/env rake'
+    Cape.remote_rake_executable = '/usr/bin/env rake'
 
     Cape do
       # Create Capistrano recipes for all Rake tasks.

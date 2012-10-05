@@ -31,7 +31,7 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
       """
     And the output should contain:
       """
-      We left the remote Rake executable as "/usr/bin/env rake"
+      We left the remote Rake executable as "/usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake"
       """
     And the output should contain:
       """
@@ -61,7 +61,7 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
       """
     And the output should contain:
       """
-      We left the local Rake executable as "/usr/bin/env rake"
+      We left the local Rake executable as "/usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake"
       """
     And the output should contain:
       """

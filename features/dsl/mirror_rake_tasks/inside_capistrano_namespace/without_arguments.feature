@@ -90,7 +90,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
     Then the output should contain:
       """
         * executing `ns:with_period'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake with_period"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period"
       """
 
   Scenario: mirror Rake task 'without_period' with its description
@@ -197,7 +197,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
     Then the output should contain:
       """
         * executing `ns:my_namespace'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env rake my_namespace"
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace"
       """
 
   Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description

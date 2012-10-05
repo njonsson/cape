@@ -2,9 +2,7 @@ require 'cape/rake'
 
 describe Cape::Rake do
   describe '::DEFAULT_EXECUTABLE' do
-    subject { Cape::Rake::DEFAULT_EXECUTABLE }
-
-    it { should == '/usr/bin/env rake' }
+    subject { described_class::DEFAULT_EXECUTABLE }
 
     it { should be_frozen }
   end
@@ -24,9 +22,9 @@ describe Cape::Rake do
   end
 
   describe '-- without specified attributes --' do
-    its(:local_executable)  { should == '/usr/bin/env rake' }
+    its(:local_executable) { should == described_class::DEFAULT_EXECUTABLE }
 
-    its(:remote_executable) { should == '/usr/bin/env rake' }
+    its(:remote_executable) { should == described_class::DEFAULT_EXECUTABLE }
   end
 
   describe '-- with specified attributes --' do
