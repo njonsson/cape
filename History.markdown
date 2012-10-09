@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.5.0"></a>v1.5.0, Tue 10/09/2012
+
+* Automatically detect and use Bundler when running Rake
+
 ## <a name="v1.4.0"></a>v1.4.0, Mon 2/06/2012
 
 * Cache the Rake task list to improve Capistrano responsiveness
