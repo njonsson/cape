@@ -139,7 +139,7 @@ On remote computers, via Capistrano:
 
     $ cap bag_leaves PAPER_OR_PLASTIC=plastic
       * executing `bag_leaves'
-      * executing "cd /path/to/currently/deployed/version/of/your/app && /usr/bin/env rake bag_leaves[plastic]"
+      * executing "cd /path/to/currently/deployed/version/of/your/app && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake bag_leaves[plastic]"
         servers: ["your.server.name"]
         [your.server.name] executing command
      ** [out :: your.server.name] (in /path/to/currently/deployed/version/of/your/app)
@@ -187,13 +187,26 @@ The above is equivalent to the following manually-defined Capistrano recipes.
 
     # These translations to Capistrano are just for illustration.
 
+    RAKE = '/usr/bin/env '                                +
+           '`'                                            +
+            '/usr/bin/env bundle check >/dev/null 2>&1; ' +
+            'case $? in '                                 +
+               # Exit code 0: bundle is defined and installed
+               # Exit code 1: bundle is defined but not installed
+              '0|1 ) '                                    +
+                'echo bundle exec '                       +
+                ';; '                                     +
+            'esac'                                        +
+           '` '                                           +
+           'rake'
+
     task :routes, :roles => :app do
-      run "cd #{current_path} && /usr/bin/env rake routes"
+      run "cd #{current_path} && #{RAKE} routes"
     end
 
     namespace :db do
       task :migrate, :roles => :app do
-        run "cd #{current_path} && /usr/bin/env rake db:migrate RAILS_ENV=#{rails_env}"
+        run "cd #{current_path} && #{RAKE} db:migrate RAILS_ENV=#{rails_env}"
       end
     end
 
