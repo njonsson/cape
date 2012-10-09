@@ -80,14 +80,14 @@ sNNNNNN.     zNNN      B(NDhs=(  ''`
 <li>
 <strong>You use <a href="http://capify.org">Capistrano</a></strong> to deploy your application, and</li>
 <li>
-<strong>You have <a href="http://rake.rubyforge.org">Rake</a> tasks you want to run remotely</strong> — but you don’t want to hand-code Capistrano recipes for each Rake task —</li>
+<strong>You have <a href="http://rake.rubyforge.org">Rake</a> tasks that you want to execute remotely</strong> — but you don’t want to hand-code Capistrano recipes for each Rake task —</li>
 </ul><p>Then</p>
 
 <ul>
 <li>
 <strong>You can use the <a href="http://njonsson.github.com/cape">Cape</a> DSL</strong> within Capistrano recipes to dynamically add recipes for your application’s Rake tasks, and</li>
 <li>
-<strong>You can run your Rake tasks on your deployed servers,</strong> friction-free, and look like a superhero. <em>[cue fanfare]</em>
+<strong>You can execute your Rake tasks on your deployed servers,</strong> friction-free, and look like a superhero. <em>[cue fanfare]</em>
 </li>
 </ul><h2>Features</h2>
 
@@ -99,7 +99,7 @@ sNNNNNN.     zNNN      B(NDhs=(  ''`
 <li>
 <strong>Pass arguments</strong> to Rake tasks by setting environment variables with the same names</li>
 <li>
-<strong>Override the default executables</strong> for local and remote Rake installations (<code>/usr/bin/env rake</code> is the default)</li>
+<strong>Specify the Rake executable</strong> for local and remote Rake installations</li>
 <li>
 <strong>Enumerate Rake tasks</strong> for your own purposes</li>
 </ul><p>See what’s changed lately by reading the <a href="http://github.com/njonsson/cape/blob/master/History.markdown">project history</a>.</p>
@@ -148,7 +148,7 @@ rake bag_leaves[paper_or_plastic]
 
 <h3>Simply mirror all Rake tasks as Capistrano recipes</h3>
 
-<p>Add the following to your Capistrano recipes. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+<p>Add the following to your Capistrano recipes. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
 <pre><code># config/deploy.rb
 
@@ -200,7 +200,7 @@ Putting the leaves in a plastic bag
 
 <pre><code>$ cap bag_leaves PAPER_OR_PLASTIC=plastic
   * executing `bag_leaves'
-  * executing "cd /path/to/currently/deployed/version/of/your/app &amp;&amp; /usr/bin/env rake bag_leaves[plastic]"
+  * executing "cd /path/to/currently/deployed/version/of/your/app &amp;&amp; /usr/bin/env `/usr/bin/env bundle check &gt;/dev/null 2&gt;&amp;1; case $? in 0|1 ) echo bundle exec ;; esac` rake bag_leaves[plastic]"
     servers: ["your.server.name"]
     [your.server.name] executing command
  ** [out :: your.server.name] (in /path/to/currently/deployed/version/of/your/app)
@@ -211,7 +211,7 @@ Putting the leaves in a plastic bag
 
 <h3>Mirror some Rake tasks, but not others</h3>
 
-<p>Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+<p>Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
 <pre><code># config/deploy.rb
 
@@ -226,7 +226,7 @@ end
 
 <h3>Mirror Rake tasks that require Capistrano recipe options and/or environment variables</h3>
 
-<p>Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when running Rake tasks. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+<p>Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when executing Rake tasks. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
 <pre><code># config/deploy.rb
 
@@ -251,20 +251,33 @@ end
 
 # These translations to Capistrano are just for illustration.
 
+RAKE = '/usr/bin/env '                                +
+       '`'                                            +
+        '/usr/bin/env bundle check &gt;/dev/null 2&gt;&amp;1; ' +
+        'case $? in '                                 +
+           # Exit code 0: bundle is defined and installed
+           # Exit code 1: bundle is defined but not installed
+          '0|1 ) '                                    +
+            'echo bundle exec '                       +
+            ';; '                                     +
+        'esac'                                        +
+       '` '                                           +
+       'rake'
+
 task :routes, :roles =&gt; :app do
-  run "cd #{current_path} &amp;&amp; /usr/bin/env rake routes"
+  run "cd #{current_path} &amp;&amp; #{RAKE} routes"
 end
 
 namespace :db do
   task :migrate, :roles =&gt; :app do
-    run "cd #{current_path} &amp;&amp; /usr/bin/env rake db:migrate RAILS_ENV=#{rails_env}"
+    run "cd #{current_path} &amp;&amp; #{RAKE} db:migrate RAILS_ENV=#{rails_env}"
   end
 end
 </code></pre>
 
 <h3>Mirror Rake tasks into a Capistrano namespace</h3>
 
-<p>Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+<p>Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
 <pre><code># config/deploy.rb
 
@@ -280,7 +293,7 @@ end
 
 <h3>Iterate over available Rake tasks</h3>
 
-<p>Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+<p>Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
 <pre><code># config/deploy.rb
 
@@ -304,15 +317,21 @@ end
 
 <h3>Configure Rake execution</h3>
 
-<p>Cape lets you specify how Rake should be executed on the local computer and on remote computers. Note that Cape statements must be executed within a <code>Cape</code> block.</p>
+<p>Cape lets you specify how Rake should be run on the local computer and on remote computers. But the default behavior is most likely just right for your needs:</p>
+
+<ul>
+<li>It detects whether Bundler is installed on the computer</li>
+<li>It detects whether the project uses Bundler to manage its dependencies</li>
+<li>It runs Rake via Bundler if the above conditions are true; otherwise, it runs Rake directly</li>
+</ul><p>Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
 <pre><code># config/deploy.rb
 
 require 'cape'
 
-# Configure Cape to execute Rake via Bundler, both locally and remotely.
-Cape.local_rake_executable  = '/usr/bin/env bundle exec rake'
-Cape.remote_rake_executable = '/usr/bin/env bundle exec rake'
+# Configure Cape never to run Rake via Bundler, neither locally nor remotely.
+Cape.local_rake_executable  = '/usr/bin/env rake'
+Cape.remote_rake_executable = '/usr/bin/env rake'
 
 Cape do
   # Create Capistrano recipes for all Rake tasks.
@@ -322,7 +341,11 @@ end
 
 <h2>Known issues</h2>
 
-<p>For now, only Rake tasks that have descriptions can be mirrored or enumerated.</p>
+<p><strong>A Rake task that lacks a description cannot be mirrored or enumerated.</strong> This is pending <a href="http://github.com/jimweirich/rake/pull/99" title="Rake pull request #99 (“Add ‘--include-hidden-tasks’ option to enhance ‘-T’ and ‘-D’ ”)">an enhancement to Rake</a>.</p>
+
+<p><strong>A Rake task whose name collides with a Ruby method cannot be mirrored.</strong> For example, the name of <a href="http://rubyonrails.org">Rails</a>’s <em>db:fixtures:load</em> task collides with the Ruby Core Library’s <a href="http://ruby-doc.org/core/Kernel.html#method-i-load"><em>Kernel::load</em> method</a> because that method is mixed into all objects. If you try to mirror <em>db:fixtures:load</em>, Capistrano will raise an exception. There is <a href="http://github.com/njonsson/cape/issues/7#issuecomment-5632718" title="Comment on Cape issue #7 (“defining a task named ‘load’ would shadow an existing method with that name (ArgumentError)”)">a questionable workaround</a> for this.</p>
+
+<p><strong>A Rake task is always executed in the Capistrano deployment’s <em>current_path</em>.</strong> You may need to execute a task under <em>release_path</em> or another remote filesystem location, but this is not possible at present. <a href="http://github.com/njonsson/cape/issues/9" title="Cape issue #9 (“Cape Always Runs the Mirrorred Rake Tasks Under $current_path”)">Discuss</a> this.</p>
 
 <h2>Contributing</h2>
 
