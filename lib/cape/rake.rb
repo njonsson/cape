@@ -7,17 +7,17 @@ module Cape
     # presence of Bundler and a Bundler configuration. If Bundler is installed
     # on the computer and configured, we prepend `rake` with `bundle exec`.
     DEFAULT_EXECUTABLE = (
-                          '/usr/bin/env '                                 +
-                          '`'                                             +
-                           '/usr/bin/env bundle check >/dev/null 2>&1; '  +
-                           'case $? in '                                  +
+                          '/usr/bin/env '                                +
+                          '`'                                            +
+                           '/usr/bin/env bundle check >/dev/null 2>&1; ' +
+                           'case $? in '                                 +
                               # Exit code 0: bundle is defined and installed
                               # Exit code 1: bundle is defined but not installed
-                             '0|1 ) '                                     +
-                               'echo bundle exec '                        +
-                               ';; '                                      +
-                           'esac' +
-                          '` '                                            +
+                             '0|1 ) '                                    +
+                               'echo bundle exec '                       +
+                               ';; '                                     +
+                           'esac'                                        +
+                          '` '                                           +
                           'rake'
                          ).freeze
 
