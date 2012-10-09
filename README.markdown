@@ -166,9 +166,9 @@ Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements mu
       mirror_rake_tasks :foo
     end
 
-### Mirror Rake tasks that require Capistrano recipe options and/or environment variables
+### Mirror Rake tasks that require renaming, Capistrano recipe options, path switching, and/or environment variables
 
-Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when executing Rake tasks. Note that Cape statements must be contained in a `Cape` block.
+Cape lets you customize mirrored Rake tasks to suit your needs. Note that Cape statements must be contained in a `Cape` block, and references to Capistrano variables such as `rails_env` and `release_path` must be contained in an inner block, lambda, or other callable object.
 
     # config/deploy.rb
 
@@ -176,13 +176,37 @@ Cape lets you specify options used for defining Capistrano recipes. You can also
 
     Cape do
       # Display defined Rails routes on application server remote machines only.
-      mirror_rake_tasks :routes, :roles => :app
+      mirror_rake_tasks :routes do |recipes|
+        recipes.options[:roles] = :app
+      end
 
       # Execute database migration on application server remote machines only,
       # and set the 'RAILS_ENV' environment variable to the value of the
       # Capistrano variable 'rails_env'.
-      mirror_rake_tasks 'db:migrate', :roles => :app do |env|
-        env['RAILS_ENV'] = rails_env
+      mirror_rake_tasks 'db:migrate' do |recipes|
+        recipes.options[:roles] = :app
+        recipes.env['RAILS_ENV'] = lambda { rails_env }
+      end
+
+      # Support a Rake task that must be run on application server remote
+      # machines only, and in the remote directory 'release_path' instead of the
+      # default, 'current_path'.
+      before 'deploy:symlink', :spec
+      mirror_rake_tasks :spec do |recipes|
+        recipes.cd { release_path }
+        recipes.options[:roles] = :app
+      end
+
+      # Avoid collisions with the existing Ruby method #test, run tests on
+      # application server remote machines only, and set the 'RAILS_ENV'
+      # environment variable to the value of the Capistrano variable
+      # 'rails_env'.
+      mirror_rake_tasks :test do |recipes|
+        recipes.rename do |rake_task_name|
+          "#{rake_task_name}_task"
+        end
+        recipes.options[:roles] = :app
+        recipes.env['RAILS_ENV'] = lambda { rails_env }
       end
     end
 
@@ -213,6 +237,15 @@ The above is equivalent to the following manually-defined Capistrano recipes.
       task :migrate, :roles => :app do
         run "cd #{current_path} && #{RAKE} db:migrate RAILS_ENV=#{rails_env}"
       end
+    end
+
+    before 'deploy:symlink', :spec
+    task :spec, :roles => :app do
+      run "cd #{release_path} && #{RAKE} routes"
+    end
+
+    task :test_task, :roles => :app do
+      run "cd #{current_path} && #{RAKE} test RAILS_ENV=#{rails_env}"
     end
 
 ### Mirror Rake tasks into a Capistrano namespace
@@ -285,10 +318,6 @@ Note that Cape statements must be contained in a `Cape` block.
     source 'http://rubygems.org'
 
     gem 'rake', '>= 0.9.3'
-
-**A Rake task whose name collides with a Ruby method cannot be mirrored.** For example, the name of [Rails](http://rubyonrails.org)’s _db:fixtures:load_ task collides with the Ruby Core Library’s [_Kernel::load_ method](http://ruby-doc.org/core/Kernel.html#method-i-load) because that method is mixed into all objects. If you try to mirror _db:fixtures:load_, Capistrano will raise an exception. There is [a questionable workaround](http://github.com/njonsson/cape/issues/7#issuecomment-5632718 "Comment on Cape issue #7 (“defining a task named ‘load’ would shadow an existing method with that name (ArgumentError)”)") for this.
-
-**A Rake task is always executed in the Capistrano deployment’s _current_path_.** You may need to execute a task under _release_path_ or another remote filesystem location, but this is not possible at present. [Discuss](http://github.com/njonsson/cape/issues/9 "Cape issue #9 (“Cape Always Runs the Mirrorred Rake Tasks Under $current_path”)") this.
 
 ## Contributing
 

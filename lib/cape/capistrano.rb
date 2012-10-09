@@ -1,5 +1,5 @@
-require 'cape/hash_list'
 require 'cape/rake'
+require 'cape/recipe_definition'
 require 'cape/util'
 
 module Cape
@@ -17,14 +17,13 @@ module Cape
       attributes.each do |name, value|
         send "#{name}=", value
       end
-      self.rake ||= Rake.new
+      self.rake ||= new_rake
     end
 
     # Defines a wrapper in Capistrano around the specified Rake _task_.
     #
     # @param [Hash] task            metadata for a Rake task
-    # @param [Hash] named_arguments named arguments, including options to pass to
-    #                               the Capistrano +task+ method
+    # @param [Hash] named_arguments
     #
     # @option task [String]               :name        the name of the Rake task
     # @option task [Array of String, nil] :parameters  the names of the Rake
@@ -32,33 +31,28 @@ module Cape
     # @option task [String]               :description documentation for the Rake
     #                                                  task
     #
-    # @option named_arguments [Binding] :binding            the Binding of your
-    #                                                       Capistrano recipes
-    #                                                       file
+    # @option named_arguments [Binding] :binding the Binding of your Capistrano
+    #                                            recipes file
     #
-    # @yield [env] a block that defines environment variables for the Rake task;
-    #              optional
-    # @yieldparam [Hash] env the environment variables to set before executing
-    #                        the Rake task
+    # @yield [recipes] a block that customizes the Capistrano recipe(s)
+    #                  generated for the Rake task(s); optional
+    # @yieldparam [RecipeDefinition] recipes an interface for customizing the
+    #                                        Capistrano recipe(s) generated for
+    #                                        the Rake task(s)
     #
     # @return [Capistrano] the object
     #
     # @raise [ArgumentError] +named_arguments[:binding]+ is missing
     #
     # @note Any parameters that the Rake task has are integrated via environment variables, since Capistrano does not support recipe parameters per se.
-    #
-    # @see http://github.com/capistrano/capistrano/blob/master/lib/capistrano/configuration/actions/invocation.rb#L99-L144 Valid Capistrano ‘task’ method options
     def define_rake_wrapper(task, named_arguments, &block)
       unless (binding = named_arguments[:binding])
         raise ::ArgumentError, ':binding named argument is required'
       end
 
       capistrano_context = binding.eval('self', __FILE__, __LINE__)
-      options = named_arguments.reject do |key, value|
-        key == :binding
-      end
       describe  task, capistrano_context
-      implement(task, capistrano_context, options, &block)
+      implement(task, capistrano_context, &block)
     end
 
   private
@@ -88,6 +82,11 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
       description.join
     end
 
+    def capture_recipe_definition(recipe_definition, &recipe_definition_block)
+      recipe_definition_block.call(recipe_definition) if recipe_definition_block
+      true
+    end
+
     def describe(task, capistrano_context)
       if (description = build_capistrano_description(task))
         capistrano_context.desc description
@@ -95,13 +94,18 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
       self
     end
 
-    def implement(task, capistrano_context, options, &env_block)
-      name_tokens = task[:name].split(':')
-      name_tokens << 'default' if task[:default]
+    def implement(task, capistrano_context, &recipe_definition_block)
+      name_tokens = tokenize_name(task)
+      recipe_definition = new_recipe_definition
+      capture_recipe_definition(recipe_definition, &recipe_definition_block)
+      env = nil
       rake = self.rake
-      # Define the recipe.
       block = lambda { |context|
-        context.task name_tokens.last, options do
+        recipe_name = name_tokens.last
+        if recipe_definition.rename
+          recipe_name = recipe_definition.rename.call(name_tokens.last)
+        end
+        context.task recipe_name, recipe_definition.options do
           arguments = Array(task[:parameters]).collect do |a|
             if (value = ENV[a.upcase])
               value = value.inspect
@@ -113,17 +117,26 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
           else
             arguments = "[#{arguments.join ','}]"
           end
-          env_hash = HashList.new
-          env_block.call(env_hash) if env_block
-          env_hash.reject! do |var_name, var_value|
-            var_name.nil? || var_value.nil?
+
+          unless env
+            env_strings = recipe_definition.env.collect do |var_name, var_value|
+              if var_name.nil? || var_value.nil?
+                nil
+              else
+                if var_value.is_a?(Proc)
+                  var_value = context.instance_eval do
+                    var_value.call
+                  end
+                end
+                "#{var_name}=#{var_value.inspect}"
+              end
+            end.compact
+            env = env_strings.empty? ? nil : (' ' + env_strings.join(' '))
           end
-          env_strings = env_hash.collect do |var_name, var_value|
-            "#{var_name}=#{var_value.inspect}"
-          end
-          env = env_strings.empty? ? nil : (' ' + env_strings.join(' '))
-          command = "cd #{context.current_path} && " +
-                    "#{rake.remote_executable} "     +
+
+          path = recipe_definition.cd || context.current_path
+          path = path.call if path.respond_to?(:call)
+          command = "cd #{path} && #{rake.remote_executable} " +
                     "#{task[:name]}#{arguments}#{env}"
           context.run command
         end
@@ -137,6 +150,20 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
       end
       block.call capistrano_context
       self
+    end
+
+    def new_rake(*arguments)
+      Rake.new(*arguments)
+    end
+
+    def new_recipe_definition(*arguments)
+      RecipeDefinition.new(*arguments)
+    end
+
+    def tokenize_name(task)
+      task[:name].split(':').tap do |result|
+        result << 'default' if task[:default]
+      end
     end
 
   end

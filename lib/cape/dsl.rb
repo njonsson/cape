@@ -92,52 +92,18 @@ module Cape
 
     # Defines Rake tasks as Capistrano recipes.
     #
-    # @overload mirror_rake_tasks(task_expression=nil)
-    #   Defines Rake tasks as Capistrano recipes.
+    # @param [String, Symbol] task_expression the full name of a Rake task or
+    #                                         namespace to filter
     #
-    #   @param [String, Symbol] task_expression the full name of a Rake task or
-    #                                           namespace to filter
+    # @yield [recipes] a block that customizes the Capistrano recipe(s)
+    #                  generated for the Rake task(s); optional
+    # @yieldparam [RecipeDefinition] recipes an interface for customizing the
+    #                                        Capistrano recipe(s) generated for
+    #                                        the Rake task(s)
     #
-    #   @yield [env] a block that defines environment variables for the Rake
-    #                task; optional
-    #   @yieldparam [Hash] env the environment variables to set before executing
-    #                          the Rake task
-    #
-    #   @return [DSL] the object
-    #
-    # @overload mirror_rake_tasks(capistrano_task_options={})
-    #   Defines all Rake tasks as Capistrano recipes with options.
-    #
-    #   @param [Hash] capistrano_task_options options to pass to the Capistrano
-    #                                         +task+ method; optional
-    #
-    #   @yield [env] a block that defines environment variables for the Rake
-    #                task; optional
-    #   @yieldparam [Hash] env the environment variables to set before executing
-    #                          the Rake task
-    #
-    #   @return [DSL] the object
-    #
-    # @overload mirror_rake_tasks(task_expression, capistrano_task_options={})
-    #   Defines specific Rake tasks as Capistrano recipes with options.
-    #
-    #   @param [String, Symbol] task_expression         the full name of a Rake
-    #                                                   task or namespace to
-    #                                                   filter
-    #   @param [Hash]           capistrano_task_options options to pass to the
-    #                                                   Capistrano +task+ method;
-    #                                                   optional
-    #
-    #   @yield [env] a block that defines environment variables for the Rake
-    #                task; optional
-    #   @yieldparam [Hash] env the environment variables to set before executing
-    #                          the Rake task
-    #
-    #   @return [DSL] the object
+    # @return [DSL] the object
     #
     # @note Any parameters that the Rake tasks have are integrated via environment variables, since Capistrano does not support recipe parameters per se.
-    #
-    # @see http://github.com/capistrano/capistrano/blob/master/lib/capistrano/configuration/actions/invocation.rb#L99-L144 Valid Capistrano ‘task’ method options
     #
     # @example Mirroring all Rake tasks
     #   # config/deploy.rb
@@ -160,7 +126,7 @@ module Cape
     #     mirror_rake_tasks :foo
     #   end
     #
-    # @example Mirroring Rake tasks that require Capistrano recipe options and/or environment variables
+    # @example Mirroring Rake tasks that require renaming, Capistrano recipe options, path switching, and/or environment variables
     #   # config/deploy.rb
     #
     #   require 'cape'
@@ -168,13 +134,37 @@ module Cape
     #   Cape do
     #     # Display defined Rails routes on application server remote machines
     #     # only.
-    #     mirror_rake_tasks :routes, :roles => :app
+    #     mirror_rake_tasks :routes do |recipes|
+    #       recipes.options[:roles] = :app
+    #     end
     #
     #     # Execute database migration on application server remote machines
     #     # only, and set the 'RAILS_ENV' environment variable to the value of
     #     # the Capistrano variable 'rails_env'.
-    #     mirror_rake_tasks 'db:migrate', :roles => :app do |env|
-    #       env['RAILS_ENV'] = rails_env
+    #     mirror_rake_tasks 'db:migrate' do |recipes|
+    #       recipes.options[:roles] = :app
+    #       recipes.env['RAILS_ENV'] = lambda { rails_env }
+    #     end
+    #
+    #     # Support a Rake task that must be run on application server remote
+    #     # machines only, and in the remote directory 'release_path' instead of
+    #     # the default, 'current_path'.
+    #     before 'deploy:symlink', :spec
+    #     mirror_rake_tasks :spec do |recipes|
+    #       recipes.cd { release_path }
+    #       recipes.options[:roles] = :app
+    #     end
+    #
+    #     # Avoid collisions with the existing Ruby method #test, run tests on
+    #     # application server remote machines only, and set the 'RAILS_ENV'
+    #     # environment variable to the value of the Capistrano variable
+    #     # 'rails_env'.
+    #     mirror_rake_tasks :test do |recipes|
+    #       recipes.rename do |rake_task_name|
+    #         "#{rake_task_name}_task"
+    #       end
+    #       recipes.options[:roles] = :app
+    #       recipes.env['RAILS_ENV'] = lambda { rails_env }
     #     end
     #   end
     #
@@ -188,19 +178,9 @@ module Cape
     #       cape.mirror_rake_tasks
     #     end
     #   end
-    def mirror_rake_tasks(*arguments, &block)
-      arguments_count = arguments.length
-      options = arguments.last.is_a?(Hash) ? arguments.pop.dup : {}
-      unless arguments.length <= 1
-        raise ::ArgumentError,
-              ("wrong number of arguments (#{arguments_count} for 0 or 1, " +
-               'plus an options hash)')
-      end
-
-      task_expression = arguments.first
-      options[:binding] = binding
+    def mirror_rake_tasks(task_expression=nil, &block)
       rake.each_task task_expression do |t|
-        deployment_library.define_rake_wrapper(t, options, &block)
+        deployment_library.define_rake_wrapper(t, :binding => binding, &block)
       end
       self
     end
@@ -236,7 +216,7 @@ module Cape
 
     # Returns an abstraction of the Rake installation and available tasks.
     def rake
-      @rake ||= Rake.new
+      @rake ||= new_rake
     end
 
   private
@@ -245,7 +225,15 @@ module Cape
       return @deployment_library if @deployment_library
 
       raise_unless_capistrano
-      @deployment_library = Capistrano.new(:rake => rake)
+      @deployment_library = new_capistrano(:rake => rake)
+    end
+
+    def new_capistrano(*arguments)
+      Capistrano.new(*arguments)
+    end
+
+    def new_rake(*arguments)
+      Rake.new(*arguments)
     end
 
     def raise_unless_capistrano

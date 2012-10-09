@@ -57,13 +57,12 @@ describe Cape::DSL do
         lambda {
           do_mirror_rake_tasks task_expression, task_expression
         }.should raise_error(ArgumentError,
-                             'wrong number of arguments (2 for 0 or 1, plus ' +
-                             'an options hash)')
+                             'wrong number of arguments (2 for 1)')
       end
     end
 
-    shared_examples_for 'a successful call' do |task_expression_in_use,
-                                                options_in_use|
+    shared_examples_for "a successful call (#{Cape::DSL.name})" do |task_expression_in_use,
+                                                                    options_in_use|
       specify 'by collecting Rake#each_task' do
         mock_rake.should_receive(:each_task).with task_expression_in_use
         do_mirror_rake_tasks
@@ -113,42 +112,6 @@ describe Cape::DSL do
       end
     end
 
-    describe 'with one scalar argument, an options hash, and a block --' do
-      def do_mirror_rake_tasks
-        super 'task:expression', :bar => :baz do |env|
-          env['AN_ENV_VAR'] = 'an environment variable'
-        end
-      end
-
-      should_behave_like 'a successful call', 'task:expression', :bar => :baz
-    end
-
-    describe 'with one scalar argument and an options hash --' do
-      def do_mirror_rake_tasks
-        super 'task:expression', :bar => :baz
-      end
-
-      should_behave_like 'a successful call', 'task:expression', :bar => :baz
-    end
-
-    describe 'with an options hash and a block --' do
-      def do_mirror_rake_tasks
-        super :bar => :baz do |env|
-          env['AN_ENV_VAR'] = 'an environment variable'
-        end
-      end
-
-      should_behave_like 'a successful call', nil, :bar => :baz
-    end
-
-    describe 'with an options hash --' do
-      def do_mirror_rake_tasks
-        super :bar => :baz
-      end
-
-      should_behave_like 'a successful call', nil, :bar => :baz
-    end
-
     describe 'with one scalar argument and a block --' do
       def do_mirror_rake_tasks
         super 'task:expression' do |env|
@@ -156,7 +119,9 @@ describe Cape::DSL do
         end
       end
 
-      should_behave_like('a successful call', 'task:expression', {})
+      should_behave_like("a successful call (#{Cape::DSL.name})",
+                         'task:expression',
+                         {})
     end
 
     describe 'with one scalar argument --' do
@@ -164,7 +129,9 @@ describe Cape::DSL do
         super 'task:expression'
       end
 
-      should_behave_like('a successful call', 'task:expression', {})
+      should_behave_like("a successful call (#{Cape::DSL.name})",
+                         'task:expression',
+                         {})
     end
 
     describe 'without arguments --' do
@@ -172,7 +139,7 @@ describe Cape::DSL do
         super
       end
 
-      should_behave_like('a successful call', nil, {})
+      should_behave_like("a successful call (#{Cape::DSL.name})", nil, {})
     end
   end
 
