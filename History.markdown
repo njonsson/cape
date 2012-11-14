@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.6.0"></a>v1.6.0, Wed 11/14/2012
+
+* Enable mirroring and enumeration of hidden Rake tasks for versions of Rake that make it possible
+
 ## <a name="v1.5.0"></a>v1.5.0, Tue 10/09/2012
 
 * Automatically detect and use Bundler when running Rake
