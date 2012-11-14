@@ -341,7 +341,14 @@ end
 
 <h2>Known issues</h2>
 
-<p><strong>A Rake task that lacks a description cannot be mirrored or enumerated.</strong> This is pending <a href="http://github.com/jimweirich/rake/pull/99" title="Rake pull request #99 (“Add ‘--include-hidden-tasks’ option to enhance ‘-T’ and ‘-D’ ”)">an enhancement to Rake</a>.</p>
+<p><strong>A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.</strong> Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project:</p>
+
+<pre><code># Gemfile
+
+source 'http://rubygems.org'
+
+gem 'rake', '&gt;= 0.9.3'
+</code></pre>
 
 <p><strong>A Rake task whose name collides with a Ruby method cannot be mirrored.</strong> For example, the name of <a href="http://rubyonrails.org">Rails</a>’s <em>db:fixtures:load</em> task collides with the Ruby Core Library’s <a href="http://ruby-doc.org/core/Kernel.html#method-i-load"><em>Kernel::load</em> method</a> because that method is mixed into all objects. If you try to mirror <em>db:fixtures:load</em>, Capistrano will raise an exception. There is <a href="http://github.com/njonsson/cape/issues/7#issuecomment-5632718" title="Comment on Cape issue #7 (“defining a task named ‘load’ would shadow an existing method with that name (ArgumentError)”)">a questionable workaround</a> for this.</p>
 
