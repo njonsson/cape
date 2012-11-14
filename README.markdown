@@ -273,7 +273,7 @@ Note that Cape statements must be contained in a `Cape` block.
 
 ## Known issues
 
-**A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.** Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project:
+**A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.** Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project.
 
     # Gemfile
 
