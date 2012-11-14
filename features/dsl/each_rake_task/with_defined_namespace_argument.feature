@@ -21,7 +21,7 @@ Feature: The #each_rake_task DSL method with an argument of a defined namespace
         end
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should not contain:
       """
 

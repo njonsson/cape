@@ -12,7 +12,7 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
         mirror_rake_tasks 'my_namespace'
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should not contain "cap with_period"
     And the output should contain:
       """

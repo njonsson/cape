@@ -59,7 +59,7 @@ module Cape
       task_expression = task_expression                       ?
                         ::Regexp.escape(task_expression.to_s) :
                         '.+?'
-      regexp = /^rake (#{task_expression}(?::.+?)?)(?:\[(.+?)\])?\s+# (.+)/
+      regexp = /^rake (#{task_expression}(?::.+?)?)(?:\[(.+?)\])?\s+#\s*(.*)/
       each_output_line do |l|
         unless (matches = l.chomp.match(regexp))
           next
@@ -143,7 +143,7 @@ module Cape
     end
 
     def fetch_output
-      `#{local_executable} --tasks 2>/dev/null`
+      `#{local_executable} --all --tasks 2>/dev/null || #{local_executable} --tasks 2>/dev/null`
     end
   end
 

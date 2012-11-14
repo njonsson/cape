@@ -32,6 +32,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'aruba',      '~> 0'
   s.add_development_dependency 'capistrano', '~> 2'
-  s.add_development_dependency 'rake',       '~> 0'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec',      '~> 2'
 end

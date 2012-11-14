@@ -24,7 +24,7 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
         end
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should contain:
       """
       We changed the local Rake executable to "echo \"rake this-comes-from-overridden-rake  # This comes from overridden Rake\" #"

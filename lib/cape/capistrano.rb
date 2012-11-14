@@ -64,7 +64,9 @@ module Cape
       return nil unless task[:description]
 
       description = [task[:description]]
-      description << '.' unless task[:description].end_with?('.')
+      unless task[:description].empty? || task[:description].end_with?('.')
+        description << '.'
+      end
 
       unless (parameters = Array(task[:parameters])).empty?
         noun            = Util.pluralize('variable', parameters.length)

@@ -4,7 +4,7 @@ Feature: The #each_rake_task DSL method without arguments
   As a developer using Cape,
   I want to use the Cape DSL.
 
-  Scenario: enumerate all non-hidden Rake tasks
+  Scenario: enumerate all Rake tasks
     Given a full-featured Rakefile
     And a Capfile with:
       """
@@ -21,7 +21,7 @@ Feature: The #each_rake_task DSL method without arguments
         end
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should contain:
       """
 
@@ -79,9 +79,4 @@ Feature: The #each_rake_task DSL method without arguments
       Name: "with_three_args"
       Parameters: ["an_arg1", "an_arg2", "an_arg3"]
       Description: "My task with three arguments"
-      """
-    And the output should not contain:
-      """
-
-      Name: "hidden_task"
       """

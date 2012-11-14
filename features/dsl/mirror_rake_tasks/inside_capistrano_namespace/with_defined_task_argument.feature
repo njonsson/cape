@@ -14,7 +14,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, with 
         end
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should contain:
       """
       cap ns:with_period # Ends with period.

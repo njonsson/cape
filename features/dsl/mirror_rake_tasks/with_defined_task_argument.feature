@@ -12,7 +12,7 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined task
         mirror_rake_tasks 'with_period'
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should contain:
       """
       cap with_period # Ends with period.

@@ -12,7 +12,7 @@ Feature: The #mirror_rake_tasks DSL method with an undefined argument
         mirror_rake_tasks 'this_does_not_exist'
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should not contain "cap with_period"
 
   Scenario: do not mirror Rake task 'with_period'

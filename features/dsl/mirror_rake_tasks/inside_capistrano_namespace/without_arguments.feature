@@ -4,7 +4,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
   As a developer using Cape,
   I want to use the Cape DSL.
 
-  Scenario: mirror all non-hidden Rake tasks
+  Scenario: mirror all Rake tasks
     Given a full-featured Rakefile
     And a Capfile with:
       """
@@ -14,7 +14,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
         end
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should contain:
       """
       cap ns:with_period                                            # Ends with period.
@@ -51,7 +51,6 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
       """
       cap ns:with_three_args                                        # My task with three arguments.
       """
-    And the output should not contain "cap hidden_task"
 
   Scenario: mirror Rake task 'with_period' with its description
     Given a full-featured Rakefile
@@ -287,22 +286,5 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace, witho
       Set environment variables AN_ARG1, AN_ARG2, and AN_ARG3 if you want to pass Rake
       task arguments.
 
-
-      """
-
-  Scenario: do not mirror Rake task 'hidden_task'
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      namespace :ns do
-        Cape do |cape|
-          cape.mirror_rake_tasks
-        end
-      end
-      """
-    When I run `cap -e ns:hidden_task`
-    Then the output should contain exactly:
-      """
-      The task `ns:hidden_task' does not exist.
 
       """

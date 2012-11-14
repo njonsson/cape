@@ -4,7 +4,7 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
   As a developer using Cape,
   I want to use the Cape DSL.
 
-  Scenario: mirror all non-hidden Rake tasks with the specified options
+  Scenario: mirror all Rake tasks with the specified options
     Given a full-featured Rakefile
     And a Capfile with:
       """
@@ -12,7 +12,7 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
         mirror_rake_tasks :roles => :app
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should contain:
       """
       cap with_period                                            # Ends with period.
@@ -49,7 +49,6 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
       """
       cap with_three_args                                        # My task with three arguments.
       """
-    And the output should not contain "cap hidden_task"
 
   Scenario: mirror Rake task 'with_period' with its description
     Given a full-featured Rakefile

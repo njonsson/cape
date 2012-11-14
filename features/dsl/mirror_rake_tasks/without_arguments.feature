@@ -4,7 +4,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
   As a developer using Cape,
   I want to use the Cape DSL.
 
-  Scenario: mirror all non-hidden Rake tasks
+  Scenario: mirror all Rake tasks
     Given a full-featured Rakefile
     And a Capfile with:
       """
@@ -12,7 +12,7 @@ Feature: The #mirror_rake_tasks DSL method without arguments
         mirror_rake_tasks
       end
       """
-    When I run `cap -T`
+    When I run `cap -vT`
     Then the output should contain:
       """
       cap with_period                                            # Ends with period.
@@ -49,7 +49,6 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       """
       cap with_three_args                                        # My task with three arguments.
       """
-    And the output should not contain "cap hidden_task"
 
   Scenario: mirror Rake task 'with_period' with its description
     Given a full-featured Rakefile
@@ -316,20 +315,5 @@ Feature: The #mirror_rake_tasks DSL method without arguments
       """
         * executing `with_three_args'
         * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_three_args[,\"a value for an_arg2\",]"
-
-      """
-
-  Scenario: do not mirror Rake task 'hidden_task'
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      Cape do
-        mirror_rake_tasks
-      end
-      """
-    When I run `cap -e hidden_task`
-    Then the output should contain exactly:
-      """
-      The task `hidden_task' does not exist.
 
       """
