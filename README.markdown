@@ -29,7 +29,7 @@
             <hNNBNBh=(.                                /   \   `
                ..
 
-# [<img align="right" src="https://codeclimate.com/badge.png" title="Code Climate" />](http://codeclimate.com/github/njonsson/cape) [<img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status" />](http://gemnasium.com/njonsson/cape) [<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status" />](http://travis-ci.org/njonsson/cape) Cape
+# [<img align="right" src="https://codeclimate.com/badge.png" title="Code Climate report" />](http://codeclimate.com/github/njonsson/cape) [<img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status" />](http://gemnasium.com/njonsson/cape) [<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status" />](http://travis-ci.org/njonsson/cape) Cape
 
 If
 
