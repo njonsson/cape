@@ -143,22 +143,31 @@ module Cape
     #     mirror_rake_tasks
     #   end
     #
-    # @example Mirroring specific Rake tasks
+    # @example Mirroring some Rake tasks, but not others
     #   # config/deploy.rb
     #
     #   require 'cape'
     #
     #   Cape do
-    #     mirror_rake_tasks 'log:clear'
+    #     # Create Capistrano recipes for the Rake task 'foo' and/or for the
+    #     # tasks in the 'foo' namespace.
+    #     mirror_rake_tasks :foo
     #   end
     #
-    # @example Mirroring specific Rake tasks with Capistrano recipe options and/or environment variables
+    # @example Mirroring Rake tasks that require Capistrano recipe options and/or environment variables
     #   # config/deploy.rb
     #
     #   require 'cape'
     #
     #   Cape do
-    #     mirror_rake_tasks :db, :roles => :app do |env|
+    #     # Display defined Rails routes on application server remote machines
+    #     # only.
+    #     mirror_rake_tasks :routes, :roles => :app
+    #
+    #     # Execute database migration on application server remote machines
+    #     # only, and set the 'RAILS_ENV' environment variable to the value of
+    #     # the Capistrano variable 'rails_env'.
+    #     mirror_rake_tasks 'db:migrate', :roles => :app do |env|
     #       env['RAILS_ENV'] = rails_env
     #     end
     #   end
