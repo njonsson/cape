@@ -44,7 +44,7 @@ module Cape
     #
     # @note Any parameters that the Rake task has are integrated via environment variables, since Capistrano does not support recipe parameters per se.
     #
-    # @see http://github.com/capistrano/capistrano/blob/master/lib/capistrano/task_definition.rb#L15-L17 Valid Capistrano ‘task’ method options
+    # @see http://github.com/capistrano/capistrano/blob/master/lib/capistrano/configuration/actions/invocation.rb#L99-L144 Valid Capistrano ‘task’ method options
     def define_rake_wrapper(task, named_arguments, &block)
       unless (binding = named_arguments[:binding])
         raise ::ArgumentError, ':binding named argument is required'
