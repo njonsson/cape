@@ -54,13 +54,13 @@ module Cape
       options = named_arguments.reject do |key, value|
         key == :binding
       end
-      describe( task, capistrano_context, options, &block)
+      describe  task, capistrano_context
       implement(task, capistrano_context, options, &block)
     end
 
   private
 
-    def build_capistrano_description(task, options, &block)
+    def build_capistrano_description(task)
       return nil unless task[:description]
 
       description = [task[:description]]
@@ -85,8 +85,8 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
       description.join
     end
 
-    def describe(task, capistrano_context, options, &block)
-      if (description = build_capistrano_description(task, options, &block))
+    def describe(task, capistrano_context)
+      if (description = build_capistrano_description(task))
         capistrano_context.desc description
       end
       self
