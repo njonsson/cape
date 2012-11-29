@@ -29,8 +29,10 @@ describe Cape::Rake do
 
   describe '-- with specified attributes --' do
     subject {
-      described_class.new :local_executable => 'the specified value of #local_executable',
-                          :remote_executable => 'the specified value of #remote_executable'
+      described_class.new :local_executable => ('the specified value of ' +
+                                                '#local_executable'),
+                          :remote_executable => ('the specified value of ' +
+                                                 '#remote_executable')
     }
 
     its(:local_executable) {

@@ -8,6 +8,7 @@ module Cape
       # Compares the String representation of the Symbol to that of another.
       #
       # @param [Symbol] other
+      #
       # @return  [0] the Symbol is equal to _other_
       # @return [-1] the Symbol is lesser than _other_
       # @return  [1] the Symbol is greater than _other_

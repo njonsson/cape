@@ -7,6 +7,7 @@ module Cape
     #
     # @param [String] singular_noun  a singular noun
     # @param [Fixnum] count the quantity of _singular_noun_; optional
+    #
     # @return [String] the plural of _singular_noun_, unless _count_ is +1+
     def self.pluralize(singular_noun, count=2)
       return singular_noun if count == 1
@@ -17,6 +18,7 @@ module Cape
     # Builds a list phrase from the elements of the specified _array_.
     #
     # @param [Array of String] array zero or more nouns
+    #
     # @return [String] the elements of _array_, joined with commas and "and", as
     #                  appropriate
     def self.to_list_phrase(array)

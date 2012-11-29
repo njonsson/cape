@@ -9,6 +9,7 @@ module Cape
       # _keys_.
       #
       # @param [Array] keys zero or more hash keys
+      #
       # @return [Hash] a subset of the Hash
       def slice(*keys)
         ::Hash[select { |key, value| keys.include? key }]

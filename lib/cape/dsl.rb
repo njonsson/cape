@@ -27,7 +27,8 @@ module Cape
     #       # Do something interesting with this hash:
     #       # * t[:name] -- the full name of the task
     #       # * t[:parameters] -- the names of task arguments
-    #       # * t[:description] -- documentation on the task, including parameters
+    #       # * t[:description] -- documentation on the task, including
+    #       #                      parameters
     #     end
     #   end
     #
@@ -41,7 +42,8 @@ module Cape
     #       # Do something interesting with this hash:
     #       # * t[:name] -- the full name of the task
     #       # * t[:parameters] -- the names of task arguments
-    #       # * t[:description] -- documentation on the task, including parameters
+    #       # * t[:description] -- documentation on the task, including
+    #       #                      parameters
     #     end
     #   end
     def each_rake_task(task_expression=nil, &block)
@@ -61,6 +63,7 @@ module Cape
     # Sets the command used to run Rake on the local computer.
     #
     # @param [String] value the command used to run Rake on the local computer
+    #
     # @return [String] _value_
     #
     # @example Changing the local Rake executable
@@ -68,7 +71,8 @@ module Cape
     #
     #   Cape do
     #     self.local_rake_executable = '/path/to/rake'
-    #     $stdout.puts "We changed the local Rake executable to #{self.local_rake_executable.inspect}."
+    #     $stdout.puts 'We changed the local Rake executable to ' +
+    #                  "#{local_rake_executable.inspect}."
     #   end
     def local_rake_executable=(value)
       rake.local_executable = value
@@ -80,6 +84,7 @@ module Cape
     # @param [Symbol, String] method the method called
     # @param [Array]          args   the arguments passed to _method_
     # @param [Proc]           block  the block passed to _method_
+    #
     # @return the result of the forwarded method call
     def method_missing(method, *args, &block)
       @outer_self.send(method, *args, &block)
@@ -187,8 +192,8 @@ module Cape
       options = arguments.last.is_a?(Hash) ? arguments.pop.dup : {}
       unless arguments.length <= 1
         raise ::ArgumentError,
-              "wrong number of arguments (#{arguments_count} for 0 or 1, plus " +
-              'an options hash)'
+              ("wrong number of arguments (#{arguments_count} for 0 or 1, " +
+               'plus an options hash)')
       end
 
       task_expression = arguments.first
@@ -211,6 +216,7 @@ module Cape
     # Sets the command used to run Rake on remote computers.
     #
     # @param [String] value the command used to run Rake on remote computers
+    #
     # @return [String] _value_
     #
     # @example Changing the remote Rake executable
@@ -218,7 +224,8 @@ module Cape
     #
     #   Cape do
     #     self.remote_rake_executable = '/path/to/rake'
-    #     $stdout.puts "We changed the remote Rake executable to #{self.remote_rake_executable.inspect}."
+    #     $stdout.puts 'We changed the remote Rake executable to ' +
+    #                  "#{remote_rake_executable.inspect}."
     #   end
     def remote_rake_executable=(value)
       rake.remote_executable = value

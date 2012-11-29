@@ -4,8 +4,8 @@ module Cape
   class Rake
 
     # The default command used to run Rake. We use `bundle check` to detect the
-    # presence of Bundler and a Bundler configuration. If Bundler is installed
-    # on the computer and configured, we prepend `rake` with `bundle exec`.
+    # presence of Bundler and a Bundler configuration. If Bundler is installed on
+    # the computer and configured, we prepend `rake` with `bundle exec`.
     DEFAULT_EXECUTABLE = (
                           '/usr/bin/env '                                +
                           '`'                                            +
@@ -24,6 +24,7 @@ module Cape
     # Sets the command used to run Rake on remote computers.
     #
     # @param [String] value the command used to run Rake on remote computers
+    #
     # @return [String] _value_
     attr_writer :remote_executable
 
@@ -37,6 +38,7 @@ module Cape
     # Compares the Rake object to another.
     #
     # @param [Object] other another object
+    #
     # @return [true]  the Rake object is equal to _other_
     # @return [false] the Rake object is unequal to _other_
     def ==(other)
@@ -73,8 +75,8 @@ module Cape
         end
         if previous_task
           all_but_last_segment = this_task[:name].split(':')[0...-1].join(':')
-          previous_task[:default] = (all_but_last_segment ==
-                                     previous_task[:name])
+          previous_task[:default] = all_but_last_segment ==
+                                    previous_task[:name]
           yield previous_task
         end
       end
@@ -101,6 +103,7 @@ module Cape
     # cached Rake task metadata.
     #
     # @param [String] value the command used to run Rake on the local computer
+    #
     # @return [String] _value_
     #
     # @see #expire_cache!
