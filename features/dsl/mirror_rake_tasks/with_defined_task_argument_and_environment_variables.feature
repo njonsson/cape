@@ -1,4 +1,4 @@
-Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and valid options, and with environment variables
+Feature: The #mirror_rake_tasks DSL method with an argument of a defined task, and with environment variables
 
   In order to include Rake tasks with descriptions in my Capistrano recipes,
   As a developer using Cape,
@@ -9,7 +9,7 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks :with_period, :roles => :app do |env|
+        mirror_rake_tasks :with_period do |env|
           env['RAILS_ENV'] = rails_env
         end
       end
@@ -29,7 +29,7 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
       set :rails_env,    'production'
 
       Cape do
-        mirror_rake_tasks 'with_period', :roles => :app do |env|
+        mirror_rake_tasks 'with_period' do |env|
           env['RAILS_ENV'] = rails_env
         end
       end
@@ -39,5 +39,5 @@ Feature: The #mirror_rake_tasks DSL method with arguments of a defined task and 
       """
         * executing `with_period'
         * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period RAILS_ENV=\"production\""
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `with_period' is only run for servers matching {}, but no servers matched
       """

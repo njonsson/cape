@@ -9,23 +9,9 @@ Feature: The #mirror_rake_tasks DSL method with an undefined argument
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks 'this_does_not_exist'
-      end
-      """
-    When I run `cap -vT`
-    Then the output should not contain "cap with_period"
-
-  Scenario: do not mirror Rake task 'with_period'
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      Cape do
         mirror_rake_tasks :this_does_not_exist
       end
       """
-    When I run `cap -e with_period`
-    Then the output should contain exactly:
-      """
-      The task `with_period' does not exist.
-
-      """
+    When I run `cap -vT`
+    Then the output should not contain "cap this_does_not_exist"
+    And the output should not contain "cap with_period"

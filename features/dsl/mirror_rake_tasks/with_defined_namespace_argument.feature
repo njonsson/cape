@@ -9,11 +9,14 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks 'my_namespace'
+        mirror_rake_tasks :my_namespace
       end
       """
     When I run `cap -vT`
-    Then the output should not contain "cap with_period"
+    Then the output should contain:
+      """
+      cap my_namespace                                           # A task that shadows a names...
+      """
     And the output should contain:
       """
       cap my_namespace:in_a_namespace                            # My task in a namespace.
@@ -22,75 +25,42 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined namespa
       """
       cap my_namespace:my_nested_namespace:in_a_nested_namespace # My task in a nested namespace.
       """
+    And the output should not contain "cap with_period"
 
-  Scenario: do not mirror Rake task 'with_period'
+  Scenario: mirror a Rake task that shadows the matching namespace with its implementation
     Given a full-featured Rakefile
     And a Capfile with:
       """
+      set :current_path, '/path/to/current/deployed/application'
+      set :rails_env,    'production'
+
+      Cape do
+        mirror_rake_tasks 'my_namespace'
+      end
+      """
+      When I run `cap my_namespace`
+    Then the output should contain:
+      """
+        * executing `my_namespace'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace"
+      `my_namespace' is only run for servers matching {}, but no servers matched
+      """
+
+  Scenario: mirror a Rake task in the matching namespace with its implementation
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      set :current_path, '/path/to/current/deployed/application'
+      set :rails_env,    'production'
+
       Cape do
         mirror_rake_tasks :my_namespace
       end
       """
-    When I run `cap -e with_period`
-    Then the output should contain exactly:
+      When I run `cap my_namespace:my_nested_namespace:in_a_nested_namespace`
+    Then the output should contain:
       """
-      The task `with_period' does not exist.
-
-      """
-
-  Scenario: mirror Rake task 'my_namespace' with its description
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      Cape do
-        mirror_rake_tasks :my_namespace
-      end
-      """
-    When I run `cap -e my_namespace`
-    Then the output should contain exactly:
-      """
-      ------------------------------------------------------------
-      cap my_namespace
-      ------------------------------------------------------------
-      A task that shadows a namespace.
-
-
-      """
-
-  Scenario: mirror Rake task 'my_namespace:in_a_namespace' with its description
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      Cape do
-        mirror_rake_tasks :my_namespace
-      end
-      """
-    When I run `cap -e my_namespace:in_a_namespace`
-    Then the output should contain exactly:
-      """
-      ------------------------------------------------------------
-      cap my_namespace:in_a_namespace
-      ------------------------------------------------------------
-      My task in a namespace.
-
-
-      """
-
-  Scenario: mirror Rake task 'my_namespace:my_nested_namespace:in_a_nested_namespace' with its description
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      Cape do
-        mirror_rake_tasks :my_namespace
-      end
-      """
-    When I run `cap -e my_namespace:my_nested_namespace:in_a_nested_namespace`
-    Then the output should contain exactly:
-      """
-      ------------------------------------------------------------
-      cap my_namespace:my_nested_namespace:in_a_nested_namespace
-      ------------------------------------------------------------
-      My task in a nested namespace.
-
-
+        * executing `my_namespace:my_nested_namespace:in_a_nested_namespace'
+        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace:my_nested_namespace:in_a_nested_namespace"
+      `my_namespace:my_nested_namespace:in_a_nested_namespace' is only run for servers matching {}, but no servers matched
       """
