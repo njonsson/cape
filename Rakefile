@@ -34,10 +34,10 @@ def define_spec_task(name, options={})
   end
 end
 
-desc 'Run all specs'
+desc 'Run specs'
 define_spec_task :spec
 
-desc 'Run all specs and test features'
+desc 'Run specs and test features'
 task ''       => [:spec, :features]
 task :default => [:spec, :features]
 
