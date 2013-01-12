@@ -15,6 +15,7 @@ guard :rspec, :cli => '--debugger' do
   watch %r{^spec/.+_spec\.rb$}
 
   # Run all specs when the RSpec configuration changes.
+  watch( '.rspec'              ) { 'spec' }
   watch( 'spec/spec_helper.rb' ) { 'spec' }
 
   # Run all specs when the bundle changes.
