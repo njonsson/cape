@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'cape/core_ext/hash'
 
 describe Hash do

@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'cape'
 require 'cape/dsl'
 

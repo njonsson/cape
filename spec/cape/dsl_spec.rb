@@ -1,9 +1,9 @@
+require 'spec_helper'
 require 'cape/dsl'
 require 'cape/capistrano'
 require 'cape/core_ext/hash'
 require 'cape/core_ext/symbol'
 require 'cape/rake'
-require ::File.expand_path('../../spec_helper', __FILE__)
 
 describe Cape::DSL do
   subject do
