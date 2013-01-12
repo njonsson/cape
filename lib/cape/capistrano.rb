@@ -10,6 +10,8 @@ module Cape
     attr_accessor :rake
 
     # Constructs a new Capistrano object with the specified _attributes_.
+    #
+    # @param [Hash] attributes attribute values
     def initialize(attributes={})
       attributes.each do |name, value|
         send "#{name}=", value

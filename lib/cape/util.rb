@@ -6,7 +6,7 @@ module Cape
     # Conditionally transforms the specified _noun_ into its plural form.
     #
     # @param [String] singular_noun  a singular noun
-    # @param [Fixnum] count the quantity of _singular_noun_; optional
+    # @param [Fixnum] count the quantity of _singular_noun_
     #
     # @return [String] the plural of _singular_noun_, unless _count_ is +1+
     def self.pluralize(singular_noun, count=2)

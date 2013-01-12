@@ -9,7 +9,7 @@ module Cape
     # Enumerates Rake tasks.
     #
     # @param [String, Symbol] task_expression the full name of a task or
-    #                                         namespace to filter; optional
+    #                                         namespace to filter
     # @param [Proc]           block           a block that processes tasks
     #
     # @yield [task] a block that processes tasks
@@ -96,7 +96,7 @@ module Cape
     #   Defines Rake tasks as Capistrano recipes.
     #
     #   @param [String, Symbol] task_expression the full name of a Rake task or
-    #                                           namespace to filter; optional
+    #                                           namespace to filter
     #
     #   @yield [env] a block that defines environment variables for the Rake
     #                task; optional

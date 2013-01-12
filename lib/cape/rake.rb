@@ -29,6 +29,8 @@ module Cape
     attr_writer :remote_executable
 
     # Constructs a new Rake object with the specified _attributes_.
+    #
+    # @param [Hash] attributes attribute values
     def initialize(attributes={})
       attributes.each do |name, value|
         send "#{name}=", value
@@ -39,8 +41,8 @@ module Cape
     #
     # @param [Object] other another object
     #
-    # @return [true]  the Rake object is equal to _other_
-    # @return [false] the Rake object is unequal to _other_
+    # @return [true]  the {Rake} object is equal to _other_
+    # @return [false] the {Rake} object is unequal to _other_
     def ==(other)
       other.kind_of?(Rake)                          &&
       (other.local_executable  == local_executable) &&
@@ -50,7 +52,7 @@ module Cape
     # Enumerates Rake tasks.
     #
     # @param [String, Symbol] task_expression the full name of a task or
-    #                                         namespace to filter; optional
+    #                                         namespace to filter
     #
     # @yield [task] a block that processes tasks
     # @yieldparam [Hash] task metadata on a task
