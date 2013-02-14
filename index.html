@@ -72,7 +72,7 @@ sNNNNNN.     zNNN      B(NDhs=(  ''`
 </code></pre>
 
 <h1>
-<a href="http://codeclimate.com/github/njonsson/cape"><img align="right" src="https://codeclimate.com/badge.png" title="Code Climate"></a> <a href="http://gemnasium.com/njonsson/cape"><img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status"></a> <a href="http://travis-ci.org/njonsson/cape"><img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status"></a> Cape</h1>
+<a href="http://rubygems.org/gems/cape"><img align="right" src="https://badge.fury.io/rb/cape.png" title="RubyGems release" height="13"></a> <a href="http://codeclimate.com/github/njonsson/cape"><img align="right" src="https://codeclimate.com/github/njonsson/cape.png" title="Code Climate report" height="13"></a> <a href="http://gemnasium.com/njonsson/cape"><img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status" height="13"></a> <a href="http://travis-ci.org/njonsson/cape"><img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status" height="13"></a> Cape</h1>
 
 <p>If</p>
 
@@ -218,8 +218,8 @@ Putting the leaves in a plastic bag
 require 'cape'
 
 Cape do
-  # Create Capistrano recipes for the Rake task 'foo' and/or for the tasks in the
-  # 'foo' namespace.
+  # Create Capistrano recipes for the Rake task 'foo' and/or for the tasks in
+  # the 'foo' namespace.
   mirror_rake_tasks :foo
 end
 </code></pre>
@@ -341,7 +341,7 @@ end
 
 <h2>Known issues</h2>
 
-<p><strong>A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.</strong> Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project:</p>
+<p><strong>A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.</strong> Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project.</p>
 
 <pre><code># Gemfile
 
