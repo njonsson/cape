@@ -1,3 +1,4 @@
+require 'cape/hash_list'
 require 'cape/rake'
 require 'cape/util'
 
@@ -112,7 +113,7 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
           else
             arguments = "[#{arguments.join ','}]"
           end
-          env_hash = {}
+          env_hash = HashList.new
           env_block.call(env_hash) if env_block
           env_hash.reject! do |var_name, var_value|
             var_name.nil? || var_value.nil?
