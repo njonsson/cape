@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.6.1"></a>v1.6.1, Mon 2/18/2013
+
+* Respect the specified order of environment variables in the remote command line
+
 ## <a name="v1.6.0"></a>v1.6.0, Wed 11/14/2012
 
 * Enable mirroring and enumeration of hidden Rake tasks for versions of Rake that make it possible
