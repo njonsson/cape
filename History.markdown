@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.6.2"></a>v1.6.2, Fri 2/22/2013
+
+* Correctly update environment variables when set more than once
+
 ## <a name="v1.6.1"></a>v1.6.1, Mon 2/18/2013
 
 * Respect the specified order of environment variables in the remote command line
