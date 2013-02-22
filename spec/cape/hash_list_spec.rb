@@ -13,6 +13,7 @@ describe Cape::HashList do
 
     describe 'when values are added out of order' do
       before :each do
+        subject['foo'] = 'xxx'
         subject['foo'] = 'bar'
         subject['baz'] = 'qux'
       end
@@ -35,6 +36,7 @@ describe Cape::HashList do
     it 'should index the values as expected' do
       subject['foo'].should == 'bar'
       subject['baz'].should == 'qux'
+      subject['not-found'].should be_nil
     end
 
     describe 'when sent #clear' do

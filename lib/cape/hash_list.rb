@@ -51,7 +51,7 @@ module Cape
         Array(pair).first == key
       end
       if index
-        super key, value
+        super(index, [key, value])
       else
         self << [key, value]
       end
