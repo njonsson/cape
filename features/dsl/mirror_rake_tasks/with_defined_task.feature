@@ -1,4 +1,4 @@
-Feature: The #mirror_rake_tasks DSL method with an argument of a defined task
+Feature: The #mirror_rake_tasks DSL method with a defined task
 
   In order to include Rake tasks with descriptions in my Capistrano recipes,
   As a developer using Cape,
@@ -24,7 +24,6 @@ Feature: The #mirror_rake_tasks DSL method with an argument of a defined task
     And a Capfile with:
       """
       set :current_path, '/path/to/current/deployed/application'
-      set :rails_env,    'production'
 
       Cape do
         mirror_rake_tasks 'with_period'

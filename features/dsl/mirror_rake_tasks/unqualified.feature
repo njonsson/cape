@@ -1,4 +1,4 @@
-Feature: The #mirror_rake_tasks DSL method without arguments
+Feature: The #mirror_rake_tasks DSL method
 
   In order to include Rake tasks with descriptions in my Capistrano recipes,
   As a developer using Cape,

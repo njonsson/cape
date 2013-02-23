@@ -1,4 +1,4 @@
-Feature: The #mirror_rake_tasks DSL method with an undefined argument
+Feature: The #mirror_rake_tasks DSL method with an undefined task or namespace
 
   In order to include Rake tasks with descriptions in my Capistrano recipes,
   As a developer using Cape,
