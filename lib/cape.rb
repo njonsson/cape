@@ -12,6 +12,7 @@ end
 # The method used to group Cape statements.
 #
 # @param [Proc] block Cape and Capistrano statements
+#
 # @return [Cape] the Cape module
 #
 # @yield [cape] a block containing Cape statements
