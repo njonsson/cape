@@ -22,28 +22,17 @@ Feature: The #each_rake_task DSL method with an argument of a defined namespace
       end
       """
     When I run `cap -vT`
-    Then the output should not contain:
-      """
-
-      Name: "with_period"
-      Description: "Ends with period."
-      """
-    And the output should contain:
+    Then the output should contain:
       """
 
       Name: "my_namespace"
       Description: "A task that shadows a namespace"
       Default
-      """
-    And the output should contain:
-      """
 
       Name: "my_namespace:in_a_namespace"
       Description: "My task in a namespace"
-      """
-    And the output should contain:
-      """
 
       Name: "my_namespace:my_nested_namespace:in_a_nested_namespace"
       Description: "My task in a nested namespace"
       """
+    And the output should not contain "with_period"

@@ -1,4 +1,4 @@
-Feature: The #mirror_rake_tasks DSL method a defined task, valid options, and environment variables
+Feature: The #mirror_rake_tasks DSL method a defined task, valid options
 
   In order to include Rake tasks with descriptions in my Capistrano recipes,
   As a developer using Cape,
@@ -18,6 +18,7 @@ Feature: The #mirror_rake_tasks DSL method a defined task, valid options, and en
       cap with_period # Ends with period.
       """
     And the output should not contain "without_period"
+    And the output should not contain "my_namespace"
 
   Scenario: mirror the matching Rake task with its implementation
     Given a full-featured Rakefile

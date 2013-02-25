@@ -49,6 +49,10 @@ Feature: The #mirror_rake_tasks DSL method
       """
       cap with_three_args                                        # My task with three arguments.
       """
+    And the output should contain:
+      """
+      cap hidden_task                                            #
+      """
 
   Scenario: mirror Rake task 'with_period' with its description
     Given a full-featured Rakefile

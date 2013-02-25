@@ -25,7 +25,7 @@ Feature: The #mirror_rake_tasks DSL method with a defined namespace
       """
       cap my_namespace:my_nested_namespace:in_a_nested_namespace # My task in a nested namespace.
       """
-    And the output should not contain "cap with_period"
+    And the output should not contain "period"
 
   Scenario: mirror a Rake task that shadows the matching namespace with its implementation
     Given a full-featured Rakefile

@@ -9,9 +9,8 @@ Feature: The #mirror_rake_tasks DSL method with an undefined task or namespace
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks :this_does_not_exist
+        mirror_rake_tasks 'period'
       end
       """
     When I run `cap -vT`
-    Then the output should not contain "cap this_does_not_exist"
-    And the output should not contain "cap with_period"
+    Then the output should not contain "period"
