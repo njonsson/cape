@@ -1,3 +1,5 @@
+interactor :off
+
 guard :rspec, :cli => '--debugger' do
   # Run the corresponding spec (or all specs) when code changes.
   watch( %r{^lib/(.+)\.rb$} ) do |match|
