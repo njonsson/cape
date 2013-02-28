@@ -15,11 +15,31 @@ else
   end
 end
 
-Cucumber::Rake::Task.new :features, 'Test features' do |t|
-  t.bundler = false
+def define_features_task(name, options)
+  Cucumber::Rake::Task.new name, options[:desc] do |t|
+    t.bundler = false
+    t.cucumber_opts = options[:cucumber_opts] if options.key?(:cucumber_opts)
+  end
+end
+
+define_features_task :features, :desc => 'Test features'
+
+tags = `grep -Ehr "^\\s*@\\S+\\s*$" features`.split("\n").
+                                              collect(&:strip).
+                                              uniq.
+                                              sort
+unless tags.empty?
+  namespace :features do
+    tags.each do |t|
+      define_features_task t.gsub(/^@/, ''),
+                           :desc => "Test features tagged #{t}",
+                           :cucumber_opts => "-t #{t}"
+    end
+  end
 end
 
 def define_spec_task(name, options={})
+  desc options[:desc]
   RSpec::Core::RakeTask.new name do |t|
     t.rspec_opts ||= []
     unless options[:debug] == false
@@ -30,12 +50,18 @@ def define_spec_task(name, options={})
         t.rspec_opts << '--debug'
       end
     end
-    t.pattern = %w(spec/*_spec.rb spec/**/*_spec.rb)
+    t.pattern = options[:pattern] || %w(spec/*_spec.rb spec/**/*_spec.rb)
   end
 end
 
-desc 'Run specs'
-define_spec_task :spec
+define_spec_task :spec, :desc => 'Run specs'
+
+namespace :spec do
+  uncommitted_specs = `git ls-files --modified --others *_spec.rb`.split("\n")
+  desc = 'Run uncommitted specs'
+  desc += ' (none)' if uncommitted_specs.empty?
+  define_spec_task :uncommitted, :desc => desc, :pattern => uncommitted_specs
+end
 
 desc 'Run specs and test features'
 task ''       => [:spec, :features]
@@ -43,12 +69,11 @@ task :default => [:spec, :features]
 
 # Support the 'gem test' command.
 namespace :test do
-  desc ''
-  define_spec_task :specs, :debug => false
+  define_spec_task :spec, :desc => '', :debug => false
 
   Cucumber::Rake::Task.new :features, '' do |t|
     t.bundler = false
     t.cucumber_opts = '--backtrace'
   end
 end
-task :test => %w(test:specs test:features)
+task :test => %w(test:spec test:features)
