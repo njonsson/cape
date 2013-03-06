@@ -145,6 +145,7 @@ module Cape
     #   require 'cape'
     #
     #   Cape do
+    #     # Create Capistrano recipes for all Rake tasks.
     #     mirror_rake_tasks
     #   end
     #
