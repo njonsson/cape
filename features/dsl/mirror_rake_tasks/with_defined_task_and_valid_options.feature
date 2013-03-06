@@ -1,4 +1,4 @@
-Feature: The #mirror_rake_tasks DSL method a defined task, valid options
+Feature: The #mirror_rake_tasks DSL method with a defined task and valid options
 
   In order to include Rake tasks with descriptions in my Capistrano recipes,
   As a developer using Cape,
