@@ -22,12 +22,14 @@ def define_features_task(name, options)
   end
 end
 
-define_features_task :features, :desc => 'Test features'
-
 tags = `grep -Ehr "^\\s*@\\S+\\s*$" features`.split("\n").
                                               collect(&:strip).
                                               uniq.
                                               sort
+options = {:desc => 'Test features'}
+options[:cucumber_opts] = '-t @focus' if tags.delete('@focus')
+define_features_task :features, options
+
 unless tags.empty?
   namespace :features do
     tags.each do |t|
