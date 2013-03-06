@@ -77,7 +77,7 @@ Feature: The #mirror_rake_tasks DSL method
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
+      set :current_path, '/current/path'
 
       Cape do
         mirror_rake_tasks
@@ -87,7 +87,7 @@ Feature: The #mirror_rake_tasks DSL method
     Then the output should contain:
       """
         * executing `with_period'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period"
+        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period"
       `with_period' is only run for servers matching {}, but no servers matched
       """
 
@@ -175,7 +175,7 @@ Feature: The #mirror_rake_tasks DSL method
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
+      set :current_path, '/current/path'
 
       Cape do
         mirror_rake_tasks
@@ -185,7 +185,7 @@ Feature: The #mirror_rake_tasks DSL method
     Then the output should contain:
       """
         * executing `my_namespace'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace"
+        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace"
       `my_namespace' is only run for servers matching {}, but no servers matched
       """
 
@@ -231,7 +231,7 @@ Feature: The #mirror_rake_tasks DSL method
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
+      set :current_path, '/current/path'
 
       Cape do
         mirror_rake_tasks
@@ -241,7 +241,7 @@ Feature: The #mirror_rake_tasks DSL method
     Then the output should contain:
       """
         * executing `my_namespace:my_nested_namespace:in_a_nested_namespace'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace:my_nested_namespace:in_a_nested_namespace"
+        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake my_namespace:my_nested_namespace:in_a_nested_namespace"
       `my_namespace:my_nested_namespace:in_a_nested_namespace' is only run for servers matching {}, but no servers matched
       """
 
@@ -293,7 +293,7 @@ Feature: The #mirror_rake_tasks DSL method
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
+      set :current_path, '/current/path'
 
       Cape do
         mirror_rake_tasks
@@ -303,7 +303,7 @@ Feature: The #mirror_rake_tasks DSL method
     Then the output should contain:
       """
         * executing `with_three_args'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_three_args[\"a value for an_arg1\",\"a value for an_arg2\",\"a value for an_arg3\"]"
+        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_three_args[\"a value for an_arg1\",\"a value for an_arg2\",\"a value for an_arg3\"]"
       `with_three_args' is only run for servers matching {}, but no servers matched
       """
 
@@ -311,7 +311,7 @@ Feature: The #mirror_rake_tasks DSL method
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
+      set :current_path, '/current/path'
 
       Cape do
         mirror_rake_tasks
@@ -321,6 +321,6 @@ Feature: The #mirror_rake_tasks DSL method
     Then the output should contain:
       """
         * executing `with_three_args'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_three_args[,\"a value for an_arg2\",]"
+        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_three_args[,\"a value for an_arg2\",]"
       `with_three_args' is only run for servers matching {}, but no servers matched
       """

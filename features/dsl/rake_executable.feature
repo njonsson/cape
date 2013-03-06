@@ -44,7 +44,7 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
+      set :current_path, '/current/path'
 
       Cape.remote_rake_executable = 'echo "This comes from overridden Rake" #'
 
@@ -66,5 +66,5 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
     And the output should contain:
       """
         * executing `with_period'
-        * executing "cd /path/to/current/deployed/application && echo \"This comes from overridden Rake\" # with_period"
+        * executing "cd /current/path && echo \"This comes from overridden Rake\" # with_period"
       """

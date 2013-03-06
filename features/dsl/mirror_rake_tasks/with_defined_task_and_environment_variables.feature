@@ -26,8 +26,8 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and environment v
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
-      set :rails_env,    'production'
+      set :current_path, '/current/path'
+      set :rails_env,    'rails-env'
 
       Cape do
         mirror_rake_tasks 'with_period' do |env|
@@ -39,6 +39,6 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and environment v
     Then the output should contain:
       """
         * executing `with_period'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period RAILS_ENV=\"production\""
+        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period RAILS_ENV=\"rails-env\""
       `with_period' is only run for servers matching {}, but no servers matched
       """

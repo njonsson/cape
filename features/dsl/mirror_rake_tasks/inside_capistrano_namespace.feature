@@ -24,7 +24,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace
     Given a full-featured Rakefile
     And a Capfile with:
       """
-      set :current_path, '/path/to/current/deployed/application'
+      set :current_path, '/current/path'
 
       namespace :ns do
         Cape do |cape|
@@ -36,5 +36,5 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace
     Then the output should contain:
       """
         * executing `ns:with_period'
-        * executing "cd /path/to/current/deployed/application && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period"
+        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period"
       """
