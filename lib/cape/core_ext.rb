@@ -5,6 +5,8 @@ end
 module Cape
 
   # Contains extensions to core types.
+  #
+  # @api private
   module CoreExt; end
 
 end

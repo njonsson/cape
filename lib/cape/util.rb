@@ -1,6 +1,8 @@
 module Cape
 
   # Provides utility functions.
+  #
+  # @api private
   module Util
 
     # Conditionally transforms the specified _noun_ into its plural form.

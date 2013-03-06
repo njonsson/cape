@@ -7,6 +7,8 @@ module Cape
   #
   # This class exists because in Ruby v1.8.7 and earlier, Hash did not preserve
   # the insertion order of keys.
+  #
+  # @api private
   class HashList < ::Array
 
     # Constructs a new HashList using the specified _arguments_.
