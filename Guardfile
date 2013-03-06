@@ -21,3 +21,24 @@ guard :rspec, :cli => '--debugger' do
   # Run all specs when the bundle changes.
   watch( 'Gemfile.lock' ) { 'spec' }
 end
+
+guard :cucumber do
+  # Run run all features when code changes.
+  watch(%r{^lib/(.+)\.rb$}) { 'features' }
+
+  # Run the corresponding feature (or all features) when a step definition
+  # changes.
+  watch(%r{^features/step_definitions\.rb$}) { 'features' }
+  watch(%r{^features/step_definitions/(.+)_steps\.rb$}) do |match|
+    Dir[File.join("**/#{match[1]}.feature")].first || 'features'
+  end
+
+  # Run a feature when it changes.
+  watch %r{^features/.+\.feature$}
+
+  # Run all features when the Cucumber configuration changes.
+  watch(%r{^features/support/.+$}) { 'features' }
+
+  # Run all features when the bundle changes.
+  watch('Gemfile.lock') { 'features' }
+end
