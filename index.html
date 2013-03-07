@@ -224,9 +224,9 @@ Cape do
 end
 </code></pre>
 
-<h3>Mirror Rake tasks that require Capistrano recipe options and/or environment variables</h3>
+<h3>Mirror Rake tasks that require renaming, Capistrano recipe options, path switching, and/or environment variables</h3>
 
-<p>Cape lets you specify options used for defining Capistrano recipes. You can also specify remote environment variables to be set when executing Rake tasks. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
+<p>Cape lets you customize mirrored Rake tasks to suit your needs. Note that Cape statements must be contained in a <code>Cape</code> block, and references to Capistrano variables such as <code>rails_env</code> and <code>release_path</code> must be contained in an inner block, lambda, or other callable object.</p>
 
 <pre><code># config/deploy.rb
 
@@ -234,13 +234,37 @@ require 'cape'
 
 Cape do
   # Display defined Rails routes on application server remote machines only.
-  mirror_rake_tasks :routes, :roles =&gt; :app
+  mirror_rake_tasks :routes do |recipes|
+    recipes.options[:roles] = :app
+  end
 
   # Execute database migration on application server remote machines only,
   # and set the 'RAILS_ENV' environment variable to the value of the
   # Capistrano variable 'rails_env'.
-  mirror_rake_tasks 'db:migrate', :roles =&gt; :app do |env|
-    env['RAILS_ENV'] = rails_env
+  mirror_rake_tasks 'db:migrate' do |recipes|
+    recipes.options[:roles] = :app
+    recipes.env['RAILS_ENV'] = lambda { rails_env }
+  end
+
+  # Support a Rake task that must be run on application server remote
+  # machines only, and in the remote directory 'release_path' instead of the
+  # default, 'current_path'.
+  before 'deploy:symlink', :spec
+  mirror_rake_tasks :spec do |recipes|
+    recipes.cd { release_path }
+    recipes.options[:roles] = :app
+  end
+
+  # Avoid collisions with the existing Ruby method #test, run tests on
+  # application server remote machines only, and set the 'RAILS_ENV'
+  # environment variable to the value of the Capistrano variable
+  # 'rails_env'.
+  mirror_rake_tasks :test do |recipes|
+    recipes.rename do |rake_task_name|
+      "#{rake_task_name}_task"
+    end
+    recipes.options[:roles] = :app
+    recipes.env['RAILS_ENV'] = lambda { rails_env }
   end
 end
 </code></pre>
@@ -272,6 +296,15 @@ namespace :db do
   task :migrate, :roles =&gt; :app do
     run "cd #{current_path} &amp;&amp; #{RAKE} db:migrate RAILS_ENV=#{rails_env}"
   end
+end
+
+before 'deploy:symlink', :spec
+task :spec, :roles =&gt; :app do
+  run "cd #{release_path} &amp;&amp; #{RAKE} routes"
+end
+
+task :test_task, :roles =&gt; :app do
+  run "cd #{current_path} &amp;&amp; #{RAKE} test RAILS_ENV=#{rails_env}"
 end
 </code></pre>
 
@@ -349,10 +382,6 @@ source 'http://rubygems.org'
 
 gem 'rake', '&gt;= 0.9.3'
 </code></pre>
-
-<p><strong>A Rake task whose name collides with a Ruby method cannot be mirrored.</strong> For example, the name of <a href="http://rubyonrails.org">Rails</a>’s <em>db:fixtures:load</em> task collides with the Ruby Core Library’s <a href="http://ruby-doc.org/core/Kernel.html#method-i-load"><em>Kernel::load</em> method</a> because that method is mixed into all objects. If you try to mirror <em>db:fixtures:load</em>, Capistrano will raise an exception. There is <a href="http://github.com/njonsson/cape/issues/7#issuecomment-5632718" title="Comment on Cape issue #7 (“defining a task named ‘load’ would shadow an existing method with that name (ArgumentError)”)">a questionable workaround</a> for this.</p>
-
-<p><strong>A Rake task is always executed in the Capistrano deployment’s <em>current_path</em>.</strong> You may need to execute a task under <em>release_path</em> or another remote filesystem location, but this is not possible at present. <a href="http://github.com/njonsson/cape/issues/9" title="Cape issue #9 (“Cape Always Runs the Mirrorred Rake Tasks Under $current_path”)">Discuss</a> this.</p>
 
 <h2>Contributing</h2>
 
