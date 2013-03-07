@@ -1,5 +1,9 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.7.0"></a>v1.7.0, Thu 3/07/2013
+
+* Introduce a new DSL that supports task renaming and path switching, and deprecate the old one
+
 ## <a name="v1.6.2"></a>v1.6.2, Fri 2/22/2013
 
 * Correctly update environment variables when set more than once
