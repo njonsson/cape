@@ -6,7 +6,6 @@ end
 module Cape
 
   extend DSL
-  extend DSLDeprecated
 
 end
 
