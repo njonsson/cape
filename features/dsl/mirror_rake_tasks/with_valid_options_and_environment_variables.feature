@@ -5,7 +5,7 @@ Feature: The #mirror_rake_tasks DSL method with valid options and environment va
   I want to use the Cape DSL.
 
   @deprecated
-  Scenario: mirror the matching Rake task with its implementation (deprecated)
+  Scenario: mirror a Rake task with its implementation (deprecated)
     Given a full-featured Rakefile
     And a Capfile with:
       """
@@ -27,7 +27,7 @@ Feature: The #mirror_rake_tasks DSL method with valid options and environment va
       `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
       """
 
-  Scenario: mirror the matching Rake task with its implementation
+  Scenario: mirror a Rake task with its implementation
     Given a full-featured Rakefile
     And a Capfile with:
       """

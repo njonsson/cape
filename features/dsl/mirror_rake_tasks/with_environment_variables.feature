@@ -5,7 +5,7 @@ Feature: The #mirror_rake_tasks DSL method with environment variables
   I want to use the Cape DSL.
 
   @deprecated
-  Scenario: mirror only the matching Rake task (deprecated)
+  Scenario: mirror a Rake task (deprecated)
     Given a full-featured Rakefile
     And a Capfile with:
       """
@@ -21,7 +21,7 @@ Feature: The #mirror_rake_tasks DSL method with environment variables
       *** DEPRECATED: Referencing Capistrano variables from Cape without wrapping them in a block, a lambda, or another callable object
       """
 
-  Scenario: mirror only the matching Rake task
+  Scenario: mirror a Rake task
     Given a full-featured Rakefile
     And a Capfile with:
       """
