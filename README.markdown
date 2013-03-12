@@ -29,12 +29,12 @@
             <hNNBNBh=(.                                /   \   `
                ..
 
-# [<img align="right" src="https://badge.fury.io/rb/cape.png" title="RubyGems release" height="13" />][rubygems-release] [<img align="right" src="https://codeclimate.com/github/njonsson/cape.png" title="Code Climate report" height="13" />][code-climate-report] [<img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status" height="13" />][gemnasium-build-status] [<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=v1.x" title="Travis CI build status" height="13" />][travis-ci-build-status] Cape
+# Cape
 
-[rubygems-release]:       http://rubygems.org/gems/cape
-[code-climate-report]:    http://codeclimate.com/github/njonsson/cape
-[gemnasium-build-status]: http://gemnasium.com/njonsson/cape
-[travis-ci-build-status]: http://travis-ci.org/njonsson/cape
+[![Travis CI build status]](http://travis-ci.org/njonsson/cape          "Travis CI build status")
+[![Gemnasium build status]](http://gemnasium.com/njonsson/cape          "Gemnasium build status")
+[![Code Climate report]   ](http://codeclimate.com/github/njonsson/cape "Code Climate report")
+[![RubyGems release]      ](http://rubygems.org/gems/cape               "RubyGems release")
 
 If
 
@@ -328,3 +328,8 @@ Your patches are welcome, and you will receive attribution here for good stuff.
 ## License
 
 Released under the [MIT License](http://github.com/njonsson/cape/blob/master/License.markdown).
+
+[Travis CI build status]: https://secure.travis-ci.org/njonsson/cape.png?branch=v1.x
+[Gemnasium build status]: https://gemnasium.com/njonsson/cape.png
+[Code Climate report]:    https://codeclimate.com/github/njonsson/cape.png
+[RubyGems release]:       https://badge.fury.io/rb/cape.png
