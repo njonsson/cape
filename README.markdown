@@ -29,7 +29,7 @@
             <hNNBNBh=(.                                /   \   `
                ..
 
-# [<img align="right" src="https://badge.fury.io/rb/cape.png" title="RubyGems release" height="13" />][rubygems-release] [<img align="right" src="https://codeclimate.com/github/njonsson/cape.png" title="Code Climate report" height="13" />][code-climate-report] [<img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status" height="13" />][gemnasium-build-status] [<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" title="Travis CI build status" height="13" />][travis-ci-build-status] Cape
+# [<img align="right" src="https://badge.fury.io/rb/cape.png" title="RubyGems release" height="13" />][rubygems-release] [<img align="right" src="https://codeclimate.com/github/njonsson/cape.png" title="Code Climate report" height="13" />][code-climate-report] [<img align="right" src="https://gemnasium.com/njonsson/cape.png" title="Gemnasium build status" height="13" />][gemnasium-build-status] [<img align="right" src="https://secure.travis-ci.org/njonsson/cape.png?branch=v1.x" title="Travis CI build status" height="13" />][travis-ci-build-status] Cape
 
 [rubygems-release]:       http://rubygems.org/gems/cape
 [code-climate-report]:    http://codeclimate.com/github/njonsson/cape
