@@ -34,4 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capistrano', '~> 2'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec',      '~> 2'
+
+  # Avoid Cucumber's warnings about JSON parser performance.
+  s.add_development_dependency 'json_pure'
 end
