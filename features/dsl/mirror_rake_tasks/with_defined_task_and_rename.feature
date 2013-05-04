@@ -42,6 +42,8 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and renaming logi
     Then the output should contain:
       """
         * executing `do_load'
-        * executing "cd /current/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake load"
+      """
+    And the output should contain:
+      """
       `do_load' is only run for servers matching {}, but no servers matched
       """

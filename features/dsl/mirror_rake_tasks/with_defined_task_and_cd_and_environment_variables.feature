@@ -41,6 +41,8 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, a different dire
     Then the output should contain:
       """
         * executing `with_period'
-        * executing "cd /release/path && /usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake with_period RAILS_ENV=\"rails-env\""
+      """
+    And the output should contain:
+      """
       `with_period' is only run for servers matching {}, but no servers matched
       """
