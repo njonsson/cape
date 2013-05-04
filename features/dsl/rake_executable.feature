@@ -63,8 +63,3 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
       """
       We left the local Rake executable as "/usr/bin/env `/usr/bin/env bundle check >/dev/null 2>&1; case $? in 0|1 ) echo bundle exec ;; esac` rake"
       """
-    And the output should contain:
-      """
-        * executing `with_period'
-        * executing "cd /current/path && echo \"This comes from overridden Rake\" # with_period"
-      """
