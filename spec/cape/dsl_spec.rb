@@ -33,12 +33,12 @@ describe Cape::DSL do
                 with(task_expression).
                 and_yield({:name => task_expression})
       do_each_rake_task do |t|
-        t.should == {:name => task_expression}
+        expect(t).to eq(:name => task_expression)
       end
     end
 
     it 'should return itself' do
-      do_each_rake_task.should == subject
+      expect(do_each_rake_task).to eq(subject)
     end
   end
 
@@ -54,9 +54,9 @@ describe Cape::DSL do
 
     describe 'with two scalar arguments --' do
       specify do
-        lambda {
+        expect {
           do_mirror_rake_tasks task_expression, task_expression
-        }.should raise_error(ArgumentError, /^wrong number of arguments/)
+        }.to raise_error(ArgumentError, /^wrong number of arguments/)
       end
     end
 
@@ -107,7 +107,7 @@ describe Cape::DSL do
       end
 
       specify 'by returning itself' do
-        do_mirror_rake_tasks.should == subject
+        expect(do_mirror_rake_tasks).to eq(subject)
       end
     end
 
@@ -153,7 +153,7 @@ describe Cape::DSL do
     end
 
     it 'should return the result of Rake#local_executable' do
-      subject.local_rake_executable.should == 'foo'
+      expect(subject.local_rake_executable).to eq('foo')
     end
   end
 
@@ -168,7 +168,7 @@ describe Cape::DSL do
     end
 
     it 'should return the result of Rake#remote_executable' do
-      subject.remote_rake_executable.should == 'foo'
+      expect(subject.remote_rake_executable).to eq('foo')
     end
   end
 end

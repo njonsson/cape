@@ -37,12 +37,12 @@ describe Cape::DSLDeprecated do
                 with(task_expression).
                 and_yield({:name => task_expression})
       do_each_rake_task do |t|
-        t.should == {:name => task_expression}
+        expect(t).to eq(:name => task_expression)
       end
     end
 
     it 'should return itself' do
-      do_each_rake_task.should == subject
+      expect(do_each_rake_task).to eq(subject)
     end
   end
 
@@ -62,11 +62,11 @@ describe Cape::DSLDeprecated do
 
     describe 'with two scalar arguments --' do
       specify do
-        lambda {
+        expect {
           do_mirror_rake_tasks task_expression, task_expression
-        }.should raise_error(ArgumentError,
-                             'wrong number of arguments (2 for 0 or 1, plus ' +
-                             'an options hash)')
+        }.to raise_error(ArgumentError,
+                         'wrong number of arguments (2 for 0 or 1, plus ' +
+                         'an options hash)')
       end
     end
 
@@ -117,7 +117,7 @@ describe Cape::DSLDeprecated do
       end
 
       specify 'by returning itself' do
-        do_mirror_rake_tasks.should == subject
+        expect(do_mirror_rake_tasks).to eq(subject)
       end
     end
 
@@ -134,18 +134,18 @@ describe Cape::DSLDeprecated do
 
       it 'should print the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        subject.deprecation.stream.string.should == deprecation_preamble                                                  +
-                                                    Cape::XTerm.bold('`'                                                  +
-                                                                      'mirror_rake_tasks "task:expression", '             +
-                                                                                        ':bar => :baz'                    +
-                                                                     '`. '                                                +
-                                                                     'Use this instead: '                                 +
-                                                                     '`'                                                  +
-                                                                      'mirror_rake_tasks("task:expression") { |recipes| ' +
-                                                                        'recipes.options[:bar] = :baz '                   +
-                                                                      '}'                                                 +
-                                                                     '`')                                                 +
-                                                    "\n"
+        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                                  +
+                                                        Cape::XTerm.bold('`'                                                  +
+                                                                          'mirror_rake_tasks "task:expression", '             +
+                                                                                            ':bar => :baz'                    +
+                                                                         '`. '                                                +
+                                                                         'Use this instead: '                                 +
+                                                                         '`'                                                  +
+                                                                          'mirror_rake_tasks("task:expression") { |recipes| ' +
+                                                                            'recipes.options[:bar] = :baz '                   +
+                                                                          '}'                                                 +
+                                                                         '`')                                                 +
+                                                        "\n")
       end
     end
 
@@ -160,18 +160,18 @@ describe Cape::DSLDeprecated do
 
       it 'should print the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        subject.deprecation.stream.string.should == deprecation_preamble                                                  +
-                                                    Cape::XTerm.bold('`'                                                  +
-                                                                      'mirror_rake_tasks "task:expression", '             +
-                                                                                        ':bar => :baz'                    +
-                                                                     '`. '                                                +
-                                                                     'Use this instead: '                                 +
-                                                                     '`'                                                  +
-                                                                      'mirror_rake_tasks("task:expression") { |recipes| ' +
-                                                                        'recipes.options[:bar] = :baz '                   +
-                                                                      '}'                                                 +
-                                                                     '`')                                                 +
-                                                    "\n"
+        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                                  +
+                                                        Cape::XTerm.bold('`'                                                  +
+                                                                          'mirror_rake_tasks "task:expression", '             +
+                                                                                            ':bar => :baz'                    +
+                                                                         '`. '                                                +
+                                                                         'Use this instead: '                                 +
+                                                                         '`'                                                  +
+                                                                          'mirror_rake_tasks("task:expression") { |recipes| ' +
+                                                                            'recipes.options[:bar] = :baz '                   +
+                                                                          '}'                                                 +
+                                                                         '`')                                                 +
+                                                        "\n")
       end
     end
 
@@ -188,17 +188,17 @@ describe Cape::DSLDeprecated do
 
       it 'should print the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        subject.deprecation.stream.string.should == deprecation_preamble                                +
-                                                    Cape::XTerm.bold('`'                                +
-                                                                      'mirror_rake_tasks :bar => :baz'  +
-                                                                     '`. '                              +
-                                                                     'Use this instead: '               +
-                                                                     '`'                                +
-                                                                      'mirror_rake_tasks { |recipes| '  +
-                                                                        'recipes.options[:bar] = :baz ' +
-                                                                      '}'                               +
-                                                                     '`')                               +
-                                                    "\n"
+        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                +
+                                                        Cape::XTerm.bold('`'                                +
+                                                                          'mirror_rake_tasks :bar => :baz'  +
+                                                                         '`. '                              +
+                                                                         'Use this instead: '               +
+                                                                         '`'                                +
+                                                                          'mirror_rake_tasks { |recipes| '  +
+                                                                            'recipes.options[:bar] = :baz ' +
+                                                                          '}'                               +
+                                                                         '`')                               +
+                                                        "\n")
       end
     end
 
@@ -213,17 +213,17 @@ describe Cape::DSLDeprecated do
 
       it 'should print the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        subject.deprecation.stream.string.should == deprecation_preamble                                +
-                                                    Cape::XTerm.bold('`'                                +
-                                                                      'mirror_rake_tasks :bar => :baz'  +
-                                                                     '`. '                              +
-                                                                     'Use this instead: '               +
-                                                                     '`'                                +
-                                                                      'mirror_rake_tasks { |recipes| '  +
-                                                                        'recipes.options[:bar] = :baz ' +
-                                                                      '}'                               +
-                                                                     '`')                               +
-                                                    "\n"
+        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                +
+                                                        Cape::XTerm.bold('`'                                +
+                                                                          'mirror_rake_tasks :bar => :baz'  +
+                                                                         '`. '                              +
+                                                                         'Use this instead: '               +
+                                                                         '`'                                +
+                                                                          'mirror_rake_tasks { |recipes| '  +
+                                                                            'recipes.options[:bar] = :baz ' +
+                                                                          '}'                               +
+                                                                         '`')                               +
+                                                        "\n")
       end
     end
 
@@ -240,7 +240,7 @@ describe Cape::DSLDeprecated do
 
       it 'should print no deprecation messages to stderr' do
         do_mirror_rake_tasks
-        subject.deprecation.stream.string.should be_empty
+        expect(subject.deprecation.stream.string).to be_empty
       end
     end
 
@@ -255,7 +255,7 @@ describe Cape::DSLDeprecated do
 
       it 'should print no deprecation messages to stderr' do
         do_mirror_rake_tasks
-        subject.deprecation.stream.string.should be_empty
+        expect(subject.deprecation.stream.string).to be_empty
       end
     end
 
@@ -270,7 +270,7 @@ describe Cape::DSLDeprecated do
 
       it 'should print no deprecation messages to stderr' do
         do_mirror_rake_tasks
-        subject.deprecation.stream.string.should be_empty
+        expect(subject.deprecation.stream.string).to be_empty
       end
     end
   end
@@ -286,7 +286,7 @@ describe Cape::DSLDeprecated do
     end
 
     it 'should return the result of Rake#local_executable' do
-      subject.local_rake_executable.should == 'foo'
+      expect(subject.local_rake_executable).to eq('foo')
     end
   end
 
@@ -301,7 +301,7 @@ describe Cape::DSLDeprecated do
     end
 
     it 'should return the result of Rake#remote_executable' do
-      subject.remote_rake_executable.should == 'foo'
+      expect(subject.remote_rake_executable).to eq('foo')
     end
   end
 end

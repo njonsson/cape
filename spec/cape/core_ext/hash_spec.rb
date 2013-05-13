@@ -6,8 +6,8 @@ describe Hash do
 
   describe '-- when sent #slice with keys that are present and those that are not --' do
     it 'should return the expected subset hash' do
-      subject.slice(:baz, :fizzle, :quux).should == {:baz => 'qux',
-                                                     :quux => 'corge'}
+      expect(subject.slice(:baz, :fizzle, :quux)).to eq(:baz => 'qux',
+                                                        :quux => 'corge')
     end
   end
 end
