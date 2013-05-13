@@ -57,7 +57,7 @@ describe Cape::DSL do
         lambda {
           do_mirror_rake_tasks task_expression, task_expression
         }.should raise_error(ArgumentError,
-                             'wrong number of arguments (2 for 1)')
+                             /^wrong number of arguments \(2 for .+\)$/)
       end
     end
 
