@@ -3,7 +3,7 @@ require 'cape'
 require 'cape/dsl'
 
 describe Cape do
-  Cape::DSL.instance_methods.each do |m|
+  Cape::DSL.public_instance_methods.each do |m|
     it { should respond_to(m) }
   end
 end
