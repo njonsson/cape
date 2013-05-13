@@ -1,6 +1,9 @@
 interactor :off
 
-guard :rspec, :cli => '--debug' do
+guard :rspec, :all_after_pass => true,
+              :all_on_start   => false,
+              :keep_failed    => false,
+              :cli => '--debug' do
   # Run the corresponding spec (or all specs) when code changes.
   watch(%r{^lib/(.+)\.rb$}) do |match|
     Dir["spec/#{match[1]}_spec.rb"].first || 'spec'
@@ -17,7 +20,10 @@ guard :rspec, :cli => '--debug' do
   watch('Gemfile.lock') { 'spec' }
 end
 
-guard :cucumber do
+guard :cucumber, :all_after_pass => true,
+                 :all_on_start   => false,
+                 :keep_failed    => false,
+                 :focus_on => 'focus' do
   # Run run all features when code changes.
   watch(%r{^lib/(.+)\.rb$}) { 'features' }
 
