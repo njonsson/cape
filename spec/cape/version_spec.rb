@@ -2,5 +2,5 @@ require 'spec_helper'
 require 'cape/version'
 
 describe 'Cape::VERSION' do
-  specify { Cape::VERSION.should =~ /^\d+\.\d+\.\d+/ }
+  specify { expect(Cape::VERSION).to match(/^\d+\.\d+\.\d+/) }
 end

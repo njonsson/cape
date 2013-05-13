@@ -14,7 +14,7 @@ describe '#Cape' do
     Cape do |c|
       yielded = c
     end
-    yielded.should == Cape
+    expect(yielded).to eq(Cape)
   end
 
   it 'should accept a nullary block' do

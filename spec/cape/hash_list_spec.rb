@@ -34,9 +34,9 @@ describe Cape::HashList do
     it { should == {'foo' => 'bar', 'baz' => 'qux'} }
 
     it 'should index the values as expected' do
-      subject['foo'].should == 'bar'
-      subject['baz'].should == 'qux'
-      subject['not-found'].should be_nil
+      expect(subject['foo']).to eq('bar')
+      expect(subject['baz']).to eq('qux')
+      expect(subject['not-found']).to be_nil
     end
 
     describe 'when sent #clear' do

@@ -10,15 +10,15 @@ describe Cape::Rake do
 
   describe '-- when sent #== --' do
     it('should recognize equivalent instances to be equal') {
-      described_class.new.should == described_class.new
+      expect(described_class.new).to eq(described_class.new)
     }
 
     it('should compare using #local_executable') {
-      described_class.new.should_not == described_class.new(:local_executable => 'foo')
+      expect(described_class.new).not_to eq(described_class.new(:local_executable => 'foo'))
     }
 
     it('should compare using #remote_executable') {
-      described_class.new.should_not == described_class.new(:remote_executable => 'foo')
+      expect(described_class.new).not_to eq(described_class.new(:remote_executable => 'foo'))
     }
   end
 
@@ -84,11 +84,11 @@ rake baz # baz
       end
 
       it 'should not swallow errors' do
-        lambda {
+        expect {
           subject.each_task do |t|
             raise ZeroDivisionError, 'pow!'
           end
-        }.should raise_error(ZeroDivisionError, 'pow!')
+        }.to raise_error(ZeroDivisionError, 'pow!')
       end
     end
 
