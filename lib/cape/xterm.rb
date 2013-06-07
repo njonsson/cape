@@ -6,7 +6,7 @@ module Cape
   # formats to be applied.
   #
   # @example Apply bold and red-foreground formatting to a string
-  #   Cape::XTerm.bold_and_red_foreground 'foo'
+  #   Cape::XTerm.bold_and_foreground_red 'foo'
   #
   # @api private
   module XTerm
