@@ -14,8 +14,8 @@ end
 
 group :tooling do
   gem   'guard-cucumber', '~> 1'
-  gem   'guard-rspec',    '~> 3'
+  gem   'guard-rspec',    '~> 4'
   if RUBY_PLATFORM =~ /darwin/i
-    gem 'rb-fsevent',     '~> 0',                        :require => false
+    gem 'rb-fsevent',     '~> 0', :require => false
   end
 end
