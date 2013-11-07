@@ -3,8 +3,8 @@ source 'http://rubygems.org'
 gemspec
 
 group :debug do
-  gem   'ruby-debug',     '~> 0', :platforms => :mri_18
-  gem   'ruby-debug19',   '~> 0', :platforms => :mri_19, :require => 'ruby-debug'
+  gem   'ruby-debug',             :platforms => [:mri_18, :jruby]
+  gem   'debugger',               :platforms => [:mri_19, :mri_20]
 end
 
 group :doc do
