@@ -45,11 +45,20 @@ def define_spec_task(name, options={})
   RSpec::Core::RakeTask.new name do |t|
     t.rspec_opts ||= []
     unless options[:debug] == false
-      begin
-        require 'ruby-debug'
-      rescue LoadError
-      else
+      available = %w(debugger ruby-debug).detect do |debugger_library|
+        begin
+          require debugger_library
+        rescue LoadError
+          false
+        else
+          true
+        end
+      end
+      if available
         t.rspec_opts << '--debug'
+      else
+        require 'cape/xterm'
+        $stderr.puts Cape::XTerm.bold('*** Debugging tools not installed')
       end
     end
     t.pattern = options[:pattern] || %w(spec/*_spec.rb spec/**/*_spec.rb)
