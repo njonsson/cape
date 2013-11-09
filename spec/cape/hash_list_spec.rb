@@ -2,49 +2,69 @@ require 'spec_helper'
 require 'cape/hash_list'
 
 describe Cape::HashList do
+  subject(:hash_list) { hash_list_class.new }
+
+  let(:hash_list_class) { described_class }
+
   describe 'that is empty' do
-    it { should be_empty }
+    specify { expect(hash_list).to be_empty }
 
-    its(:inspect) { should == '{}' }
+    describe '#inspect' do
+      specify { expect(hash_list.inspect).to eq('{}') }
+    end
 
-    its(:to_a) { should == [] }
+    describe '#to_a' do
+      specify { expect(hash_list.to_a).to eq([]) }
+    end
 
-    its(:to_hash) { should == {} }
+    describe '#to_hash' do
+      specify { expect(hash_list.to_hash).to eq({}) }
+    end
 
     describe 'when values are added out of order' do
       before :each do
-        subject['foo'] = 'xxx'
-        subject['foo'] = 'bar'
-        subject['baz'] = 'qux'
+        hash_list['foo'] = 'xxx'
+        hash_list['foo'] = 'bar'
+        hash_list['baz'] = 'qux'
       end
 
-      it { should == {'foo' => 'bar', 'baz' => 'qux'} }
+      specify { expect(hash_list).to eq({'foo' => 'bar', 'baz' => 'qux'}) }
 
-      its(:inspect) { should == '{"foo"=>"bar", "baz"=>"qux"}' }
+      describe '#inspect' do
+        specify {
+          expect(hash_list.inspect).to eq('{"foo"=>"bar", "baz"=>"qux"}')
+        }
+      end
 
-      its(:to_a) { should == [%w(foo bar), %w(baz qux)] }
+      describe '#to_a' do
+        specify { expect(hash_list.to_a).to eq([%w(foo bar), %w(baz qux)]) }
+      end
 
-      its(:to_hash) { should == {'foo' => 'bar', 'baz' => 'qux'} }
+      describe '#to_hash' do
+        specify {
+          expect(hash_list.to_hash).to eq({'foo' => 'bar', 'baz' => 'qux'})
+        }
+      end
     end
   end
 
   describe 'that has values out of order' do
-    subject { described_class.new 'foo' => 'bar', 'baz' => 'qux' }
+    subject(:hash_list) { hash_list_class.new 'foo' => 'bar', 'baz' => 'qux' }
 
-    it { should == {'foo' => 'bar', 'baz' => 'qux'} }
+    specify { expect(hash_list).to eq({'foo' => 'bar', 'baz' => 'qux'}) }
 
-    it 'should index the values as expected' do
-      expect(subject['foo']).to eq('bar')
-      expect(subject['baz']).to eq('qux')
-      expect(subject['not-found']).to be_nil
+    it 'indexes the values as expected' do
+      expect(hash_list['foo']).to eq('bar')
+      expect(hash_list['baz']).to eq('qux')
+      expect(hash_list['not-found']).to be_nil
     end
 
-    describe 'when sent #clear' do
+    describe '#clear' do
       before :each do
-        subject.clear
+        hash_list.clear
       end
 
-      it { should be_empty }
+      specify { expect(hash_list).to be_empty }
     end
   end
 end

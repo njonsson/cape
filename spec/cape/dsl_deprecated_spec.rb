@@ -8,52 +8,54 @@ require 'cape/rake'
 require 'cape/xterm'
 
 describe Cape::DSLDeprecated do
-  subject do
+  subject(:dsl) do
     Object.new.tap do |o|
       o.extend Cape::DSL
-      o.extend described_class
+      o.extend dsl_module
     end
   end
 
-  let(:mock_capistrano) { mock(Cape::Capistrano).as_null_object }
+  let(:dsl_module) { described_class }
 
-  let(:mock_rake) { mock(Cape::Rake).as_null_object }
+  let(:capistrano) { double(Cape::Capistrano).as_null_object }
+
+  let(:rake) { double(Cape::Rake).as_null_object }
 
   let(:task_expression) { 'task:expression' }
 
   before :each do
-    Cape::Capistrano.stub!(:new).and_return mock_capistrano
-    Cape::Rake.      stub!(:new).and_return mock_rake
-    subject.deprecation.stream = StringIO.new
+    allow(Cape::Capistrano).to receive(:new).and_return(capistrano)
+    allow(Cape::Rake      ).to receive(:new).and_return(rake)
+    dsl.deprecation.stream = StringIO.new
   end
 
-  describe '-- when sent #each_rake_task --' do
+  describe '#each_rake_task' do
     def do_each_rake_task(&block)
-      subject.each_rake_task(task_expression, &block)
+      dsl.each_rake_task(task_expression, &block)
     end
 
-    it 'should delegate to Rake#each_task' do
-      mock_rake.should_receive(:each_task).
-                with(task_expression).
-                and_yield({:name => task_expression})
+    it 'delegates to Rake#each_task' do
+      expect(rake).to receive(:each_task).
+                      with(task_expression).
+                      and_yield({:name => task_expression})
       do_each_rake_task do |t|
         expect(t).to eq(:name => task_expression)
       end
     end
 
-    it 'should return itself' do
-      expect(do_each_rake_task).to eq(subject)
+    it 'returns itself' do
+      expect(do_each_rake_task).to eq(dsl)
     end
   end
 
-  describe '-- when sent #mirror_rake_tasks' do
+  describe '#mirror_rake_tasks' do
     before :each do
-      mock_rake.stub!(:each_task).and_yield({:name => task_expression})
-      subject.stub! :raise_unless_capistrano
+      allow(rake).to receive(:each_task).and_yield({:name => task_expression})
+      allow(dsl ).to receive(:raise_unless_capistrano)
     end
 
     def do_mirror_rake_tasks(*arguments, &block)
-      subject.mirror_rake_tasks(*arguments, &block)
+      dsl.mirror_rake_tasks(*arguments, &block)
     end
 
     let(:deprecation_preamble) {
@@ -73,51 +75,43 @@ describe Cape::DSLDeprecated do
     shared_examples_for "a successful call (#{Cape::DSLDeprecated.name})" do |task_expression_in_use,
                                                                               options_in_use|
       specify 'by collecting Rake#each_task' do
-        mock_rake.should_receive(:each_task).with task_expression_in_use
+        expect(rake).to receive(:each_task).with(task_expression_in_use)
         do_mirror_rake_tasks
       end
 
       specify 'by verifying that Capistrano is in use' do
-        subject.should_receive :raise_unless_capistrano
+        expect(dsl).to receive(:raise_unless_capistrano)
         do_mirror_rake_tasks
       end
 
       describe 'by sending Capistrano#define_rake_wrapper for Rake#each_task' do
         specify 'with the expected task' do
-          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                        named_arguments|
-            task == {:name => task_expression}
-          end
+          expect(capistrano).to receive(:define_rake_wrapper).
+                                with { |task, named_arguments| task == {:name => task_expression} }
           do_mirror_rake_tasks
         end
 
         specify 'with the expected named options' do
-          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                        named_arguments|
-            named_arguments.keys.sort == ([:binding] + options_in_use.keys).sort
-          end
+          expect(capistrano).to receive(:define_rake_wrapper).
+                                with { |task, named_arguments| named_arguments.keys.sort == ([:binding] + options_in_use.keys).sort }
           do_mirror_rake_tasks
         end
 
         specify 'with a :binding option' do
-          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                        named_arguments|
-            named_arguments[:binding].is_a? Binding
-          end
+          expect(capistrano).to receive(:define_rake_wrapper).
+                                with { |task, named_arguments| named_arguments[:binding].is_a? Binding }
           do_mirror_rake_tasks
         end
 
         specify 'with any provided extra options' do
-          mock_capistrano.should_receive(:define_rake_wrapper).with do |task,
-                                                                        named_arguments|
-            named_arguments.slice(*options_in_use.keys) == options_in_use
-          end
+          expect(capistrano).to receive(:define_rake_wrapper).
+                                with { |task, named_arguments| named_arguments.slice(*options_in_use.keys) == options_in_use }
           do_mirror_rake_tasks
         end
       end
 
       specify 'by returning itself' do
-        expect(do_mirror_rake_tasks).to eq(subject)
+        expect(do_mirror_rake_tasks).to eq(dsl)
       end
     end
 
@@ -128,13 +122,13 @@ describe Cape::DSLDeprecated do
         end
       end
 
-      should_behave_like "a successful call (#{Cape::DSLDeprecated.name})",
-                         'task:expression',
-                         :bar => :baz
+      behaves_like "a successful call (#{Cape::DSLDeprecated.name})",
+                   'task:expression',
+                   :bar => :baz
 
-      it 'should print the expected deprecation messages to stderr' do
+      it 'prints the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                                  +
+        expect(dsl.deprecation.stream.string).to eq(deprecation_preamble                                                  +
                                                         Cape::XTerm.bold('`'                                                  +
                                                                           'mirror_rake_tasks "task:expression", '             +
                                                                                             ':bar => :baz'                    +
@@ -154,13 +148,13 @@ describe Cape::DSLDeprecated do
         super 'task:expression', :bar => :baz
       end
 
-      should_behave_like "a successful call (#{Cape::DSLDeprecated.name})",
-                         'task:expression',
-                         :bar => :baz
+      behaves_like "a successful call (#{Cape::DSLDeprecated.name})",
+                   'task:expression',
+                   :bar => :baz
 
-      it 'should print the expected deprecation messages to stderr' do
+      it 'prints the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                                  +
+        expect(dsl.deprecation.stream.string).to eq(deprecation_preamble                                                  +
                                                         Cape::XTerm.bold('`'                                                  +
                                                                           'mirror_rake_tasks "task:expression", '             +
                                                                                             ':bar => :baz'                    +
@@ -182,13 +176,13 @@ describe Cape::DSLDeprecated do
         end
       end
 
-      should_behave_like "a successful call (#{Cape::DSLDeprecated.name})",
-                         nil,
-                         :bar => :baz
+      behaves_like "a successful call (#{Cape::DSLDeprecated.name})",
+                   nil,
+                   :bar => :baz
 
-      it 'should print the expected deprecation messages to stderr' do
+      it 'prints the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                +
+        expect(dsl.deprecation.stream.string).to eq(deprecation_preamble                                +
                                                         Cape::XTerm.bold('`'                                +
                                                                           'mirror_rake_tasks :bar => :baz'  +
                                                                          '`. '                              +
@@ -207,13 +201,13 @@ describe Cape::DSLDeprecated do
         super :bar => :baz
       end
 
-      should_behave_like "a successful call (#{Cape::DSLDeprecated.name})",
-                         nil,
-                         :bar => :baz
+      behaves_like "a successful call (#{Cape::DSLDeprecated.name})",
+                   nil,
+                   :bar => :baz
 
-      it 'should print the expected deprecation messages to stderr' do
+      it 'prints the expected deprecation messages to stderr' do
         do_mirror_rake_tasks
-        expect(subject.deprecation.stream.string).to eq(deprecation_preamble                                +
+        expect(dsl.deprecation.stream.string).to eq(deprecation_preamble                                +
                                                         Cape::XTerm.bold('`'                                +
                                                                           'mirror_rake_tasks :bar => :baz'  +
                                                                          '`. '                              +
@@ -234,13 +228,13 @@ describe Cape::DSLDeprecated do
         end
       end
 
-      should_behave_like("a successful call (#{Cape::DSLDeprecated.name})",
-                         'task:expression',
-                         {})
+      behaves_like("a successful call (#{Cape::DSLDeprecated.name})",
+                   'task:expression',
+                   {})
 
-      it 'should print no deprecation messages to stderr' do
+      it 'prints no deprecation messages to stderr' do
         do_mirror_rake_tasks
-        expect(subject.deprecation.stream.string).to be_empty
+        expect(dsl.deprecation.stream.string).to be_empty
       end
     end
 
@@ -249,13 +243,13 @@ describe Cape::DSLDeprecated do
         super 'task:expression'
       end
 
-      should_behave_like("a successful call (#{Cape::DSLDeprecated.name})",
-                         'task:expression',
-                         {})
+      behaves_like("a successful call (#{Cape::DSLDeprecated.name})",
+                   'task:expression',
+                   {})
 
-      it 'should print no deprecation messages to stderr' do
+      it 'prints no deprecation messages to stderr' do
         do_mirror_rake_tasks
-        expect(subject.deprecation.stream.string).to be_empty
+        expect(dsl.deprecation.stream.string).to be_empty
       end
     end
 
@@ -264,44 +258,44 @@ describe Cape::DSLDeprecated do
         super
       end
 
-      should_behave_like("a successful call (#{Cape::DSLDeprecated.name})",
-                         nil,
-                         {})
+      behaves_like("a successful call (#{Cape::DSLDeprecated.name})",
+                   nil,
+                   {})
 
-      it 'should print no deprecation messages to stderr' do
+      it 'prints no deprecation messages to stderr' do
         do_mirror_rake_tasks
-        expect(subject.deprecation.stream.string).to be_empty
+        expect(dsl.deprecation.stream.string).to be_empty
       end
     end
   end
 
-  describe '-- when sent #local_rake_executable --' do
+  describe '#local_rake_executable' do
     before :each do
-      mock_rake.stub!(:local_executable).and_return 'foo'
+      allow(rake).to receive(:local_executable).and_return('foo')
     end
 
-    it 'should delegate to Rake#local_executable' do
-      mock_rake.should_receive :local_executable
-      subject.local_rake_executable
+    it 'delegates to Rake#local_executable' do
+      expect(rake).to receive(:local_executable)
+      dsl.local_rake_executable
     end
 
-    it 'should return the result of Rake#local_executable' do
-      expect(subject.local_rake_executable).to eq('foo')
+    it 'returns the result of Rake#local_executable' do
+      expect(dsl.local_rake_executable).to eq('foo')
     end
   end
 
-  describe '-- when sent #remote_rake_executable --' do
+  describe '#remote_rake_executable' do
     before :each do
-      mock_rake.stub!(:remote_executable).and_return 'foo'
+      allow(rake).to receive(:remote_executable).and_return('foo')
     end
 
-    it 'should delegate to Rake#remote_executable' do
-      mock_rake.should_receive :remote_executable
-      subject.remote_rake_executable
+    it 'delegates to Rake#remote_executable' do
+      expect(rake).to receive(:remote_executable)
+      dsl.remote_rake_executable
     end
 
-    it 'should return the result of Rake#remote_executable' do
-      expect(subject.remote_rake_executable).to eq('foo')
+    it 'returns the result of Rake#remote_executable' do
+      expect(dsl.remote_rake_executable).to eq('foo')
     end
   end
 end

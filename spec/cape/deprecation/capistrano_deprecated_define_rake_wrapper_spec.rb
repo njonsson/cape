@@ -4,154 +4,176 @@ require 'cape/deprecation/base_sharedspec'
 require 'cape/xterm'
 
 describe Cape::Deprecation::CapistranoDeprecatedDefineRakeWrapper do
-  it_should_behave_like "a #{Cape::Deprecation::Base.name}"
+  subject(:capistrano_deprecated_define_rake_wrapper) {
+    capistrano_deprecated_define_rake_wrapper_class.new
+  }
+
+  let(:capistrano_deprecated_define_rake_wrapper_class) { described_class }
+
+  it_behaves_like "a #{Cape::Deprecation::Base.name}"
 
   let(:deprecation_preamble) {
     Cape::XTerm.bold_and_foreground_red('*** DEPRECATED:') + ' '
   }
 
   describe '-- without specified attributes --' do
-    its(:formatted_message) {
-      should == deprecation_preamble                       +
-                Cape::XTerm.bold('`define_rake_wrapper`. ' +
-                                 'Use this instead: `define_rake_wrapper`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                       +
+                                                                                  Cape::XTerm.bold('`define_rake_wrapper`. ' +
+                                                                                                   'Use this instead: `define_rake_wrapper`'))
+      }
+    end
   end
 
   describe '-- with #task' do
     before :each do
-      subject.task = {:name => :foo}
+      capistrano_deprecated_define_rake_wrapper.task = {:name => :foo}
     end
 
-    its(:formatted_message) {
-      should == deprecation_preamble                                     +
-                Cape::XTerm.bold('`define_rake_wrapper {:name=>:foo}`. ' +
-                                 'Use this instead: '                    +
-                                 '`define_rake_wrapper {:name=>:foo}`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                                     +
+                                                                                  Cape::XTerm.bold('`define_rake_wrapper {:name=>:foo}`. ' +
+                                                                                                   'Use this instead: '                    +
+                                                                                                   '`define_rake_wrapper {:name=>:foo}`'))
+      }
+    end
 
     describe 'and with #named_arguments' do
       before :each do
-        subject.named_arguments = {:bar => :baz}
+        capistrano_deprecated_define_rake_wrapper.named_arguments = {:bar => :baz}
       end
 
-      its(:formatted_message) {
-        should == deprecation_preamble                                                +
-                  Cape::XTerm.bold('`'                                                +
-                                    'define_rake_wrapper {:name=>:foo}, '             +
-                                                         ':bar => :baz'               +
-                                   '`. '                                              +
-                                   'Use this instead: '                               +
-                                   '`'                                                +
-                                    'define_rake_wrapper({:name=>:foo}) { |recipes| ' +
-                                      'recipes.options[:bar] = :baz '                 +
-                                    '}'                                               +
-                                   '`')
-      }
+      describe '#formatted_message' do
+        specify {
+          expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                                                +
+                                                                                    Cape::XTerm.bold('`'                                                +
+                                                                                                      'define_rake_wrapper {:name=>:foo}, '             +
+                                                                                                                           ':bar => :baz'               +
+                                                                                                     '`. '                                              +
+                                                                                                     'Use this instead: '                               +
+                                                                                                     '`'                                                +
+                                                                                                      'define_rake_wrapper({:name=>:foo}) { |recipes| ' +
+                                                                                                        'recipes.options[:bar] = :baz '                 +
+                                                                                                      '}'                                               +
+                                                                                                     '`'))
+        }
+      end
 
       describe 'and with #env --' do
         before :each do
-          subject.env['QUX'] = 'quux'
+          capistrano_deprecated_define_rake_wrapper.env['QUX'] = 'quux'
         end
 
-        its(:formatted_message) {
-          should == deprecation_preamble                                                +
-                    Cape::XTerm.bold('`'                                                +
-                                      'define_rake_wrapper({:name=>:foo}, '             +
-                                                          ':bar => :baz) { |env| '      +
-                                        'env["QUX"] = "quux" '                          +
-                                      '}'                                               +
-                                     '`. '                                              +
-                                     'Use this instead: '                               +
-                                     '`'                                                +
-                                      'define_rake_wrapper({:name=>:foo}) { |recipes| ' +
-                                        'recipes.options[:bar] = :baz; '                +
-                                        'recipes.env["QUX"] = "quux" '                  +
-                                      '}'                                               +
-                                     '`')
-        }
+        describe '#formatted_message' do
+          specify {
+            expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                                                +
+                                                                                      Cape::XTerm.bold('`'                                                +
+                                                                                                        'define_rake_wrapper({:name=>:foo}, '             +
+                                                                                                                            ':bar => :baz) { |env| '      +
+                                                                                                          'env["QUX"] = "quux" '                          +
+                                                                                                        '}'                                               +
+                                                                                                       '`. '                                              +
+                                                                                                       'Use this instead: '                               +
+                                                                                                       '`'                                                +
+                                                                                                        'define_rake_wrapper({:name=>:foo}) { |recipes| ' +
+                                                                                                          'recipes.options[:bar] = :baz; '                +
+                                                                                                          'recipes.env["QUX"] = "quux" '                  +
+                                                                                                        '}'                                               +
+                                                                                                       '`'))
+          }
+        end
       end
     end
 
     describe 'and with #env --' do
       before :each do
-        subject.env['BAR'] = 'baz'
+        capistrano_deprecated_define_rake_wrapper.env['BAR'] = 'baz'
       end
 
-      its(:formatted_message) {
-        should == deprecation_preamble                                                +
-                  Cape::XTerm.bold('`'                                                +
-                                    'define_rake_wrapper({:name=>:foo}) { |env| '     +
-                                      'env["BAR"] = "baz" '                           +
-                                    '}'                                               +
-                                   '`. '                                              +
-                                   'Use this instead: '                               +
-                                   '`'                                                +
-                                    'define_rake_wrapper({:name=>:foo}) { |recipes| ' +
-                                      'recipes.env["BAR"] = "baz" '                   +
-                                    '}'                                               +
-                                   '`')
-      }
+      describe '#formatted_message' do
+        specify {
+          expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                                                +
+                                                                                    Cape::XTerm.bold('`'                                                +
+                                                                                                      'define_rake_wrapper({:name=>:foo}) { |env| '     +
+                                                                                                        'env["BAR"] = "baz" '                           +
+                                                                                                      '}'                                               +
+                                                                                                     '`. '                                              +
+                                                                                                     'Use this instead: '                               +
+                                                                                                     '`'                                                +
+                                                                                                      'define_rake_wrapper({:name=>:foo}) { |recipes| ' +
+                                                                                                        'recipes.env["BAR"] = "baz" '                   +
+                                                                                                      '}'                                               +
+                                                                                                     '`'))
+        }
+      end
     end
   end
 
   describe '-- with #named_arguments' do
     before :each do
-      subject.named_arguments = {:foo => :bar}
+      capistrano_deprecated_define_rake_wrapper.named_arguments = {:foo => :bar}
     end
 
-    its(:formatted_message) {
-      should == deprecation_preamble                                    +
-                Cape::XTerm.bold('`define_rake_wrapper :foo => :bar`. ' +
-                                 'Use this instead: '                   +
-                                 '`'                                    +
-                                  'define_rake_wrapper { |recipes| '    +
-                                    'recipes.options[:foo] = :bar '     +
-                                  '}'                                   +
-                                 '`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                                                +
+                                                                                  Cape::XTerm.bold('`define_rake_wrapper :foo => :bar`. ' +
+                                                                                                   'Use this instead: '                   +
+                                                                                                   '`'                                    +
+                                                                                                    'define_rake_wrapper { |recipes| '    +
+                                                                                                      'recipes.options[:foo] = :bar '     +
+                                                                                                    '}'                                   +
+                                                                                                   '`'))
+      }
+    end
 
     describe 'and with #env --' do
       before :each do
-        subject.env['BAZ'] = 'qux'
+        capistrano_deprecated_define_rake_wrapper.env['BAZ'] = 'qux'
       end
 
-      its(:formatted_message) {
-        should == deprecation_preamble                                           +
-                  Cape::XTerm.bold('`'                                           +
-                                    'define_rake_wrapper(:foo => :bar) { |env| ' +
-                                      'env["BAZ"] = "qux" '                      +
-                                    '}'                                          +
-                                   '`. '                                         +
-                                   'Use this instead: '                          +
-                                   '`'                                           +
-                                    'define_rake_wrapper { |recipes| '           +
-                                      'recipes.options[:foo] = :bar; '           +
-                                      'recipes.env["BAZ"] = "qux" '              +
-                                    '}'                                          +
-                                   '`')
-      }
+      describe '#formatted_message' do
+        specify {
+          expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                                                +
+                                                                                    Cape::XTerm.bold('`'                                           +
+                                                                                                      'define_rake_wrapper(:foo => :bar) { |env| ' +
+                                                                                                        'env["BAZ"] = "qux" '                      +
+                                                                                                      '}'                                          +
+                                                                                                     '`. '                                         +
+                                                                                                     'Use this instead: '                          +
+                                                                                                     '`'                                           +
+                                                                                                      'define_rake_wrapper { |recipes| '           +
+                                                                                                        'recipes.options[:foo] = :bar; '           +
+                                                                                                        'recipes.env["BAZ"] = "qux" '              +
+                                                                                                      '}'                                          +
+                                                                                                     '`'))
+        }
+      end
     end
   end
 
   describe '-- with #env --' do
     before :each do
-      subject.env['FOO'] = 'bar'
+      capistrano_deprecated_define_rake_wrapper.env['FOO'] = 'bar'
     end
 
-    its(:formatted_message) {
-      should == deprecation_preamble                                 +
-                Cape::XTerm.bold('`'                                 +
-                                  'define_rake_wrapper { |env| '     +
-                                    'env["FOO"] = "bar" '            +
-                                  '}'                                +
-                                 '`. '                               +
-                                 'Use this instead: '                +
-                                 '`'                                 +
-                                  'define_rake_wrapper { |recipes| ' +
-                                    'recipes.env["FOO"] = "bar" '    +
-                                  '}'                                +
-                                 '`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(capistrano_deprecated_define_rake_wrapper.formatted_message).to eq(deprecation_preamble                                                +
+                                                                                  Cape::XTerm.bold('`'                                 +
+                                                                                                    'define_rake_wrapper { |env| '     +
+                                                                                                      'env["FOO"] = "bar" '            +
+                                                                                                    '}'                                +
+                                                                                                   '`. '                               +
+                                                                                                   'Use this instead: '                +
+                                                                                                   '`'                                 +
+                                                                                                    'define_rake_wrapper { |recipes| ' +
+                                                                                                      'recipes.env["FOO"] = "bar" '    +
+                                                                                                    '}'                                +
+                                                                                                   '`'))
+      }
+    end
   end
 end

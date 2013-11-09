@@ -1,53 +1,65 @@
 require 'cape/recipe_definition'
 
 describe Cape::RecipeDefinition do
-  its(:cd) { should be_nil }
+  subject(:recipe_definition) { recipe_definition_class.new }
 
-  it 'should have a mutable #cd' do
-    subject.cd '/foo/bar'
-    expect(subject.cd).to eq('/foo/bar')
+  let(:recipe_definition_class) { described_class }
 
-    subject.cd lambda { '/foo/bar' }
-    expect(subject.cd.call).to eq('/foo/bar')
+  describe '#cd' do
+    specify { expect(recipe_definition.cd).to be_nil }
 
-    subject.cd { '/foo/bar' }
-    expect(subject.cd.call).to eq('/foo/bar')
-  end
+    it 'is mutable' do
+      recipe_definition.cd '/foo/bar'
+      expect(recipe_definition.cd).to eq('/foo/bar')
 
-  it 'should complain about a #cd with the wrong arity' do
-    expect {
-      subject.cd do |foo, bar|
-      end
-    }.to raise_error(ArgumentError, 'Must have 0 parameters but has 2')
-  end
+      recipe_definition.cd lambda { '/foo/bar' }
+      expect(recipe_definition.cd.call).to eq('/foo/bar')
 
-  its(:env) { should == {} }
-
-  it 'should have a mutable #env' do
-    subject.env['FOO'] = 'bar'
-    expect(subject.env).to eq('FOO' => 'bar')
-  end
-
-  its(:options) { should == {} }
-
-  it 'should have mutable #options' do
-    subject.options[:some_option] = 'foo'
-    expect(subject.options).to eq(:some_option => 'foo')
-  end
-
-  its(:rename) { should be_nil }
-
-  it 'should have a mutable #rename' do
-    subject.rename do |task_name|
-      "#{task_name}_recipe"
+      recipe_definition.cd { '/foo/bar' }
+      expect(recipe_definition.cd.call).to eq('/foo/bar')
     end
-    expect(subject.rename.call(:foo)).to eq('foo_recipe')
+
+    it 'complains about wrong arity' do
+      expect {
+        recipe_definition.cd do |foo, bar|
+        end
+      }.to raise_error(ArgumentError, 'Must have 0 parameters but has 2')
+    end
   end
 
-  it 'should complain about a #rename with the wrong arity' do
-    expect {
-      subject.rename do |foo, bar|
+  describe '#env' do
+    specify { expect(recipe_definition.env).to eq({}) }
+
+    it 'is mutable' do
+      recipe_definition.env['FOO'] = 'bar'
+      expect(recipe_definition.env).to eq('FOO' => 'bar')
+    end
+  end
+
+  describe '#options' do
+    specify { expect(recipe_definition.options).to eq({}) }
+
+    it 'is mutable' do
+      recipe_definition.options[:some_option] = 'foo'
+      expect(recipe_definition.options).to eq(:some_option => 'foo')
+    end
+  end
+
+  describe '#rename' do
+    specify { expect(recipe_definition.rename).to be_nil }
+
+    it 'is mutable' do
+      recipe_definition.rename do |task_name|
+        "#{task_name}_recipe"
       end
-    }.to raise_error(ArgumentError, 'Must have 1 parameter but has 2')
+      expect(recipe_definition.rename.call(:foo)).to eq('foo_recipe')
+    end
+
+    it 'complains about wrong arity' do
+      expect {
+        recipe_definition.rename do |foo, bar|
+        end
+      }.to raise_error(ArgumentError, 'Must have 1 parameter but has 2')
+    end
   end
 end

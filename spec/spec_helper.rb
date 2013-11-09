@@ -15,7 +15,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-  config.alias_it_should_behave_like_to :should_behave_like, 'should behave like'
+  config.alias_it_should_behave_like_to :behaves_like, 'behaves like'
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

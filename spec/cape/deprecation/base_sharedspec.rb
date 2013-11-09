@@ -3,7 +3,9 @@ require 'cape/deprecation/base'
 
 shared_examples_for "a #{Cape::Deprecation::Base.name}" do
   describe '-- without specified attributes --' do
-    its(:stream) { should == $stderr }
+    describe '#stream' do
+      specify { expect(subject.stream).to eq($stderr) }
+    end
   end
 
   describe '-- with a different #stream --' do
@@ -13,6 +15,8 @@ shared_examples_for "a #{Cape::Deprecation::Base.name}" do
 
     let(:different_stream) { StringIO.new }
 
-    its(:stream) { should == different_stream }
+    describe '#stream' do
+      specify { expect(subject.stream).to eq(different_stream) }
+    end
   end
 end

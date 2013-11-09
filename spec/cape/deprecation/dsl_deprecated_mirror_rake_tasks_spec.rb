@@ -4,150 +4,172 @@ require 'cape/deprecation/base_sharedspec'
 require 'cape/xterm'
 
 describe Cape::Deprecation::DSLDeprecatedMirrorRakeTasks do
-  it_should_behave_like "a #{Cape::Deprecation::Base.name}"
+  subject(:dsl_deprecated_mirror_rake_tasks) {
+    dsl_deprecated_mirror_rake_tasks_class.new
+  }
+
+  let(:dsl_deprecated_mirror_rake_tasks_class) { described_class }
+
+  it_behaves_like "a #{Cape::Deprecation::Base.name}"
 
   let(:deprecation_preamble) {
     Cape::XTerm.bold_and_foreground_red('*** DEPRECATED:') + ' '
   }
 
   describe '-- without specified attributes --' do
-    its(:formatted_message) {
-      should == deprecation_preamble                     +
-                Cape::XTerm.bold('`mirror_rake_tasks`. ' +
-                                 'Use this instead: `mirror_rake_tasks`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                     +
+                                                                         Cape::XTerm.bold('`mirror_rake_tasks`. ' +
+                                                                                          'Use this instead: `mirror_rake_tasks`'))
+      }
+    end
   end
 
   describe '-- with #task_expression' do
     before :each do
-      subject.task_expression = :foo
+      dsl_deprecated_mirror_rake_tasks.task_expression = :foo
     end
 
-    its(:formatted_message) {
-      should == deprecation_preamble                          +
-                Cape::XTerm.bold('`mirror_rake_tasks :foo`. ' +
-                                 'Use this instead: `mirror_rake_tasks :foo`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                          +
+                                                                         Cape::XTerm.bold('`mirror_rake_tasks :foo`. ' +
+                                                                                          'Use this instead: `mirror_rake_tasks :foo`'))
+      }
+    end
 
     describe 'and with #options' do
       before :each do
-        subject.options = {:bar => :baz}
+        dsl_deprecated_mirror_rake_tasks.options = {:bar => :baz}
       end
 
-      its(:formatted_message) {
-        should == deprecation_preamble                                        +
-                  Cape::XTerm.bold('`mirror_rake_tasks :foo, :bar => :baz`. ' +
-                                   'Use this instead: '                       +
-                                   '`'                                        +
-                                    'mirror_rake_tasks(:foo) { |recipes| '    +
-                                      'recipes.options[:bar] = :baz '         +
-                                    '}'                                       +
-                                   '`')
-      }
+      describe '#formatted_message' do
+        specify {
+          expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                          +
+                                                                           Cape::XTerm.bold('`mirror_rake_tasks :foo, :bar => :baz`. ' +
+                                                                                            'Use this instead: '                       +
+                                                                                            '`'                                        +
+                                                                                             'mirror_rake_tasks(:foo) { |recipes| '    +
+                                                                                               'recipes.options[:bar] = :baz '         +
+                                                                                             '}'                                       +
+                                                                                            '`'))
+        }
+      end
 
       describe 'and with #env --' do
         before :each do
-          subject.env['QUX'] = 'quux'
+          dsl_deprecated_mirror_rake_tasks.env['QUX'] = 'quux'
         end
 
-        its(:formatted_message) {
-          should == deprecation_preamble                                         +
-                    Cape::XTerm.bold('`'                                         +
-                                      'mirror_rake_tasks(:foo, '                 +
-                                                        ':bar => :baz) { |env| ' +
-                                        'env["QUX"] = "quux" '                   +
-                                      '}'                                        +
-                                     '`. '                                       +
-                                     'Use this instead: '                        +
-                                     '`'                                         +
-                                      'mirror_rake_tasks(:foo) { |recipes| '     +
-                                        'recipes.options[:bar] = :baz; '         +
-                                        'recipes.env["QUX"] = "quux" '           +
-                                      '}'                                        +
-                                     '`')
-        }
+        describe '#formatted_message' do
+          specify {
+            expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                          +
+                                                                             Cape::XTerm.bold('`'                                         +
+                                                                                               'mirror_rake_tasks(:foo, '                 +
+                                                                                                                 ':bar => :baz) { |env| ' +
+                                                                                                 'env["QUX"] = "quux" '                   +
+                                                                                               '}'                                        +
+                                                                                              '`. '                                       +
+                                                                                              'Use this instead: '                        +
+                                                                                              '`'                                         +
+                                                                                               'mirror_rake_tasks(:foo) { |recipes| '     +
+                                                                                                 'recipes.options[:bar] = :baz; '         +
+                                                                                                 'recipes.env["QUX"] = "quux" '           +
+                                                                                               '}'                                        +
+                                                                                              '`'))
+          }
+        end
       end
     end
 
     describe 'and with #env --' do
       before :each do
-        subject.env['BAR'] = 'baz'
+        dsl_deprecated_mirror_rake_tasks.env['BAR'] = 'baz'
       end
 
-      its(:formatted_message) {
-        should == deprecation_preamble                                     +
-                  Cape::XTerm.bold('`'                                     +
-                                    'mirror_rake_tasks(:foo) { |env| '     +
-                                      'env["BAR"] = "baz" '                +
-                                    '}'                                    +
-                                   '`. '                                   +
-                                   'Use this instead: '                    +
-                                   '`'                                     +
-                                    'mirror_rake_tasks(:foo) { |recipes| ' +
-                                      'recipes.env["BAR"] = "baz" '        +
-                                    '}'                                    +
-                                   '`')
-      }
+      describe '#formatted_message' do
+        specify {
+          expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                          +
+                                                                           Cape::XTerm.bold('`'                                     +
+                                                                                             'mirror_rake_tasks(:foo) { |env| '     +
+                                                                                               'env["BAR"] = "baz" '                +
+                                                                                             '}'                                    +
+                                                                                            '`. '                                   +
+                                                                                            'Use this instead: '                    +
+                                                                                            '`'                                     +
+                                                                                             'mirror_rake_tasks(:foo) { |recipes| ' +
+                                                                                               'recipes.env["BAR"] = "baz" '        +
+                                                                                             '}'                                    +
+                                                                                            '`'))
+        }
+      end
     end
   end
 
   describe '-- with #options' do
     before :each do
-      subject.options = {:foo => :bar}
+      dsl_deprecated_mirror_rake_tasks.options = {:foo => :bar}
     end
 
-    its(:formatted_message) {
-      should == deprecation_preamble                                  +
-                Cape::XTerm.bold('`mirror_rake_tasks :foo => :bar`. ' +
-                                 'Use this instead: '                 +
-                                 '`'                                  +
-                                  'mirror_rake_tasks { |recipes| '    +
-                                    'recipes.options[:foo] = :bar '   +
-                                  '}'                                 +
-                                 '`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                          +
+                                                                         Cape::XTerm.bold('`mirror_rake_tasks :foo => :bar`. ' +
+                                                                                          'Use this instead: '                 +
+                                                                                          '`'                                  +
+                                                                                           'mirror_rake_tasks { |recipes| '    +
+                                                                                             'recipes.options[:foo] = :bar '   +
+                                                                                           '}'                                 +
+                                                                                          '`'))
+      }
+    end
 
     describe 'and with #env --' do
       before :each do
-        subject.env['BAZ'] = 'qux'
+        dsl_deprecated_mirror_rake_tasks.env['BAZ'] = 'qux'
       end
 
-      its(:formatted_message) {
-        should == deprecation_preamble                                         +
-                  Cape::XTerm.bold('`'                                         +
-                                    'mirror_rake_tasks(:foo => :bar) { |env| ' +
-                                      'env["BAZ"] = "qux" '                    +
-                                    '}'                                        +
-                                   '`. '                                       +
-                                   'Use this instead: '                        +
-                                   '`'                                         +
-                                    'mirror_rake_tasks { |recipes| '           +
-                                      'recipes.options[:foo] = :bar; '         +
-                                      'recipes.env["BAZ"] = "qux" '            +
-                                    '}'                                        +
-                                   '`')
-      }
+      describe '#formatted_message' do
+        specify {
+          expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                          +
+                                                                           Cape::XTerm.bold('`'                                         +
+                                                                                             'mirror_rake_tasks(:foo => :bar) { |env| ' +
+                                                                                               'env["BAZ"] = "qux" '                    +
+                                                                                             '}'                                        +
+                                                                                            '`. '                                       +
+                                                                                            'Use this instead: '                        +
+                                                                                            '`'                                         +
+                                                                                             'mirror_rake_tasks { |recipes| '           +
+                                                                                               'recipes.options[:foo] = :bar; '         +
+                                                                                               'recipes.env["BAZ"] = "qux" '            +
+                                                                                             '}'                                        +
+                                                                                            '`'))
+        }
+      end
     end
   end
 
   describe '-- with #env --' do
     before :each do
-      subject.env['FOO'] = 'bar'
+      dsl_deprecated_mirror_rake_tasks.env['FOO'] = 'bar'
     end
 
-    its(:formatted_message) {
-      should == deprecation_preamble                               +
-                Cape::XTerm.bold('`'                               +
-                                  'mirror_rake_tasks { |env| '     +
-                                    'env["FOO"] = "bar" '          +
-                                  '}'                              +
-                                 '`. '                             +
-                                 'Use this instead: '              +
-                                 '`'                               +
-                                  'mirror_rake_tasks { |recipes| ' +
-                                    'recipes.env["FOO"] = "bar" '  +
-                                  '}'                              +
-                                 '`')
-    }
+    describe '#formatted_message' do
+      specify {
+        expect(dsl_deprecated_mirror_rake_tasks.formatted_message).to eq(deprecation_preamble                          +
+                                                                         Cape::XTerm.bold('`'                               +
+                                                                                           'mirror_rake_tasks { |env| '     +
+                                                                                             'env["FOO"] = "bar" '          +
+                                                                                           '}'                              +
+                                                                                          '`. '                             +
+                                                                                          'Use this instead: '              +
+                                                                                          '`'                               +
+                                                                                           'mirror_rake_tasks { |recipes| ' +
+                                                                                             'recipes.env["FOO"] = "bar" '  +
+                                                                                           '}'                              +
+                                                                                          '`'))
+      }
+    end
   end
 end
