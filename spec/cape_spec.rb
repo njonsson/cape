@@ -3,13 +3,15 @@ require 'cape'
 require 'cape/dsl'
 
 describe Cape do
+  let(:cape_module) { described_class }
+
   Cape::DSL.public_instance_methods.each do |m|
-    it { should respond_to(m) }
+    specify { expect(cape_module).to respond_to(m) }
   end
 end
 
 describe '#Cape' do
-  it 'should yield the Cape module if given a unary block' do
+  it 'yields the Cape module if given a unary block' do
     yielded = nil
     Cape do |c|
       yielded = c
@@ -17,14 +19,14 @@ describe '#Cape' do
     expect(yielded).to eq(Cape)
   end
 
-  it 'should accept a nullary block' do
+  it 'accepts a nullary block' do
     Cape do
     end
   end
 
-  it 'should expire the Rake tasks cache when leaving the block' do
+  it 'expires the Rake tasks cache when leaving the block' do
     Cape do
-      rake.should_receive(:expire_cache!).once
+      expect(rake).to receive(:expire_cache!).once
     end
   end
 end

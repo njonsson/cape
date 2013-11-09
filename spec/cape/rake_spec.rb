@@ -2,52 +2,60 @@ require 'spec_helper'
 require 'cape/rake'
 
 describe Cape::Rake do
-  describe '::DEFAULT_EXECUTABLE' do
-    subject { described_class::DEFAULT_EXECUTABLE }
+  subject(:rake) { rake_class.new }
 
-    it { should be_frozen }
+  let(:rake_class) { described_class }
+
+  describe '::DEFAULT_EXECUTABLE' do
+    subject(:constant) { rake_class::DEFAULT_EXECUTABLE }
+
+    specify { expect(constant).to be_frozen }
   end
 
-  describe '-- when sent #== --' do
-    it('should recognize equivalent instances to be equal') {
-      expect(described_class.new).to eq(described_class.new)
+  describe '#==' do
+    it('recognizes equivalent instances to be equal') {
+      expect(rake_class.new).to eq(rake_class.new)
     }
 
-    it('should compare using #local_executable') {
-      expect(described_class.new).not_to eq(described_class.new(:local_executable => 'foo'))
+    it('compares using #local_executable') {
+      expect(rake_class.new).not_to eq(rake_class.new(:local_executable => 'foo'))
     }
 
-    it('should compare using #remote_executable') {
-      expect(described_class.new).not_to eq(described_class.new(:remote_executable => 'foo'))
+    it('compares using #remote_executable') {
+      expect(rake_class.new).not_to eq(rake_class.new(:remote_executable => 'foo'))
     }
   end
 
   describe '-- without specified attributes --' do
-    its(:local_executable) { should == described_class::DEFAULT_EXECUTABLE }
+    describe '#local_executable' do
+      specify { expect(rake.local_executable).to eq(rake_class::DEFAULT_EXECUTABLE) }
+    end
 
-    its(:remote_executable) { should == described_class::DEFAULT_EXECUTABLE }
+    describe '#remote_executable' do
+      specify { expect(rake.remote_executable).to eq(rake_class::DEFAULT_EXECUTABLE) }
+    end
   end
 
   describe '-- with specified attributes --' do
-    subject {
-      described_class.new :local_executable => ('the specified value of ' +
-                                                '#local_executable'),
-                          :remote_executable => ('the specified value of ' +
-                                                 '#remote_executable')
+    subject(:rake) {
+      rake_class.new :local_executable => ('the specified value of ' +
+                                           '#local_executable'),
+                     :remote_executable => ('the specified value of ' +
+                                            '#remote_executable')
     }
 
-    its(:local_executable) {
-      should == 'the specified value of #local_executable'
-    }
+    describe '#local_executable' do
+      specify { expect(rake.local_executable).to eq('the specified value of #local_executable') }
+    end
 
-    its(:remote_executable) {
-      should == 'the specified value of #remote_executable'
-    }
+    describe '#remote_executable' do
+      specify { expect(rake.remote_executable).to eq('the specified value of #remote_executable') }
+    end
   end
 
   describe '-- with respect to caching --' do
     before :each do
-      subject.stub!(:fetch_output).and_return output
+      allow(rake).to receive(:fetch_output).and_return(output)
     end
 
     let(:output) {
@@ -58,63 +66,63 @@ rake baz # baz
       end_output
     }
 
-    describe 'when sent #each_task,' do
-      it 'should build and use a cache' do
-        subject.should_receive(:fetch_output).once.and_return output
-        subject.each_task do |t|
+    describe '#each_task' do
+      it 'builds and uses a cache' do
+        expect(rake).to receive(:fetch_output).once.and_return(output)
+        rake.each_task do |t|
         end
-        subject.each_task do |t|
-        end
-      end
-
-      it 'should not expire the cache' do
-        subject.should_not_receive :expire_cache!
-        subject.each_task do |t|
+        rake.each_task do |t|
         end
       end
 
-      it 'should expire the cache in the event of an error' do
-        subject.should_receive(:expire_cache!).once
+      it 'does not expire the cache' do
+        expect(rake).not_to receive(:expire_cache!)
+        rake.each_task do |t|
+        end
+      end
+
+      it 'expires the cache in the event of an error' do
+        expect(rake).to receive(:expire_cache!).once
         begin
-          subject.each_task do |t|
+          rake.each_task do |t|
             raise 'pow!'
           end
         rescue
         end
       end
 
-      it 'should not swallow errors' do
+      it 'does not swallow errors' do
         expect {
-          subject.each_task do |t|
+          rake.each_task do |t|
             raise ZeroDivisionError, 'pow!'
           end
         }.to raise_error(ZeroDivisionError, 'pow!')
       end
     end
 
-    describe 'when sent #expire_cache!,' do
-      it 'should expire the cache' do
-        subject.should_receive(:fetch_output).twice.and_return output
-        subject.each_task do |t|
+    describe '#expire_cache!' do
+      it 'expires the cache' do
+        expect(rake).to receive(:fetch_output).twice.and_return(output)
+        rake.each_task do |t|
         end
-        subject.expire_cache!
-        subject.each_task do |t|
+        rake.expire_cache!
+        rake.each_task do |t|
         end
       end
     end
 
-    describe 'when sent #local_executable=' do
+    describe '#local_executable=' do
       describe 'with the same value,' do
-        it 'should not expire the cache' do
-          subject.should_not_receive :expire_cache!
-          subject.local_executable = subject.local_executable
+        it 'does not expire the cache' do
+          expect(rake).not_to receive(:expire_cache!)
+          rake.local_executable = rake.local_executable
         end
       end
 
       describe 'with a different value,' do
-        it 'should expire the cache' do
-          subject.should_receive(:expire_cache!).once
-          subject.local_executable = subject.local_executable + ' foo'
+        it 'expires the cache' do
+          expect(rake).to receive(:expire_cache!).once
+          rake.local_executable = rake.local_executable + ' foo'
         end
       end
     end
