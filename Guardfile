@@ -3,7 +3,7 @@ interactor :off
 guard :rspec, :all_after_pass => true,
               :all_on_start   => false,
               :keep_failed    => false,
-              :cli => '--debug' do
+              :cmd => "bundle exec rspec --debug #{File.read('.rspec').chomp.gsub "\n", ' '}" do
   # Run the corresponding spec (or all specs) when code changes.
   watch(%r{^lib/(.+)\.rb$}) do |match|
     Dir["spec/#{match[1]}_spec.rb"].first || 'spec'
