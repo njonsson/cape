@@ -35,4 +35,4 @@ Feature: The #each_rake_task DSL method with an argument of a defined namespace
       Name: "my_namespace:my_nested_namespace:in_a_nested_namespace"
       Description: "My task in a nested namespace"
       """
-    And the output should not contain "with_period"
+    And the output should not contain "long"

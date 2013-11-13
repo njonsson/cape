@@ -15,14 +15,6 @@ Feature: The #mirror_rake_tasks DSL method
     When I run `cap -vT`
     Then the output should contain:
       """
-      cap with_period                                            # Ends with period.
-      """
-    And the output should contain:
-      """
-      cap without_period                                         # Ends without period.
-      """
-    And the output should contain:
-      """
       cap long                                                   # My long task -- it has a ve...
       """
     And the output should contain:
@@ -54,64 +46,6 @@ Feature: The #mirror_rake_tasks DSL method
       cap hidden_task                                            #
       """
 
-  Scenario: mirror Rake task 'with_period' with its description
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      Cape do
-        mirror_rake_tasks
-      end
-      """
-    When I run `cap -e with_period`
-    Then the output should contain exactly:
-      """
-      ------------------------------------------------------------
-      cap with_period
-      ------------------------------------------------------------
-      Ends with period.
-
-
-      """
-
-  Scenario: mirror Rake task 'with_period' with its implementation
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      set :current_path, '/current/path'
-
-      Cape do
-        mirror_rake_tasks
-      end
-      """
-    When I run `cap with_period`
-    Then the output should contain:
-      """
-        * executing `with_period'
-      """
-    And the output should contain:
-      """
-      `with_period' is only run for servers matching {}, but no servers matched
-      """
-
-  Scenario: mirror Rake task 'without_period' with its description
-    Given a full-featured Rakefile
-    And a Capfile with:
-      """
-      Cape do
-        mirror_rake_tasks
-      end
-      """
-    When I run `cap -e without_period`
-    Then the output should contain exactly:
-      """
-      ------------------------------------------------------------
-      cap without_period
-      ------------------------------------------------------------
-      Ends without period.
-
-
-      """
-
   Scenario: mirror Rake task 'long' with its description
     Given a full-featured Rakefile
     And a Capfile with:
@@ -131,6 +65,26 @@ Feature: The #mirror_rake_tasks DSL method
       very, very, very, very long description.
 
 
+      """
+
+  Scenario: mirror Rake task 'long' with its implementation
+    Given a full-featured Rakefile
+    And a Capfile with:
+      """
+      set :current_path, '/current/path'
+
+      Cape do
+        mirror_rake_tasks
+      end
+      """
+    When I run `cap long`
+    Then the output should contain:
+      """
+        * executing `long'
+      """
+    And the output should contain:
+      """
+      `long' is only run for servers matching {}, but no servers matched
       """
 
   Scenario: mirror Rake task 'with_one_arg' with its description

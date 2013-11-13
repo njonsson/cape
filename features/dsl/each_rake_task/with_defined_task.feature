@@ -9,7 +9,7 @@ Feature: The #each_rake_task DSL method with an argument of a defined task
     And a Capfile with:
       """
       Cape do
-        each_rake_task 'with_period' do |t|
+        each_rake_task 'long' do |t|
           $stdout.puts '', "Name: #{t[:name].inspect}"
           if t[:parameters]
             $stdout.puts "Parameters: #{t[:parameters].inspect}"
@@ -24,8 +24,8 @@ Feature: The #each_rake_task DSL method with an argument of a defined task
     Then the output should contain:
       """
 
-      Name: "with_period"
-      Description: "Ends with period."
+      Name: "long"
+      Description: "My long task -- it has a very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very long description"
       """
-    And the output should not contain "without_period"
+    And the output should not contain "with_one_arg"
     And the output should not contain "my_namespace"

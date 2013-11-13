@@ -9,8 +9,8 @@ Feature: The #mirror_rake_tasks DSL method with an undefined task or namespace
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks 'period'
+        mirror_rake_tasks 'lon'
       end
       """
     When I run `cap -vT`
-    Then the output should not contain "period"
+    Then the output should not contain "lon"

@@ -9,7 +9,7 @@ Feature: The #each_rake_task DSL method with an undefined task or namespace
     And a Capfile with:
       """
       Cape do
-        each_rake_task 'period' do |t|
+        each_rake_task 'lon' do |t|
           $stdout.puts '', "Name: #{t[:name].inspect}"
           if t[:parameters]
             $stdout.puts "Parameters: #{t[:parameters].inspect}"
@@ -21,4 +21,4 @@ Feature: The #each_rake_task DSL method with an undefined task or namespace
       end
       """
     When I run `cap -vT`
-    Then the output should not contain "period"
+    Then the output should not contain "lon"

@@ -20,12 +20,12 @@ Feature: The #mirror_rake_tasks DSL method with environment variables
         end
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
-        * executing `with_period'
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {}, but no servers matched
+      `long' is only run for servers matching {}, but no servers matched
       """
