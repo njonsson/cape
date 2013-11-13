@@ -70,6 +70,26 @@ Or you may want to make Cape a dependency of your project by using [Bundler](htt
 
     gem 'cape', '~> 1'
 
+## Compatibility
+
+Cape [runs](http://travis-ci.org/njonsson/cape) on the following Ruby versions:
+
+* MRI v1.8.7, v1.9.2, v1.9.3, v2.0.0
+* REE v1.8.7
+
+Cape integrates with the following RubyGems:
+
+* Capistrano v2.x
+* Rake v0.8.7 and later
+
+**A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.** Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project.
+
+    # Gemfile
+
+    source 'http://rubygems.org'
+
+    gem 'rake', '>= 0.9.3'
+
 ## Examples
 
 Assume the following Rake tasks are defined.
@@ -308,16 +328,6 @@ Note that Cape statements must be contained in a `Cape` block.
       # Create Capistrano recipes for all Rake tasks.
       mirror_rake_tasks
     end
-
-## Known issues
-
-**A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.** Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project.
-
-    # Gemfile
-
-    source 'http://rubygems.org'
-
-    gem 'rake', '>= 0.9.3'
 
 ## Contributing
 
