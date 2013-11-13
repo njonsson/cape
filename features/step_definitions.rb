@@ -9,12 +9,6 @@ end
 
 Given 'a full-featured Rakefile' do
   step 'a file named "Rakefile" with:', <<-end_step
-    desc 'Ends with period.'
-    task :with_period
-
-    desc 'Ends without period'
-    task :without_period
-
     desc 'My long task -- it has a very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very long description'
     task :long
 
@@ -48,12 +42,6 @@ Given 'a full-featured Rakefile defining a Ruby-method-shadowing task' do
   step 'a file named "Rakefile" with:', <<-end_step
     desc 'A task that shadows a Ruby method'
     task :load
-
-    desc 'Ends with period.'
-    task :with_period
-
-    desc 'Ends without period'
-    task :without_period
 
     desc 'My long task -- it has a very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very, very long description'
     task :long

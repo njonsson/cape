@@ -21,7 +21,7 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and renaming logi
       """
       cap do_load # A task that shadows a Ruby method.
       """
-    And the output should not contain "period"
+    And the output should not contain "long"
     And the output should not contain "my_namespace"
 
   Scenario: mirror the matching Rake task with its implementation

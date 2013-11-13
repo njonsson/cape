@@ -54,7 +54,7 @@ Feature: The #local_rake_executable and #remote_rake_executable DSL attributes
         mirror_rake_tasks
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
       We changed the remote Rake executable to "echo \"This comes from overridden Rake\" #"

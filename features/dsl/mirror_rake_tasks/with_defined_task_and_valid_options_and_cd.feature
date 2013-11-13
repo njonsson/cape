@@ -9,7 +9,7 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks :with_period do |recipes|
+        mirror_rake_tasks :long do |recipes|
           recipes.options[:roles] = :app
           recipes.cd { release_path }
         end
@@ -18,9 +18,9 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
     When I run `cap -vT`
     Then the output should contain:
       """
-      cap with_period # Ends with period.
+      cap long   # My long task -- it has a very, very, very, very, very, very, ver...
       """
-    And the output should not contain "without_period"
+    And the output should not contain "with_one_arg"
     And the output should not contain "my_namespace"
 
   Scenario: mirror the matching Rake task with its implementation
@@ -30,18 +30,18 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
       set :release_path, '/release/path'
 
       Cape do
-        mirror_rake_tasks :with_period do |recipes|
+        mirror_rake_tasks :long do |recipes|
           recipes.options[:roles] = :app
           recipes.cd { release_path }
         end
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
-        * executing `with_period'
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `long' is only run for servers matching {:roles=>:app}, but no servers matched
       """

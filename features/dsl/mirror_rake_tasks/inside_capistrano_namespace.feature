@@ -17,7 +17,7 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace
     When I run `cap -vT`
     Then the output should contain:
       """
-      cap ns:with_period                                            # Ends with period.
+      cap ns:long                                                   # My long task -- it has a ve...
       """
 
   Scenario: mirror a Rake task with its implementation
@@ -32,8 +32,8 @@ Feature: The #mirror_rake_tasks DSL method, inside a Capistrano namespace
         end
       end
       """
-    When I run `cap ns:with_period`
+    When I run `cap ns:long`
     Then the output should contain:
       """
-        * executing `ns:with_period'
+        * executing `ns:long'
       """

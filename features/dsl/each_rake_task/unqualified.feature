@@ -45,9 +45,6 @@ Feature: The #each_rake_task DSL method
       Parameters: ["the_arg"]
       Description: "My task with one argument"
 
-      Name: "with_period"
-      Description: "Ends with period."
-
       Name: "with_three_args"
       Parameters: ["an_arg1", "an_arg2", "an_arg3"]
       Description: "My task with three arguments"
@@ -55,7 +52,4 @@ Feature: The #each_rake_task DSL method
       Name: "with_two_args"
       Parameters: ["my_arg1", "my_arg2"]
       Description: "My task with two arguments"
-
-      Name: "without_period"
-      Description: "Ends without period"
       """

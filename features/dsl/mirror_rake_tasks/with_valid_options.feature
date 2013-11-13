@@ -15,15 +15,15 @@ Feature: The #mirror_rake_tasks DSL method with valid options
         mirror_rake_tasks :roles => :app
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
       *** DEPRECATED: `mirror_rake_tasks :roles => :app`. Use this instead: `mirror_rake_tasks { |recipes| recipes.options[:roles] = :app }`
-        * executing `with_period'
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `long' is only run for servers matching {:roles=>:app}, but no servers matched
       """
 
   Scenario: mirror a Rake task with its implementation
@@ -38,13 +38,13 @@ Feature: The #mirror_rake_tasks DSL method with valid options
         end
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
-        * executing `with_period'
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `long' is only run for servers matching {:roles=>:app}, but no servers matched
       """
     And the output should not contain "DEPRECATED"

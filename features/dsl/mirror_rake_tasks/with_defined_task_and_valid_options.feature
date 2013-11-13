@@ -10,19 +10,19 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and valid options
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks :with_period, :roles => :app
+        mirror_rake_tasks :long, :roles => :app
       end
       """
     When I run `cap -vT`
     Then the output should contain:
       """
-      cap with_period # Ends with period.
+      cap long   # My long task -- it has a very, very, very, very, very, very, ver...
       """
-    And the output should not contain "without_period"
+    And the output should not contain "with_one_arg"
     And the output should not contain "my_namespace"
     And the output should contain:
       """
-      *** DEPRECATED: `mirror_rake_tasks :with_period, :roles => :app`. Use this instead: `mirror_rake_tasks(:with_period) { |recipes| recipes.options[:roles] = :app }`
+      *** DEPRECATED: `mirror_rake_tasks :long, :roles => :app`. Use this instead: `mirror_rake_tasks(:long) { |recipes| recipes.options[:roles] = :app }`
       """
 
   Scenario: mirror only the matching Rake task
@@ -30,7 +30,7 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and valid options
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks :with_period do |recipes|
+        mirror_rake_tasks :long do |recipes|
           recipes.options[:roles] = :app
         end
       end
@@ -38,9 +38,9 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and valid options
     When I run `cap -vT`
     Then the output should contain:
       """
-      cap with_period # Ends with period.
+      cap long   # My long task -- it has a very, very, very, very, very, very, ver...
       """
-    And the output should not contain "without_period"
+    And the output should not contain "with_one_arg"
     And the output should not contain "my_namespace"
     And the output should not contain "DEPRECATED"
 
@@ -52,18 +52,18 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and valid options
       set :current_path, '/current/path'
 
       Cape do
-        mirror_rake_tasks 'with_period', :roles => :app
+        mirror_rake_tasks 'long', :roles => :app
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
-      *** DEPRECATED: `mirror_rake_tasks "with_period", :roles => :app`. Use this instead: `mirror_rake_tasks("with_period") { |recipes| recipes.options[:roles] = :app }`
-        * executing `with_period'
+      *** DEPRECATED: `mirror_rake_tasks "long", :roles => :app`. Use this instead: `mirror_rake_tasks("long") { |recipes| recipes.options[:roles] = :app }`
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `long' is only run for servers matching {:roles=>:app}, but no servers matched
       """
 
   Scenario: mirror the matching Rake task with its implementation
@@ -73,18 +73,18 @@ Feature: The #mirror_rake_tasks DSL method with a defined task and valid options
       set :current_path, '/current/path'
 
       Cape do
-        mirror_rake_tasks 'with_period' do |recipes|
+        mirror_rake_tasks 'long' do |recipes|
           recipes.options[:roles] = :app
         end
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
-        * executing `with_period'
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `long' is only run for servers matching {:roles=>:app}, but no servers matched
       """
     And the output should not contain "DEPRECATED"

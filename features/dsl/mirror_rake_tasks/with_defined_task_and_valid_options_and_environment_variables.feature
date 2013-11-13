@@ -10,7 +10,7 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks :with_period, :roles => :app do |env|
+        mirror_rake_tasks :long, :roles => :app do |env|
           env['RAILS_ENV'] = rails_env
         end
       end
@@ -18,13 +18,13 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
     When I run `cap -vT`
     Then the output should contain:
       """
-      cap with_period # Ends with period.
+      cap long   # My long task -- it has a very, very, very, very, very, very, ver...
       """
-    And the output should not contain "without_period"
+    And the output should not contain "with_one_arg"
     And the output should not contain "my_namespace"
     And the output should contain:
       """
-      *** DEPRECATED: `mirror_rake_tasks :with_period, :roles => :app`. Use this instead: `mirror_rake_tasks(:with_period) { |recipes| recipes.options[:roles] = :app }`
+      *** DEPRECATED: `mirror_rake_tasks :long, :roles => :app`. Use this instead: `mirror_rake_tasks(:long) { |recipes| recipes.options[:roles] = :app }`
       """
     And the output should contain:
       """
@@ -36,7 +36,7 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
     And a Capfile with:
       """
       Cape do
-        mirror_rake_tasks :with_period do |recipes|
+        mirror_rake_tasks :long do |recipes|
           recipes.options[:roles] = :app
           recipes.env['RAILS_ENV'] = lambda { rails_env }
         end
@@ -45,9 +45,9 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
     When I run `cap -vT`
     Then the output should contain:
       """
-      cap with_period # Ends with period.
+      cap long   # My long task -- it has a very, very, very, very, very, very, ver...
       """
-    And the output should not contain "without_period"
+    And the output should not contain "with_one_arg"
     And the output should not contain "my_namespace"
     And the output should not contain "DEPRECATED"
 
@@ -60,20 +60,20 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
       set :rails_env,    'rails-env'
 
       Cape do
-        mirror_rake_tasks 'with_period', :roles => :app do |env|
+        mirror_rake_tasks 'long', :roles => :app do |env|
           env['RAILS_ENV'] = rails_env
         end
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
-      *** DEPRECATED: `mirror_rake_tasks("with_period", :roles => :app) { |env| env["RAILS_ENV"] = "rails-env" }`. Use this instead: `mirror_rake_tasks("with_period") { |recipes| recipes.options[:roles] = :app; recipes.env["RAILS_ENV"] = "rails-env" }`
-        * executing `with_period'
+      *** DEPRECATED: `mirror_rake_tasks("long", :roles => :app) { |env| env["RAILS_ENV"] = "rails-env" }`. Use this instead: `mirror_rake_tasks("long") { |recipes| recipes.options[:roles] = :app; recipes.env["RAILS_ENV"] = "rails-env" }`
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `long' is only run for servers matching {:roles=>:app}, but no servers matched
       """
 
   Scenario: mirror the matching Rake task with its implementation
@@ -84,19 +84,19 @@ Feature: The #mirror_rake_tasks DSL method with a defined task, valid options, a
       set :rails_env,    'rails-env'
 
       Cape do
-        mirror_rake_tasks 'with_period' do |recipes|
+        mirror_rake_tasks 'long' do |recipes|
           recipes.options[:roles] = :app
           recipes.env['RAILS_ENV'] = lambda { rails_env }
         end
       end
       """
-    When I run `cap with_period`
+    When I run `cap long`
     Then the output should contain:
       """
-        * executing `with_period'
+        * executing `long'
       """
     And the output should contain:
       """
-      `with_period' is only run for servers matching {:roles=>:app}, but no servers matched
+      `long' is only run for servers matching {:roles=>:app}, but no servers matched
       """
     And the output should not contain "DEPRECATED"
