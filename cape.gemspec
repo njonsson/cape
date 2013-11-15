@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.require_paths = %w(lib)
   s.has_rdoc      = true
 
+  s.add_development_dependency 'appraisal',  '~> 0'
   s.add_development_dependency 'aruba',      '~> 0'
   s.add_development_dependency 'capistrano', '~> 2'
   s.add_development_dependency 'rake',       '>= 0.9.3'
