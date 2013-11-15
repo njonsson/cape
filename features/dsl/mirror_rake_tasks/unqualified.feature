@@ -90,7 +90,7 @@ Feature: The #mirror_rake_tasks DSL method
     And the output should not contain "cap load"
     And the output should contain:
       """
-      *** WARNING: You will need to use Cape's renaming API if you want to mirror Rake task load (defining a task named `load' would shadow an existing method with that name)
+      *** WARNING: You must use Cape's renaming API in order to mirror Rake task load (defining a task named `load' would shadow an existing method with that name)
       """
 
   Scenario: mirror Rake task 'long' with its description
@@ -152,7 +152,7 @@ Feature: The #mirror_rake_tasks DSL method
       very, very, very, very, very, very, very, very, very, very, very, very, very,
       very, very, very, very long description.
 
-      *** WARNING: You will need to use Cape's renaming API if you want to mirror Rake task load (defining a task named `load' would shadow an existing method with that name)
+      *** WARNING: You must use Cape's renaming API in order to mirror Rake task load (defining a task named `load' would shadow an existing method with that name)
 
       """
 
@@ -177,7 +177,7 @@ Feature: The #mirror_rake_tasks DSL method
       """
     And the output should contain:
       """
-      *** WARNING: You will need to use Cape's renaming API if you want to mirror Rake task load (defining a task named `load' would shadow an existing method with that name)
+      *** WARNING: You must use Cape's renaming API in order to mirror Rake task load (defining a task named `load' would shadow an existing method with that name)
       """
 
   Scenario: mirror Rake task 'with_one_arg' with its description

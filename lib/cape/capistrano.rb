@@ -143,11 +143,11 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
             context.run command
           end
         rescue => e
-          $stderr.puts XTerm.bold_and_foreground_red('*** WARNING:')          +
-                       ' '                                                    +
-                       XTerm.bold("You will need to use Cape's renaming API " +
-                                  'if you want to mirror Rake task ')         +
-                       XTerm.bold_and_underlined(task[:name])                 +
+          $stderr.puts XTerm.bold_and_foreground_red('*** WARNING:')           +
+                       ' '                                                     +
+                       XTerm.bold("You must use Cape's renaming API in order " +
+                                  'to mirror Rake task ')                      +
+                       XTerm.bold_and_underlined(task[:name])                  +
                        XTerm.bold(" (#{e.message})")
         end
       }
