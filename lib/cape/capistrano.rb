@@ -1,6 +1,7 @@
 require 'cape/rake'
 require 'cape/recipe_definition'
 require 'cape/util'
+require 'cape/xterm'
 
 module Cape
 
@@ -105,40 +106,49 @@ Set environment #{noun} #{parameters_list} if you want to pass #{noun_phrase}.
         if recipe_definition.rename
           recipe_name = recipe_definition.rename.call(name_tokens.last)
         end
-        context.task recipe_name, recipe_definition.options do
-          arguments = Array(task[:parameters]).collect do |a|
-            if (value = ENV[a.upcase])
-              value = value.inspect
-            end
-            value
-          end
-          if arguments.empty?
-            arguments = nil
-          else
-            arguments = "[#{arguments.join ','}]"
-          end
-
-          unless env
-            env_strings = recipe_definition.env.collect do |var_name, var_value|
-              if var_name.nil? || var_value.nil?
-                nil
-              else
-                if var_value.is_a?(Proc)
-                  var_value = context.instance_eval do
-                    var_value.call
-                  end
-                end
-                "#{var_name}=#{var_value.inspect}"
+        begin
+          context.task recipe_name, recipe_definition.options do
+            arguments = Array(task[:parameters]).collect do |a|
+              if (value = ENV[a.upcase])
+                value = value.inspect
               end
-            end.compact
-            env = env_strings.empty? ? nil : (' ' + env_strings.join(' '))
-          end
+              value
+            end
+            if arguments.empty?
+              arguments = nil
+            else
+              arguments = "[#{arguments.join ','}]"
+            end
 
-          path = recipe_definition.cd || context.current_path
-          path = path.call if path.respond_to?(:call)
-          command = "cd #{path} && #{rake.remote_executable} " +
-                    "#{task[:name]}#{arguments}#{env}"
-          context.run command
+            unless env
+              env_strings = recipe_definition.env.collect do |var_name, var_value|
+                if var_name.nil? || var_value.nil?
+                  nil
+                else
+                  if var_value.is_a?(Proc)
+                    var_value = context.instance_eval do
+                      var_value.call
+                    end
+                  end
+                  "#{var_name}=#{var_value.inspect}"
+                end
+              end.compact
+              env = env_strings.empty? ? nil : (' ' + env_strings.join(' '))
+            end
+
+            path = recipe_definition.cd || context.current_path
+            path = path.call if path.respond_to?(:call)
+            command = "cd #{path} && #{rake.remote_executable} " +
+                      "#{task[:name]}#{arguments}#{env}"
+            context.run command
+          end
+        rescue => e
+          $stderr.puts XTerm.bold_and_foreground_red('*** WARNING:')          +
+                       ' '                                                    +
+                       XTerm.bold("You will need to use Cape's renaming API " +
+                                  'if you want to mirror Rake task ')         +
+                       XTerm.bold_and_underlined(task[:name])                 +
+                       XTerm.bold(" (#{e.message})")
         end
       }
       # Nest the recipe inside its containing namespaces.
