@@ -27,7 +27,8 @@ tags = `grep -Ehr "^\\s*@\\S+\\s*$" features`.split("\n").
                                               uniq.
                                               sort
 options = {:desc => 'Test features'}
-options[:cucumber_opts] = '-t @focus' if tags.delete('@focus')
+options[:cucumber_opts] =  '--format progress'
+options[:cucumber_opts] += ' --tags @focus' if tags.delete('@focus')
 define_features_task :features, options
 
 unless tags.empty?
@@ -35,7 +36,7 @@ unless tags.empty?
     tags.each do |t|
       define_features_task t.gsub(/^@/, ''),
                            :desc => "Test features tagged #{t}",
-                           :cucumber_opts => "-t #{t}"
+                           :cucumber_opts => "--tags #{t}"
     end
   end
 end
@@ -84,7 +85,7 @@ namespace :test do
 
   Cucumber::Rake::Task.new :features, '' do |t|
     t.bundler = false
-    t.cucumber_opts = '--backtrace'
+    t.cucumber_opts = '--backtrace --format progress'
   end
 end
 task :test => %w(test:spec test:features)
