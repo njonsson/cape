@@ -18,7 +18,16 @@ end
 def define_features_task(name, options)
   Cucumber::Rake::Task.new name, options[:desc] do |t|
     t.bundler = false
-    t.cucumber_opts = options[:cucumber_opts] if options.key?(:cucumber_opts)
+
+    cucumber_opts = [t.cucumber_opts]
+    cucumber_opts << "--backtrace" if options[:backtrace]
+    if options.key?(:format)
+      cucumber_opts << "--format #{options[:format]}"
+    else
+      cucumber_opts << '--format pretty'
+    end
+    cucumber_opts << "--tags #{options[:tags]}" if options.key?(:tags)
+    t.cucumber_opts = cucumber_opts.join(' ')
   end
 end
 
@@ -27,16 +36,14 @@ tags = `grep -Ehr "^\\s*@\\S+\\s*$" features`.split("\n").
                                               uniq.
                                               sort
 options = {:desc => 'Test features'}
-options[:cucumber_opts] =  '--format progress'
-options[:cucumber_opts] += ' --tags @focus' if tags.delete('@focus')
+options[:tags] = '@focus' if tags.delete('@focus')
 define_features_task :features, options
 
 unless tags.empty?
   namespace :features do
     tags.each do |t|
       define_features_task t.gsub(/^@/, ''),
-                           :desc => "Test features tagged #{t}",
-                           :cucumber_opts => "--tags #{t}"
+                           :desc => "Test features tagged #{t}", :tags => t
     end
   end
 end
@@ -45,6 +52,7 @@ def define_spec_task(name, options={})
   desc options[:desc]
   RSpec::Core::RakeTask.new name do |t|
     t.rspec_opts ||= []
+    t.rspec_opts << "--backtrace" if options[:backtrace]
     unless options[:debug] == false
       available = %w(debugger ruby-debug).detect do |debugger_library|
         begin
@@ -62,6 +70,7 @@ def define_spec_task(name, options={})
         $stderr.puts Cape::XTerm.bold('*** Debugging tools not installed')
       end
     end
+    t.rspec_opts << "--format #{options[:format]}" if options.key?(:format)
     t.pattern = options[:pattern] || %w(spec/*_spec.rb spec/**/*_spec.rb)
   end
 end
@@ -81,11 +90,11 @@ task :default => [:spec, :features]
 
 # Support the 'gem test' command.
 namespace :test do
-  define_spec_task :spec, :desc => '', :debug => false
+  define_spec_task :spec, :desc => '', :backtrace => true,
+                                       :debug => false,
+                                       :format => :progress
 
-  Cucumber::Rake::Task.new :features, '' do |t|
-    t.bundler = false
-    t.cucumber_opts = '--backtrace --format progress'
-  end
+  define_features_task :features, :desc => '', :backtrace => true,
+                                               :format => :progress
 end
 task :test => %w(test:spec test:features)
