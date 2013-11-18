@@ -1,5 +1,11 @@
 # Version history for the _Cape_ project
 
+## <a name="v1.8.0"></a>v1.8.0, Mon 11/18/2013
+
+* Add official support for MRI v1.9.2 and v2.0
+* Add official support for Rake v10.x
+* Don’t crash if the user attempts to mirror a task whose name collides with a Ruby method
+
 ## <a name="v1.7.0"></a>v1.7.0, Thu 3/07/2013
 
 * Introduce a new DSL that supports task renaming and path switching, and deprecate the old one
