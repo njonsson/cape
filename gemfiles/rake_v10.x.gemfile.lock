@@ -1,7 +1,7 @@
 PATH
   remote: /Users/nils/Sources/personal/cape
   specs:
-    cape (1.7.0)
+    cape (1.8.0)
 
 GEM
   remote: http://rubygems.org/
