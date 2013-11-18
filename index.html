@@ -71,7 +71,8 @@ sNNNNNN.     zNNN      B(NDhs=(  ''`
            ..
 </code></pre>
 
-<h1>Cape</h1>
+<h1>
+<a name="cape" class="anchor" href="#cape"><span class="octicon octicon-link"></span></a>Cape</h1>
 
 <p><a href="http://travis-ci.org/njonsson/cape" title="Travis CI build status"><img src="https://secure.travis-ci.org/njonsson/cape.png?branch=master" alt="Travis CI build status"></a>
 <a href="http://gemnasium.com/njonsson/cape" title="Gemnasium build status"><img src="https://gemnasium.com/njonsson/cape.png" alt="Gemnasium build status"></a>
@@ -82,7 +83,7 @@ sNNNNNN.     zNNN      B(NDhs=(  ''`
 
 <ul>
 <li>
-<strong>You use <a href="http://capify.org">Capistrano</a></strong> to deploy your application, and</li>
+<strong>You use <a href="http://capistranorb.com">Capistrano</a></strong> to deploy your application, and</li>
 <li>
 <strong>You have <a href="http://rake.rubyforge.org">Rake</a> tasks that you want to execute remotely</strong> — but you don’t want to hand-code Capistrano recipes for each Rake task —</li>
 </ul><p>Then</p>
@@ -93,7 +94,8 @@ sNNNNNN.     zNNN      B(NDhs=(  ''`
 <li>
 <strong>You can execute your Rake tasks on your deployed servers,</strong> friction-free, and look like a superhero. <em>[cue fanfare]</em>
 </li>
-</ul><h2>Features</h2>
+</ul><h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <ul>
 <li>
@@ -108,7 +110,8 @@ sNNNNNN.     zNNN      B(NDhs=(  ''`
 <strong>Enumerate Rake tasks</strong> for your own purposes</li>
 </ul><p>See what’s changed lately by reading the <a href="http://github.com/njonsson/cape/blob/master/History.markdown">project history</a>.</p>
 
-<h2>Installation — get your Cape on</h2>
+<h2>
+<a name="installation--get-your-cape-on" class="anchor" href="#installation--get-your-cape-on"><span class="octicon octicon-link"></span></a>Installation — get your Cape on</h2>
 
 <p>Install <a href="http://rubygems.org/gems/cape" title="Cape at RubyGems.org">the RubyGem</a>.</p>
 
@@ -124,7 +127,30 @@ source 'http://rubygems.org'
 gem 'cape', '~&gt; 1'
 </code></pre>
 
-<h2>Examples</h2>
+<h2>
+<a name="compatibility" class="anchor" href="#compatibility"><span class="octicon octicon-link"></span></a>Compatibility</h2>
+
+<p>Cape <a href="http://travis-ci.org/njonsson/cape">runs</a> on the following Ruby versions:</p>
+
+<ul>
+<li>MRI v1.8.7, v1.9.2, v1.9.3, v2.0.0</li>
+<li>REE v1.8.7</li>
+</ul><p>Cape integrates with the following RubyGems:</p>
+
+<ul>
+<li>Capistrano v2.x</li>
+<li>Rake v0.8.7 and later</li>
+</ul><p><strong>A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.</strong> Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project.</p>
+
+<pre><code># Gemfile
+
+source 'http://rubygems.org'
+
+gem 'rake', '&gt;= 0.9.3'
+</code></pre>
+
+<h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
 <p>Assume the following Rake tasks are defined.</p>
 
@@ -150,7 +176,8 @@ rake bag_leaves[paper_or_plastic]
     Rakes and bags the leaves
 </code></pre>
 
-<h3>Simply mirror all Rake tasks as Capistrano recipes</h3>
+<h3>
+<a name="simply-mirror-all-rake-tasks-as-capistrano-recipes" class="anchor" href="#simply-mirror-all-rake-tasks-as-capistrano-recipes"><span class="octicon octicon-link"></span></a>Simply mirror all Rake tasks as Capistrano recipes</h3>
 
 <p>Add the following to your Capistrano recipes. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
@@ -213,7 +240,8 @@ Putting the leaves in a plastic bag
     command finished in 1000ms
 </code></pre>
 
-<h3>Mirror some Rake tasks, but not others</h3>
+<h3>
+<a name="mirror-some-rake-tasks-but-not-others" class="anchor" href="#mirror-some-rake-tasks-but-not-others"><span class="octicon octicon-link"></span></a>Mirror some Rake tasks, but not others</h3>
 
 <p>Cape lets you filter the Rake tasks to be mirrored. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
@@ -228,7 +256,8 @@ Cape do
 end
 </code></pre>
 
-<h3>Mirror Rake tasks that require renaming, Capistrano recipe options, path switching, and/or environment variables</h3>
+<h3>
+<a name="mirror-rake-tasks-that-require-renaming-capistrano-recipe-options-path-switching-andor-environment-variables" class="anchor" href="#mirror-rake-tasks-that-require-renaming-capistrano-recipe-options-path-switching-andor-environment-variables"><span class="octicon octicon-link"></span></a>Mirror Rake tasks that require renaming, Capistrano recipe options, path switching, and/or environment variables</h3>
 
 <p>Cape lets you customize mirrored Rake tasks to suit your needs. Note that Cape statements must be contained in a <code>Cape</code> block, and references to Capistrano variables such as <code>rails_env</code> and <code>release_path</code> must be contained in an inner block, lambda, or other callable object.</p>
 
@@ -312,7 +341,8 @@ task :test_task, :roles =&gt; :app do
 end
 </code></pre>
 
-<h3>Mirror Rake tasks into a Capistrano namespace</h3>
+<h3>
+<a name="mirror-rake-tasks-into-a-capistrano-namespace" class="anchor" href="#mirror-rake-tasks-into-a-capistrano-namespace"><span class="octicon octicon-link"></span></a>Mirror Rake tasks into a Capistrano namespace</h3>
 
 <p>Cape plays friendly with the Capistrano DSL for organizing Rake tasks in Capistrano namespaces. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
@@ -328,7 +358,8 @@ namespace :rake_tasks do
 end
 </code></pre>
 
-<h3>Iterate over available Rake tasks</h3>
+<h3>
+<a name="iterate-over-available-rake-tasks" class="anchor" href="#iterate-over-available-rake-tasks"><span class="octicon octicon-link"></span></a>Iterate over available Rake tasks</h3>
 
 <p>Cape lets you enumerate Rake tasks, optionally filtering them by task name or namespace. Note that Cape statements must be contained in a <code>Cape</code> block.</p>
 
@@ -352,7 +383,8 @@ Cape do
 end
 </code></pre>
 
-<h3>Configure Rake execution</h3>
+<h3>
+<a name="configure-rake-execution" class="anchor" href="#configure-rake-execution"><span class="octicon octicon-link"></span></a>Configure Rake execution</h3>
 
 <p>Cape lets you specify how Rake should be run on the local computer and on remote computers. But the default behavior is most likely just right for your needs:</p>
 
@@ -376,30 +408,21 @@ Cape do
 end
 </code></pre>
 
-<h2>Known issues</h2>
-
-<p><strong>A Rake task that lacks a description can be mirrored or enumerated only if Rake v0.9.3 or newer is installed.</strong> Older versions of Rake did not support enumerating such tasks. You may want to make Rake v0.9.3 a dependency of your project.</p>
-
-<pre><code># Gemfile
-
-source 'http://rubygems.org'
-
-gem 'rake', '&gt;= 0.9.3'
-</code></pre>
-
-<h2>Contributing</h2>
+<h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
 <p>Report defects and feature requests on <a href="http://github.com/njonsson/cape/issues">GitHub Issues</a>.</p>
 
 <p>Your patches are welcome, and you will receive attribution here for good stuff.</p>
 
-<h2>License</h2>
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Released under the <a href="http://github.com/njonsson/cape/blob/master/License.markdown">MIT License</a>.</p>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/njonsson">njonsson</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
