@@ -38,7 +38,7 @@
 
 If
 
-* **You use [Capistrano](http://capify.org)** to deploy your application, and
+* **You use [Capistrano](http://capistranorb.com)** to deploy your application, and
 * **You have [Rake](http://rake.rubyforge.org) tasks that you want to execute remotely** — but you don’t want to hand-code Capistrano recipes for each Rake task —
 
 Then
