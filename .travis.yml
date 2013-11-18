@@ -1,5 +1,9 @@
 language: ruby
 bundler_args: --without debug doc tooling
+gemfile:
+  - gemfiles/capistrano_v2.x.gemfile
+  - gemfiles/rake_v0.9.3.gemfile
+  - gemfiles/rake_v10.x.gemfile
 rvm:
   - 1.8.7
   - 1.9.2
