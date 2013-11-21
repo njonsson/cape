@@ -16,7 +16,7 @@ rvm:
   - jruby-head
   - rbx-18mode
   - rbx-19mode
-  - rbx-head
+  - rbx
 script: "bundle exec rake test"
 matrix:
   allow_failures:
@@ -26,4 +26,4 @@ matrix:
     - rvm: jruby-head
     - rvm: rbx-18mode
     - rvm: rbx-19mode
-    - rvm: rbx-head
+    - rvm: rbx
