@@ -10,6 +10,8 @@ end
 group :doc do
   gem   'yard',           '~> 0', :platforms => [:ruby, :mswin, :mingw]
   gem   'rdiscount',              :platforms => [:ruby, :mswin, :mingw]
+
+  gem   'relish',         '~> 0'
 end
 
 group :tooling do
