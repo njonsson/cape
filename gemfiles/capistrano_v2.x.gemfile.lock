@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/nils/Sources/personal/cape
+  remote: ../
   specs:
     cape (1.8.0)
 
@@ -43,7 +43,7 @@ GEM
     net-ssh (2.7.0)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
-    rake (10.1.0)
+    rake (10.1.1)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
