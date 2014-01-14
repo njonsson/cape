@@ -15,6 +15,7 @@ group :doc do
 end
 
 group :tooling do
+  gem   'appraisal',      '~> 0'
   gem   'guard-cucumber', '~> 1', :platforms => :mri_19
   gem   'guard-rspec',    '~> 4', :platforms => :mri_19
   if RUBY_PLATFORM =~ /darwin/i
