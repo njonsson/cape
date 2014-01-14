@@ -6,9 +6,6 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    appraisal (0.5.2)
-      bundler
-      rake
     aruba (0.5.4)
       childprocess (>= 0.3.6)
       cucumber (>= 1.1.1)
@@ -57,7 +54,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  appraisal (~> 0)
   aruba (~> 0)
   cape!
   capistrano (~> 2)
