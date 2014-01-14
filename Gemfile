@@ -11,12 +11,12 @@ group :doc do
   gem   'yard',           '~> 0', :platforms => [:ruby, :mswin, :mingw]
   gem   'rdiscount',              :platforms => [:ruby, :mswin, :mingw]
 
-  gem   'relish',         '~> 0'
+  gem   'relish',         '~> 0', :platforms => :mri_19
 end
 
 group :tooling do
-  gem   'guard-cucumber', '~> 1'
-  gem   'guard-rspec',    '~> 4'
+  gem   'guard-cucumber', '~> 1', :platforms => :mri_19
+  gem   'guard-rspec',    '~> 4', :platforms => :mri_19
   if RUBY_PLATFORM =~ /darwin/i
     gem 'rb-fsevent',     '~> 0', :require => false
   end
