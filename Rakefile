@@ -1,11 +1,11 @@
-require 'appraisal'
+begin
+  require 'appraisal'
+rescue LoadError
+end
 begin
   require 'bundler/gem_tasks'
 rescue LoadError
 end
-require 'cucumber'
-require 'cucumber/rake/task'
-require 'rspec/core/rake_task'
 
 begin
   require 'yard'
@@ -17,18 +17,23 @@ else
 end
 
 def define_features_task(name, options)
-  Cucumber::Rake::Task.new name, options[:desc] do |t|
-    t.bundler = false
+  begin
+    require 'cucumber/rake/task'
+  rescue LoadError
+  else
+    Cucumber::Rake::Task.new name, options[:desc] do |t|
+      t.bundler = false
 
-    cucumber_opts = [t.cucumber_opts]
-    cucumber_opts << "--backtrace" if options[:backtrace]
-    if options.key?(:format)
-      cucumber_opts << "--format #{options[:format]}"
-    else
-      cucumber_opts << '--format pretty'
+      cucumber_opts = [t.cucumber_opts]
+      cucumber_opts << "--backtrace" if options[:backtrace]
+      if options.key?(:format)
+        cucumber_opts << "--format #{options[:format]}"
+      else
+        cucumber_opts << '--format pretty'
+      end
+      cucumber_opts << "--tags #{options[:tags]}" if options.key?(:tags)
+      t.cucumber_opts = cucumber_opts.join(' ')
     end
-    cucumber_opts << "--tags #{options[:tags]}" if options.key?(:tags)
-    t.cucumber_opts = cucumber_opts.join(' ')
   end
 end
 
@@ -51,28 +56,33 @@ end
 
 def define_spec_task(name, options={})
   desc options[:desc]
-  RSpec::Core::RakeTask.new name do |t|
-    t.rspec_opts ||= []
-    t.rspec_opts << "--backtrace" if options[:backtrace]
-    unless options[:debug] == false
-      available = %w(debugger ruby-debug).detect do |debugger_library|
-        begin
-          require debugger_library
-        rescue LoadError
-          false
+  begin
+    require 'rspec/core/rake_task'
+  rescue LoadError
+  else
+    RSpec::Core::RakeTask.new name do |t|
+      t.rspec_opts ||= []
+      t.rspec_opts << "--backtrace" if options[:backtrace]
+      unless options[:debug] == false
+        available = %w(debugger ruby-debug).detect do |debugger_library|
+          begin
+            require debugger_library
+          rescue LoadError
+            false
+          else
+            true
+          end
+        end
+        if available
+          t.rspec_opts << '--debug'
         else
-          true
+          require 'cape/xterm'
+          $stderr.puts Cape::XTerm.bold('*** Debugging tools not installed')
         end
       end
-      if available
-        t.rspec_opts << '--debug'
-      else
-        require 'cape/xterm'
-        $stderr.puts Cape::XTerm.bold('*** Debugging tools not installed')
-      end
+      t.rspec_opts << "--format #{options[:format]}" if options.key?(:format)
+      t.pattern = options[:pattern] || %w(spec/*_spec.rb spec/**/*_spec.rb)
     end
-    t.rspec_opts << "--format #{options[:format]}" if options.key?(:format)
-    t.pattern = options[:pattern] || %w(spec/*_spec.rb spec/**/*_spec.rb)
   end
 end
 
