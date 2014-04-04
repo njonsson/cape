@@ -34,6 +34,7 @@
 [![Travis CI build status]](http://travis-ci.org/njonsson/cape          "Travis CI build status")
 [![Gemnasium build status]](http://gemnasium.com/njonsson/cape          "Gemnasium build status")
 [![Code Climate report]   ](http://codeclimate.com/github/njonsson/cape "Code Climate report")
+[![Inline docs]           ](http://inch-pages.github.io/github/njonsson/cape "Inline docs")
 [![RubyGems release]      ](http://rubygems.org/gems/cape               "RubyGems release")
 
 If
@@ -342,4 +343,5 @@ Released under the [MIT License](http://github.com/njonsson/cape/blob/master/Lic
 [Travis CI build status]: https://secure.travis-ci.org/njonsson/cape.png?branch=master
 [Gemnasium build status]: https://gemnasium.com/njonsson/cape.png
 [Code Climate report]:    https://codeclimate.com/github/njonsson/cape.png
+[Inline docs]:            http://inch-pages.github.io/github/njonsson/cape.png
 [RubyGems release]:       https://badge.fury.io/rb/cape.png
