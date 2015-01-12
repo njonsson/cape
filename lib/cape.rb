@@ -1,9 +1,19 @@
-::Dir.glob(::File.expand_path('../cape/*.rb', __FILE__)) do |f|
-  require "cape/#{::File.basename f, '.rb'}"
-end
-
 # Contains the implementation of Cape.
 module Cape
+
+  autoload :Capistrano,                 'cape/capistrano'
+  autoload :CapistranoDeprecated,       'cape/capistrano_deprecated'
+  autoload :CoreExt,                    'cape/core_ext'
+  autoload :Deprecation,                'cape/deprecation'
+  autoload :DSL,                        'cape/dsl'
+  autoload :DSLDeprecated,              'cape/dsl_deprecated'
+  autoload :HashList,                   'cape/hash_list'
+  autoload :Rake,                       'cape/rake'
+  autoload :RecipeDefinition,           'cape/recipe_definition'
+  autoload :RecipeDefinitionDeprecated, 'cape/recipe_definition_deprecated'
+  autoload :Util,                       'cape/util'
+  autoload :VERSION,                    'cape/version'
+  autoload :XTerm,                      'cape/xterm'
 
   extend DSL
   extend DSLDeprecated
